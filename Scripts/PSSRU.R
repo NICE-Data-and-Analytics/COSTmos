@@ -1,5 +1,6 @@
 #script for analysis on PSSRU
-generate_PSSRU_tables <- function(){
+
+generate_PSSRU_tables <- function(qual){
 
   library(dplyr)
   options(scipen = 999)
@@ -43,8 +44,8 @@ generate_PSSRU_tables <- function(){
   #CREATE FINAL TABLE OUTCOMES
   #practice nurse calculation (band 5)
   practice_nurse_costs <- matrix(NA, 4, 3)
-  colnames(practice_nurse_costs) <- c("excluding qualitifaction", "including qualification", "NICE qualification adjustment")
-  rownames(practice_nurse_costs) <- c("cost per patient facing hour", "cost per visits (15.5)", "cost per face_to_face consulation (10)", "cost per phone consultation (6)")
+  colnames(practice_nurse_costs) <- c("excluding qualitifaction", "including qualification", "including qualification (NICE)")
+  rownames(practice_nurse_costs) <- c("Cost per patient facing hour", "Cost per visits (15.5 mins)", "Cost per face-to-face consulation (10 mins)", "Cost per phone consultation (6 mins)")
   
   practice_nurse_costs[1,] <- nurse_unit_costs[-1,3] * 1.3   # Not reported in this report; used ratio 1:1.30 (total time:direct time) using data from 2015 report (cited as based on 2006/7 survey)
   practice_nurse_costs[2,] <- practice_nurse_costs[1,] * 15.5/60   # Not reported in this report; used 15.5 min from 2015 report (cited as based on 2006/7 survey)
@@ -52,6 +53,16 @@ generate_PSSRU_tables <- function(){
   practice_nurse_costs[4,] <- practice_nurse_costs[1,] * 4/60   # Not reported in this report; used 6 mins based on Stevens 2017
 
   # https://bmjopen.bmj.com/content/7/11/e018261
+  
+  if(qual == 1){
+    output_practice_nurse <- practice_nurse_costs[, "including qualification (NICE)", drop = FALSE]
+  } else {
+    output_practice_nurse <- practice_nurse_costs[, "excluding qualitifaction", drop = FALSE]
+  }
 
-  return(practice_nurse_costs)
+  colnames(output_practice_nurse) <- c("Cost in £")
+  output_practice_nurse <- round(output_practice_nurse, 2)
+  
+  print(output_practice_nurse)
+  return(output_practice_nurse)
 }

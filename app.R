@@ -9,6 +9,9 @@
 
 library(shiny)
 
+source("./Scripts/Main.R")
+source("./Scripts/PSSRU.R")
+
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
@@ -23,16 +26,20 @@ ui <- fluidPage(
       tabPanel("Healthcare professionals unit costs",
         sidebarLayout(
             sidebarPanel(
-                sliderInput("bins",
-                            "Number of bins:",
-                            min = 1,
-                            max = 50,
-                            value = 30)
+                selectInput("healthcare_professional",
+                            label = "healthcare professional",
+                            choices = c("Practice GP", "Practice nurse", "others"),
+                            selected = "Practice nurse"),
+                radioButtons("qualification_cost",
+                             label = "Qualification cost (excluding individual/productivity)",
+                             choices = c("Include qualification cost" = 1, "Exclude qualification cost" = 2),
+                             selected = 1),
             ),
     
             # Show a plot of the generated distribution
             mainPanel(
-               plotOutput("distPlot")
+              DTOutput("table"),
+              downloadButton("healthcare_professional", "Download Table")
             )
         )
       )
@@ -40,17 +47,31 @@ ui <- fluidPage(
 )
 
 # Define server logic required to draw a histogram
-server <- function(input, output) {
+server <- function(input, output, session) {
 
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
+  UI_outputs <- reactive({
+    generate_PSSRU_tables(
+      qual = input$qualification_cost
+    )
+  })
+  
+  output$table <- renderDT({
+      
+    switch(input$healthcare_professional,
+           "Practice nurse" = {
+               datatable(UI_outputs(), options = list(pageLength = 10))
+             },
+           "Practice GP" = {
+           })
+    })
+  
+  #download buttons
+  output$healthcare_professional <- downloadHandler(
+    filename = function() {
+      paste("healthcare_professional", Sys.Date(), ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(UI_outputs(), file)
     })
 }
 
