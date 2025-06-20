@@ -1,9 +1,11 @@
 #script for analysis on PSSRU
 
-generate_PSSRU_tables <- function(qual){
+generate_PSSRU_tables <- function(qual, direct){
 
   library(dplyr)
   options(scipen = 999)
+  
+  
   #NICE qualification adjustment
   training_doctor <- read.csv("./Data/PSSRU/12.4.2_training_doctor.csv")
   training_non_doctor <- read.csv("./Data/PSSRU/12.4.1_training_non_doctor.csv")
@@ -56,13 +58,28 @@ generate_PSSRU_tables <- function(qual){
   
   if(qual == 1){
     output_practice_nurse <- practice_nurse_costs[, "including qualification (NICE)", drop = FALSE]
+    
+    if(direct == 1){
+      output_practice_GP <- gp_unit_costs[, "incl_direct_qual_adjust", drop = FALSE]
+    } else {
+      output_practice_GP <- gp_unit_costs[, "excl_direct_qual_adjust", drop = FALSE]
+    }
   } else {
     output_practice_nurse <- practice_nurse_costs[, "excluding qualitifaction", drop = FALSE]
+    
+    if(direct == 1){
+      output_practice_GP <- gp_unit_costs[, "excluding.qualification.and.including.direct.care.staff.cost", drop = FALSE]
+    } else {
+      output_practice_GP <- gp_unit_costs[, "excluding.qualification.and.excluding.direct.care.staff.cost", drop = FALSE]
+    }
   }
 
-  colnames(output_practice_nurse) <- c("Cost in £")
+  colnames(output_practice_nurse) <- colnames(output_practice_GP) <- c("Cost in £")
+  rownames(output_practice_GP) <- gp_unit_costs[,1]
   output_practice_nurse <- round(output_practice_nurse, 2)
+  output_practice_GP <- round(output_practice_GP, 2)
   
-  print(output_practice_nurse)
-  return(output_practice_nurse)
+  PSSRU <- list("practice_nurse" = output_practice_nurse, "practice_GP" = output_practice_GP)
+  
+  return(PSSRU)
 }
