@@ -11,6 +11,7 @@ generate_PSSRU_tables <- function(qual, direct){
   training_non_doctor <- read.csv("./Data/PSSRU/12.4.1_training_non_doctor.csv")
   gp_unit_costs <- read.csv("./Data/PSSRU/9.4.2_gp_unit_costs.csv")
   nurse_unit_costs <- read.csv("./Data/PSSRU/9.2.1_nurse_unit_costs.csv")
+  doctors_unit_costs <- read.csv("./Data/PSSRU/11.3.2_hospital_doctors.csv")
   
   #adjustment to qualification cost to exclude living expenses and lost production
   training_doctor$adjustment_factor <- (training_doctor[,7] - training_doctor[,3])/ training_doctor[,7]
@@ -41,7 +42,17 @@ generate_PSSRU_tables <- function(qual, direct){
   gp_unit_costs[6,7] <- gp_unit_costs[5,7] * 10
   
   nurse_unit_costs[4,1] <- "NICE productivity adjusment"
-  nurse_unit_costs[4,-1] <- nurse_unit_costs[2,-1] + training_non_doctor[7,8] / nurse_unit_costs[1,-1]
+  nurse_unit_costs[4,-1] <- nurse_unit_costs[2,-1] + training_non_doctor[7,"adjusted"] / nurse_unit_costs[1,-1]
+  
+  doctors_unit_costs[4,1] <- "NICE productivity adjusment"
+  doctors_unit_costs[4,2] <-  doctors_unit_costs[2,2] + training_doctor[2,"adjusted"] / doctors_unit_costs[1,2]
+  doctors_unit_costs[4,2] <-  doctors_unit_costs[2,2] + training_doctor[2,"adjusted"] / doctors_unit_costs[1,2]
+  doctors_unit_costs[4,3] <-  doctors_unit_costs[2,3] + training_doctor[3,"adjusted"] / doctors_unit_costs[1,3]
+  doctors_unit_costs[4,4] <-  doctors_unit_costs[2,4] + training_doctor[4,"adjusted"] / doctors_unit_costs[1,4]
+  doctors_unit_costs[4,5] <-  doctors_unit_costs[2,5] + training_doctor[5,"adjusted"] / doctors_unit_costs[1,5]
+  doctors_unit_costs[4,6] <-  doctors_unit_costs[2,6] + training_doctor[7,"adjusted"] / doctors_unit_costs[1,6]
+  doctors_unit_costs[4,7] <-  doctors_unit_costs[2,7] + training_doctor[7,"adjusted"] / doctors_unit_costs[1,7]
+  doctors_unit_costs[4,8] <-  doctors_unit_costs[2,8] + training_doctor[7,"adjusted"] / doctors_unit_costs[1,8]
   
   #CREATE FINAL TABLE OUTCOMES
   #practice nurse calculation (band 5)
@@ -58,6 +69,7 @@ generate_PSSRU_tables <- function(qual, direct){
   
   if(qual == 1){
     output_practice_nurse <- practice_nurse_costs[, "including qualification (NICE)", drop = FALSE]
+    output_hospital_doctors <- t(doctors_unit_costs[4,, drop = FALSE])
     
     if(direct == 1){
       output_practice_GP <- gp_unit_costs[, "incl_direct_qual_adjust", drop = FALSE]
@@ -66,6 +78,7 @@ generate_PSSRU_tables <- function(qual, direct){
     }
   } else {
     output_practice_nurse <- practice_nurse_costs[, "excluding qualitifaction", drop = FALSE]
+    output_hospital_doctors <- t(doctors_unit_costs[2,, drop = FALSE])
     
     if(direct == 1){
       output_practice_GP <- gp_unit_costs[, "excluding.qualification.and.including.direct.care.staff.cost", drop = FALSE]
@@ -75,11 +88,13 @@ generate_PSSRU_tables <- function(qual, direct){
   }
 
   colnames(output_practice_nurse) <- colnames(output_practice_GP) <- c("Cost in £")
+  colnames(output_hospital_doctors) <- c("Cost per working hour (£)")
+  output_hospital_doctors <- as.data.frame(output_hospital_doctors[-1,, drop = FALSE])
   rownames(output_practice_GP) <- gp_unit_costs[,1]
   output_practice_nurse <- round(output_practice_nurse, 2)
   output_practice_GP <- round(output_practice_GP, 2)
   
-  PSSRU <- list("practice_nurse" = output_practice_nurse, "practice_GP" = output_practice_GP)
-  
+  PSSRU <- list("practice_nurse" = output_practice_nurse, "practice_GP" = output_practice_GP, "hospital_doctors" = output_hospital_doctors)
+  print(PSSRU$hospital_doctors)
   return(PSSRU)
 }

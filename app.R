@@ -29,7 +29,7 @@ ui <- fluidPage(
             sidebarPanel(
                 selectInput("healthcare_professional",
                             label = "healthcare professional",
-                            choices = c("Practice GP", "Practice nurse", "others"),
+                            choices = c("Practice GP", "Practice nurse", "Hospital doctors", "Other healthcare professionals"),
                             selected = "Practice nurse"),
                 radioButtons("qualification_cost",
                              label = "Qualification cost (excluding individual/productivity)",
@@ -68,10 +68,13 @@ server <- function(input, output, session) {
       
     switch(input$healthcare_professional,
            "Practice nurse" = {
-               datatable(UI_outputs()$practice_nurse, options = list(pageLength = 10), caption = "Nurse")
+               datatable(UI_outputs()$practice_nurse, options = list(pageLength = 10))
              },
            "Practice GP" = {
-             datatable(UI_outputs()$practice_GP, options = list(pageLength = 10), caption = "Nurse")
+             datatable(UI_outputs()$practice_GP, options = list(pageLength = 10))
+           },
+           "Hospital doctors" = {
+             datatable(UI_outputs()$hospital_doctors, options = list(pageLength = 10))
            })
     })
   
