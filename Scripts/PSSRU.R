@@ -9,7 +9,7 @@ generate_PSSRU_tables <- function(qual, direct){
   #NICE qualification adjustment
   training_doctor <- read.csv("./Data/PSSRU/12.4.2_training_doctor.csv")
   training_non_doctor <- read.csv("./Data/PSSRU/12.4.1_training_non_doctor.csv")
-  gp_unit_costs <- read.csv("./Data/PSSRU/9.4.2_gp_unit_costs.csv")
+  gp_unit_costs <- read.csv("./Data/PSSRU/9.4.2_GP_unit_costs.csv")
   nurse_unit_costs <- read.csv("./Data/PSSRU/9.2.1_nurse_unit_costs.csv")
   doctors_unit_costs <- read.csv("./Data/PSSRU/11.3.2_hospital_doctors.csv")
   
@@ -53,6 +53,7 @@ generate_PSSRU_tables <- function(qual, direct){
   doctors_unit_costs[4,6] <-  doctors_unit_costs[2,6] + training_doctor[7,"adjusted"] / doctors_unit_costs[1,6]
   doctors_unit_costs[4,7] <-  doctors_unit_costs[2,7] + training_doctor[7,"adjusted"] / doctors_unit_costs[1,7]
   doctors_unit_costs[4,8] <-  doctors_unit_costs[2,8] + training_doctor[7,"adjusted"] / doctors_unit_costs[1,8]
+  doctors_unit_costs[4,-1] <- round(doctors_unit_costs[4,-1], 2)
   
   #CREATE FINAL TABLE OUTCOMES
   #practice nurse calculation (band 5)
