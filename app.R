@@ -64,27 +64,40 @@ server <- function(input, output, session) {
     )
   })
   
-  output$table <- renderDT({
-      
+  selected_data <- reactive({
     switch(input$healthcare_professional,
-           "Practice nurse" = {
-               datatable(UI_outputs()$practice_nurse, options = list(pageLength = 10))
-             },
-           "Practice GP" = {
-             datatable(UI_outputs()$practice_GP, options = list(pageLength = 10))
-           },
-           "Hospital doctors" = {
-             datatable(UI_outputs()$hospital_doctors, options = list(pageLength = 10))
-           })
-    })
+           "Practice nurse" = UI_outputs()$practice_nurse,
+           "Practice GP" = UI_outputs()$practice_GP,
+           "Hospital doctors" = UI_outputs()$hospital_doctors,
+           "Other healthcare professionals" = UI_outputs()$other_healthcare_professionals
+    )
+  })
+  
+  output$table <- renderDT({
+    datatable(selected_data(), options = list(pageLength = 10))
+  })
+  
+  # output$table <- renderDT({
+  #     
+  #   switch(input$healthcare_professional,
+  #          "Practice nurse" = {
+  #            datatable(UI_outputs()$practice_nurse, options = list(pageLength = 10))
+  #            },
+  #          "Practice GP" = {
+  #            datatable(UI_outputs()$practice_GP, options = list(pageLength = 10))
+  #          },
+  #          "Hospital doctors" = {
+  #            datatable(UI_outputs()$hospital_doctors, options = list(pageLength = 10))
+  #          })
+  #   })
   
   #download buttons
   output$healthcare_professional <- downloadHandler(
     filename = function() {
-      paste("healthcare_professional", Sys.Date(), ".csv", sep = "")
+      paste(input$healthcare_professional, Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
-      write.csv(UI_outputs(), file)
+      write.csv(selected_data(), file, row.names = FALSE)
     })
 }
 
