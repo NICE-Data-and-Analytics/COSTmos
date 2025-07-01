@@ -27,17 +27,21 @@ ui <- fluidPage(
       tabPanel("Healthcare professionals unit costs",
         sidebarLayout(
             sidebarPanel(
-                selectInput("healthcare_professional",
+              selectInput("year",
+                          label = "Select year",
+                          choices = c("2023", "2024", "2025"),
+                          selected = "2024"),  
+              selectInput("healthcare_professional",
                             label = "healthcare professional",
                             choices = c("Practice GP", "Practice nurse", "Hospital doctors", "Other healthcare professionals"),
                             selected = "Practice nurse"),
-                radioButtons("qualification_cost",
+              radioButtons("qualification_cost",
                              label = "Qualification cost (excluding individual/productivity)",
                              choices = c("Include qualification cost" = 1, "Exclude qualification cost" = 2),
                              selected = 1),
-                conditionalPanel(
-                  condition = "input.healthcare_professional == 'Practice GP'",
-                  radioButtons("direct_cost",
+              conditionalPanel(
+                condition = "input.healthcare_professional == 'Practice GP'",
+                radioButtons("direct_cost",
                                label = "Direct care staff cost",
                                choices = c("Include direct care staff costs" = 1, "Exclude direct care staff costs" = 2),
                                selected = 1)
@@ -60,7 +64,8 @@ server <- function(input, output, session) {
   UI_outputs <- reactive({
     generate_PSSRU_tables(
       qual = input$qualification_cost,
-      direct = input$direct_cost
+      direct = input$direct_cost,
+      year = input$year
     )
   })
   
@@ -74,27 +79,14 @@ server <- function(input, output, session) {
   })
   
   output$table <- renderDT({
-    datatable(selected_data(), options = list(pageLength = 10))
+    datatable(selected_data(), caption = paste(input$healthcare_professional, UI_outputs()$source), options = list(pageLength = 10))
   })
   
-  # output$table <- renderDT({
-  #     
-  #   switch(input$healthcare_professional,
-  #          "Practice nurse" = {
-  #            datatable(UI_outputs()$practice_nurse, options = list(pageLength = 10))
-  #            },
-  #          "Practice GP" = {
-  #            datatable(UI_outputs()$practice_GP, options = list(pageLength = 10))
-  #          },
-  #          "Hospital doctors" = {
-  #            datatable(UI_outputs()$hospital_doctors, options = list(pageLength = 10))
-  #          })
-  #   })
   
   #download buttons
   output$healthcare_professional <- downloadHandler(
     filename = function() {
-      paste(input$healthcare_professional, Sys.Date(), ".csv", sep = "")
+      paste(input$healthcare_professional, UI_outputs()$source, ".csv", sep = " ")
     },
     content = function(file) {
       write.csv(selected_data(), file, row.names = FALSE)

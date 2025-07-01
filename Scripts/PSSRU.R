@@ -1,17 +1,21 @@
 #script for analysis on PSSRU
 
-generate_PSSRU_tables <- function(qual, direct){
+generate_PSSRU_tables <- function(qual, direct, year){
 
   library(dplyr)
   options(scipen = 999)
   
+  #write here source and year of the publication
+  source <- paste("PSSRU", year)
+  
+  folder_path <- file.path("Data", "PSSRU", year)
   
   #NICE qualification adjustment
-  training_doctor <- read.csv("./Data/PSSRU/12.4.2_training_doctor.csv")
-  training_non_doctor <- read.csv("./Data/PSSRU/12.4.1_training_non_doctor.csv")
-  gp_unit_costs <- read.csv("./Data/PSSRU/9.4.2_GP_unit_costs.csv")
-  nurse_unit_costs <- read.csv("./Data/PSSRU/9.2.1_nurse_unit_costs.csv")
-  doctors_unit_costs <- read.csv("./Data/PSSRU/11.3.2_hospital_doctors.csv")
+  training_doctor <- read.csv(file.path(folder_path, "12.4.2_training_doctor.csv"))
+  training_non_doctor <- read.csv(file.path(folder_path,"12.4.1_training_non_doctor.csv"))
+  gp_unit_costs <- read.csv(file.path(folder_path, "9.4.2_GP_unit_costs.csv"))
+  nurse_unit_costs <- read.csv(file.path(folder_path, "9.2.1_nurse_unit_costs.csv"))
+  doctors_unit_costs <- read.csv(file.path(folder_path, "11.3.2_hospital_doctors.csv"))
   
   #adjustment to qualification cost to exclude living expenses and lost production
   training_doctor$adjustment_factor <- (training_doctor[,7] - training_doctor[,3])/ training_doctor[,7]
@@ -95,7 +99,6 @@ generate_PSSRU_tables <- function(qual, direct){
   output_practice_nurse <- round(output_practice_nurse, 2)
   output_practice_GP <- round(output_practice_GP, 2)
   
-  PSSRU <- list("practice_nurse" = output_practice_nurse, "practice_GP" = output_practice_GP, "hospital_doctors" = output_hospital_doctors)
-  print(PSSRU$hospital_doctors)
+  PSSRU <- list("source" = source, "practice_nurse" = output_practice_nurse, "practice_GP" = output_practice_GP, "hospital_doctors" = output_hospital_doctors)
   return(PSSRU)
 }
