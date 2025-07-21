@@ -12,9 +12,7 @@ library(DT)
 library(here)
 library(reactable)
 
-source(here("R", "PSSRU.R"))
-
-costs_app <- function(
+costs_app <- function() {
   
   # Define UI for application that draws a histogram
   ui <- fluidPage(
@@ -113,4 +111,4 @@ costs_app <- function(
   
   # Run the application 
   shinyApp(ui = ui, server = server)
-)
+}
