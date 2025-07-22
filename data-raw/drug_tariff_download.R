@@ -74,6 +74,15 @@ download_csv <- function(name) {
   
   # Overwrite downloaded file
   write_csv(df, download_path)
+  
+  # Create dataset name
+  df_name <- paste0("drug_tariff_", name)
+  
+  # Assign name
+  assign(df_name, df)
+  
+  # Also save as .rda object
+  do.call("use_data", list(as.name(df_name), overwrite = TRUE))
 }
 
 # Loop through and download all files
@@ -117,7 +126,7 @@ download.file(paste0("https://www.nhsbsa.nhs.uk", ix_link),
               )
 
 # Read data and clean - Removes header and empty rows, renames columns sensibly
-ix_df <- read_csv(ix_download_path,
+drug_tariff_ix <- read_csv(ix_download_path,
                skip = 5,
                col_types = "ccccccdcccdcccccc",
                col_names = c("drug_tariff_part", "supplier_name", "vmp_name", "amp_name", 
@@ -127,4 +136,7 @@ ix_df <- read_csv(ix_download_path,
                              "supplier_snomed_code","bnf_code"))
 
 # Overwrite downloaded file
-write_csv(ix_df, ix_download_path)
+write_csv(drug_tariff_ix, ix_download_path)
+
+# Also save as .rda object
+usethis::use_data(drug_tariff_ix, overwrite = T)
