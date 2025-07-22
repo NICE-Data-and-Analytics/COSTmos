@@ -1,0 +1,58 @@
+vmp_snomed_code,vmpp_snomed_code,medicine,pack_size,unit_of_measure,formulations,spec_cont_ind,basic_price
+20528411000001107,20514011000001102,Albendazole 400mg tablets,1,tablet,STD,Special container,582
+10447211000001101,10447311000001109,Biotin 5mg tablets,30,tablet,STD,NA,2540
+16665111000001100,16660611000001100,Bisacodyl 10mg/30ml enema,1,enema,(in 37ml bottle),Special container,1082
+16665111000001100,16660611000001100,Bisacodyl 10mg/30ml enema,1,enema,STD,Special container,1082
+15148011000001101,15138111000001104,Ciclosporin 0.05% eye drops 0.4ml unit dose preservative free,30,unit dose,PF,Special container,17148
+9404611000001104,20586311000001108,Ciclosporin 0.2% eye ointment,3.5,gram,STD,Special container,9679
+21514711000001108,21493011000001104,Ciclosporin 0.2% eye ointment preservative free,3.5,gram,PF,Special container,9999
+19395211000001107,39322911000001100,Ciprofloxacin 0.3% ear drops,10,ml,"PF, STD",Special container,1922
+23466511000001106,23403311000001108,Clonazepam 2.5mg/ml drops,10,ml,"SF, STD, CF",Special container,981
+10448511000001104,42567711000001104,Clonidine 100micrograms/24hours transdermal patches,2,patch,STD,NA,23272
+10448511000001104,10448611000001100,Clonidine 100micrograms/24hours transdermal patches,4,patch,STD,NA,6600
+7660211000001104,42568811000001106,Clonidine 200micrograms/24hours transdermal patches,2,patch,STD,NA,12516
+7660211000001104,7657111000001103,Clonidine 200micrograms/24hours transdermal patches,4,patch,STD,NA,5381
+10449111000001101,10449211000001107,Clonidine 300micrograms/24hours transdermal patches,4,patch,STD,NA,10434
+20924911000001104,20925111000001103,Coal tar 10% in Emulsifying ointment,100,gram,"All bases, STD",Special container,2523
+30103311000001109,29943911000001104,Coal tar 10% in Hydrous ointment,100,gram,"All bases, STD",Special container,2523
+30103411000001102,29943411000001107,Coal tar 10% in White soft paraffin,100,gram,"All bases, STD",Special container,2523
+15160511000001102,20446811000001101,Coal tar 10% in Yellow soft paraffin,100,gram,"All bases, STD",Special container,2523
+20398411000001104,20398811000001102,Coal tar 5% in Emulsifying ointment,100,gram,"All bases, STD",Special container,5340
+30103511000001103,29941211000001109,Coal tar 5% in Hydrous ointment,100,gram,"All bases, STD",Special container,5340
+30103711000001108,29940611000001101,Coal tar 5% in White soft paraffin,100,gram,"All bases, STD",Special container,5340
+14797511000001103,20069211000001109,Coal tar 5% in Yellow soft paraffin,100,gram,"All bases, STD",Special container,5340
+42352911000001106,7388611000001108,Co-phenotrope 2.5mg/0.025mg tablets,20,tablet,"SF, STD",NA,4339
+39690311000001103,1010811000001105,Co-proxamol 32.5mg/325mg tablets,100,tablet,STD,NA,45721
+41873611000001108,2857011000001105,Danazol 100mg capsules,100,capsule,"SF, STD, LF, FF",NA,22997
+20947911000001107,40536011000001102,Flunarizine 10mg tablets,30,tablet,STD,NA,5316
+15533411000001105,40536211000001107,Flunarizine 5mg capsules,50,capsule,STD,NA,6715
+42211611000001108,40536611000001109,Hydrochlorothiazide 25mg tablets,100,tablet,STD,NA,2989
+41790711000001102,40527011000001102,Levamisole 50mg tablets,50,tablet,STD,NA,26547
+39697811000001106,40530211000001105,Levothyroxine sodium 100microgram capsules,50,capsule,"SF, STD, LF, CF",NA,7299
+39698211000001109,24499811000001103,Levothyroxine sodium 25microgram capsules,28,capsule,"SF, STD, LF, AF, CF, FF",NA,5741
+39698511000001107,24500111000001109,Levothyroxine sodium 50microgram capsules,28,capsule,"SF, STD, LF, CF",NA,4601
+14014611000001109,40531011000001109,Liothyronine 2.5microgram capsules,100,capsule,"SF, STD, AF, FF, LF, CF, PF",NA,20543
+7720511000001101,7676311000001102,Magnesium citrate 200mg tablets,60,tablet,STD,NA,13325
+8795911000001102,40534511000001104,Magnesium oxide 160mg capsules,100,capsule,STD,NA,14549
+41879911000001104,13635911000001102,Megestrol 40mg tablets,100,tablet,STD,NA,18401
+7821111000001102,7723011000001104,Melatonin 2.5mg capsules,60,capsule,"SF, STD, LF",NA,16680
+7821411000001107,7722711000001105,Melatonin 3mg modified-release capsules,60,capsule,"STD, LF",NA,5431
+39700311000001108,40527911000001103,Mepacrine 100mg tablets,50,tablet,"STD, LF",NA,47156
+8796611000001103,40528311000001103,Mercaptopurine 10mg capsules,50,capsule,"SF, STD, CF, FF, AF, PF",NA,21804
+18430611000001102,36476411000001107,Mercaptopurine 10mg tablets,100,tablet,STD,NA,12768
+42377811000001100,3686411000001109,Nadolol 40mg tablets,28,tablet,"STD, CF, FF",NA,3790
+42377811000001100,40536811000001108,Nadolol 40mg tablets,100,tablet,"STD, CF, FF",NA,13537
+11490411000001101,40537111000001103,Naltrexone 3mg capsules,30,capsule,"SF, STD, AF, LF, NSF",NA,3347
+8822911000001103,40537311000001101,Naltrexone 4.5mg capsules,30,capsule,"SF, STD, AF, LF, NSF",NA,3478
+9096811000001100,9072511000001108,Nifedipine 20mg/ml oral drops,30,ml,"SF, STD, AF, FF",Special container,2341
+39701811000001107,1091011000001109,Orphenadrine 50mg tablets,100,tablet,STD,NA,6201
+38976911000001105,39000011000001108,Phenelzine 15mg capsules,60,capsule,"SF, STD, AF, CF, LF, PF",NA,11750
+16197511000001104,40532511000001109,Pirenzepine 50mg tablets,50,tablet,STD,NA,2569
+42215811000001105,27881711000001109,Prazosin 2mg tablets,100,tablet,STD,NA,13180
+42216011000001108,20280711000001102,Prazosin 5mg tablets,100,tablet,STD,NA,6596
+42110611000001101,40533111000001106,Probenecid 500mg tablets,50,tablet,"SF, STD, CF, LF",NA,6285
+42196111000001106,17635111000001107,Sodium chloride 5% eye ointment,3.5,gram,"STD, PF",Special container,3189
+42358911000001109,40533411000001101,Sucralfate 1g tablets,40,tablet,"SF, STD, CF, FF, LF, PF",NA,3418
+20456011000001109,20421311000001100,Sucralfate 2g/50ml enema,1,enema,STD,Special container,4198
+7721511000001108,7717511000001107,Sultiame 200mg tablets,50,tablet,STD,NA,11134
+20456111000001105,20434211000001108,Trimetazidine 35mg modified-release tablets,60,tablet,STD,NA,7845

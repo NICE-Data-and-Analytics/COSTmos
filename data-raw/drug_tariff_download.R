@@ -46,33 +46,34 @@ viii_dates <- list(cat_m = list(month = stringr::str_extract(viii_links$cat_m, "
 download_csv <- function(name) {
   
   viii_read <- list(cat_m = list(coltypes = "ccdcd",
-                                 colnames = c("vmpp_snomed_code", "drug_name", "pack_size", "unit", "basic_price")),
+                                 colnames = c("vmpp_snomed_code", "drug_name", "pack_size", "unit_of_measure", "basic_price")),
                     viii_a = list(coltypes = "cdccccd",
-                                 colnames = c("medicine", "pack_size", "unit", "vmp_snomed_code", "vmpp_snomed_code", "drug_tariff_category", "basic_price")),
+                                 colnames = c("medicine", "pack_size", "unit_of_measure", "vmp_snomed_code", "vmpp_snomed_code", "drug_tariff_category", "basic_price")),
                     viii_b = list(coltypes = "cccdcccd",
-                                  colnames = c("vmp_snomed_code", "vmpp_snomed_code", "medicine", "pack_size", "unit", "formulations", "spec_cont_ind", "basic_price")),
+                                  colnames = c("vmp_snomed_code", "vmpp_snomed_code", "medicine", "pack_size", "unit_of_measure", "formulations", "spec_cont_ind", "basic_price")),
                     viii_d = list(coltypes = "cccdcccd",
-                                  colnames = c("vmp_snomed_code", "vmpp_snomed_code", "medicine", "pack_size", "unit", "formulations", "spec_cont_ind", "basic_price")))
+                                  colnames = c("vmp_snomed_code", "vmpp_snomed_code", "medicine", "pack_size", "unit_of_measure", "formulations", "spec_cont_ind", "basic_price")))
   
   # Generate full link for the file that needs downloading
   full_link <- paste0("https://www.nhsbsa.nhs.uk", viii_links[[name]])
   
+  # Generate file name
+  filename <- paste0("drug_tariff_", name, "_", stringr::str_remove_all(lubridate::ym(paste0(viii_dates[[name]]$year, "-", viii_dates[[name]]$month)), "-|(01)"), ".csv")
+  
   # Generate download file path, save to temporary directory
-  download_path <- file.path(tempdir(), paste0("drug_tariff_", name, "_", stringr::str_remove_all(lubridate::ym(paste0(viii_dates[[name]]$year, "-", viii_dates[[name]]$month)), "-|(01)"), ".csv"))
+  download_path <- rprojroot::find_package_root_file("inst", "extdata", filename)
 
   # Download file to "drug_tariff" folder in "data", label with section ID and date (YYYYMM)
   download.file(full_link, download_path)
-
-  # Add check for return value for download.file
   
-  # Read file
-  df <- readr::read_csv(download_path, 
+  # Read data and clean - Removes header and empty rows, renames columns sensibly
+  df <- read_csv(download_path,
                  skip = 5,
                  col_types = viii_read[[name]]$coltypes,
                  col_names = viii_read[[name]]$colnames)
   
-  # Save in data/
-  usethis::use_data(df, overwrite = T, name = name)
+  # Overwrite downloaded file
+  write_csv(df, download_path)
 }
 
 # Loop through and download all files
@@ -94,21 +95,36 @@ ix_link <- url_ix %>%
   # Get value for href attribute
   rvest::html_attr("href")
 
+# Generate ix file name
+ix_filename <- paste0("drug_tariff_ix_",
+                      stringr::str_remove_all(
+                        lubridate::ym(
+                          paste0(stringr::str_extract(ix_link, "\\d{4}(?=\\.csv)"),
+                                 "-",
+                                 stringr::str_extract(ix_link, "(?<=IX%20)[:alpha:]+")
+                          )
+                        ),
+                        "-|(01)"),
+                      ".csv"
+)
+
+# Generate download file path, save to temporary directory
+ix_download_path <- rprojroot::find_package_root_file("inst", "extdata", ix_filename)
+
 # Download IX file to "drug_tariff" folder in "data", label with section ID and date (YYYYMM)
 download.file(paste0("https://www.nhsbsa.nhs.uk", ix_link),
-              file.path(tempdir(),
-                   paste0("drug_tariff_ix_",
-                          stringr::str_remove_all(
-                            lubridate::ym(
-                              paste0(stringr::str_extract(ix_link, "\\d{4}(?=\\.csv)"),
-                                     "-",
-                                     stringr::str_extract(ix_link, "(?<=IX%20)[:alpha:]+")
-                                     )
-                              ),
-                            "-|(01)"),
-                          ".csv"
-                          )
-                   )
+              ix_download_path
               )
 
-# Store as R objects
+# Read data and clean - Removes header and empty rows, renames columns sensibly
+ix_df <- read_csv(ix_download_path,
+               skip = 5,
+               col_types = "ccccccdcccdcccccc",
+               col_names = c("drug_tariff_part", "supplier_name", "vmp_name", "amp_name", 
+                             "colour", "size_or_weight", "quantity", "quantity_unit_of_measure",
+                             "product_order_number", "pack_order_number", "price", "add_dispensing_indicator",
+                             "product_snomed_code", "pack_snomed_code", "gtin",
+                             "supplier_snomed_code","bnf_code"))
+
+# Overwrite downloaded file
+write_csv(ix_df, ix_download_path)
