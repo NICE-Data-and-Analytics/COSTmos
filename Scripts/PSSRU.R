@@ -3,19 +3,54 @@
 generate_PSSRU_tables <- function(qual, direct, year){
 
   library(dplyr)
+  library(pdftools)
+  library(stringr)
   options(scipen = 999)
+  
+  folder_path <- file.path("Data", "PSSRU")
+  
+  PSSRU_PDF <- pdf_text(file.path(folder_path, paste0("PSSRU_", year , ".PDF")))
+  
+  #find GP table
+  GP_table <- PSSRU_PDF[grepl("Table 9.4.2", PSSRU_PDF)]
+  GP_table <- strsplit(GP_table, "\n")
+  GP_table <- GP_table[[2]]
+  GP_table <- trimws(GP_table)
+  GP_table <- str_split_fixed(GP_table, " {2,}", 10)
+  GP_table = as.data.frame(GP_table)
+  
+  #clean data frame
+  GP_table <- GP_table[-(1:4),]
+  GP_table <- GP_table[-(16:26),]
+  rownames(GP_table) <- make.unique(GP_table[,1])
+  GP_table <- GP_table[,-1]
+
   
   #write here source and year of the publication
   source <- paste("PSSRU", year)
   
-  folder_path <- file.path("Data", "PSSRU", year)
+  if(year == "2023"){
+    URL <- "https://kar.kent.ac.uk/105685/1/The%20unit%20costs%20of%20health%20and%20social%20care_Final3.pdf"
+  } else if (year == "2024") {
+    URL <- "https://kar.kent.ac.uk/109563/1/The%20unit%20costs%20of%20health%20and%20social%20care%202024%20%28for%20publication%29_Final.pdf"
+  }
+  
+  #Find training table
+  training_doctor <- PSSRU_PDF[grepl("Table 12.4.2", PSSRU_PDF)]
+  training_doctor <- strsplit(training_doctor, "\n")
+  training_doctor <- training_doctor[[3]]
+  #training_doctor <- trimws(training_doctor)
+  training_doctor <- str_split_fixed(training_doctor, " {2,}", 10)
+  training_doctor = as.data.frame(training_doctor)
+  
   
   #NICE qualification adjustment
-  training_doctor <- read.csv(file.path(folder_path, "12.4.2_training_doctor.csv"))
-  training_non_doctor <- read.csv(file.path(folder_path,"12.4.1_training_non_doctor.csv"))
-  gp_unit_costs <- read.csv(file.path(folder_path, "9.4.2_GP_unit_costs.csv"))
+  training_doctor1 <- read.csv(file.path(folder_path, "12.4.2_training_doctor.csv"))
+  training_non_doctor1 <- read.csv(file.path(folder_path,"12.4.1_training_non_doctor.csv"))
+  #gp_unit_costs <- read.csv(file.path(folder_path, "9.4.2_GP_unit_costs.csv"))
   nurse_unit_costs <- read.csv(file.path(folder_path, "9.2.1_nurse_unit_costs.csv"))
   doctors_unit_costs <- read.csv(file.path(folder_path, "11.3.2_hospital_doctors.csv"))
+  AfC_desc <- read.csv(file.path(folder_path, "8.1_AfC.csv"))
   
   #adjustment to qualification cost to exclude living expenses and lost production
   training_doctor$adjustment_factor <- (training_doctor[,7] - training_doctor[,3])/ training_doctor[,7]
@@ -24,26 +59,44 @@ generate_PSSRU_tables <- function(qual, direct, year){
   training_non_doctor$adjustment_factor <- (training_non_doctor[,5] - training_non_doctor[,3])/ training_non_doctor[,5]
   training_non_doctor$adjusted <- training_non_doctor$adjustment_factor * training_non_doctor[,6]
   
-  gp_unit_costs$incl_direct_qual_adjust <- NA
-  gp_unit_costs$excl_direct_qual_adjust <- NA
+  #create GP unit costs table
+  gp_unit_costs <- matrix(NA, 6, 6)
+  rownames(gp_unit_costs) <- c("Annual (including travel)", "Annual (excluding travel)", "Per hour of GMS activity" , "Per hour of patient contact", "Per minute of patient contact",  "Per surgery consultation lasting 10 minutes")
+  colnames(gp_unit_costs) <- c("including qualification and including direct care staff cost", "excluding qualification and including direct care staff cost",
+                               "including qualification and excluding direct care staff cost", "excluding qualification and excluding direct care staff cost",
+                               "incl_direct_qual_adjust", "excl_direct_qual_adjust")  
+  gp_unit_costs = as.data.frame(gp_unit_costs)
   
-  gp_unit_costs[1,6] <- gp_unit_costs[1,3] + training_doctor[6, 10]
-  gp_unit_costs[1,7] <- gp_unit_costs[1,5] + training_doctor[6, 10]
+  common_rows <- intersect(rownames(gp_unit_costs), rownames(GP_table))
+  gp_unit_costs[common_rows,] <- GP_table[common_rows,1:6]
   
-  gp_unit_costs[2,6] <- gp_unit_costs[2,3] + training_doctor[6, 10]
-  gp_unit_costs[2,7] <- gp_unit_costs[2,5] + training_doctor[6, 10]
+  #adding last column manually
+  gp_unit_costs["Per surgery consultation lasting 10 minutes",] <- GP_table["minutes1", 1:6]
   
+  #make values numeric
+  gp_unit_costs[] <- lapply(gp_unit_costs, function(x) {
+    as.numeric(gsub("[£,]", "", x))
+  })
+  
+  gp_unit_costs[1,5] <- gp_unit_costs["Annual (including travel)","excluding qualification and including direct care staff cost"] + 
+    training_doctor[6, "adjusted"]
+  gp_unit_costs[1,6] <- gp_unit_costs["Annual (including travel)","excluding qualification and excluding direct care staff cost"] + 
+    training_doctor[6, "adjusted"]
+  
+  gp_unit_costs[2,5] <- gp_unit_costs[2,2] + training_doctor[6, "adjusted"]
+  gp_unit_costs[2,6] <- gp_unit_costs[2,4] + training_doctor[6, "adjusted"]
+  
+  gp_unit_costs[3,5] <- gp_unit_costs[2,5] / (gp_unit_costs[2,2] / gp_unit_costs[3,2])
   gp_unit_costs[3,6] <- gp_unit_costs[2,6] / (gp_unit_costs[2,2] / gp_unit_costs[3,2])
-  gp_unit_costs[3,7] <- gp_unit_costs[2,7] / (gp_unit_costs[2,2] / gp_unit_costs[3,2])
   
+  gp_unit_costs[4,5] <- gp_unit_costs[2,5] / (gp_unit_costs[2,2] / gp_unit_costs[4,2])
   gp_unit_costs[4,6] <- gp_unit_costs[2,6] / (gp_unit_costs[2,2] / gp_unit_costs[4,2])
-  gp_unit_costs[4,7] <- gp_unit_costs[2,7] / (gp_unit_costs[2,2] / gp_unit_costs[4,2])
   
+  gp_unit_costs[5,5] <- gp_unit_costs[4,5] / 60
   gp_unit_costs[5,6] <- gp_unit_costs[4,6] / 60
-  gp_unit_costs[5,7] <- gp_unit_costs[4,7] / 60
   
+  gp_unit_costs[6,5] <- gp_unit_costs[5,5] * 10
   gp_unit_costs[6,6] <- gp_unit_costs[5,6] * 10
-  gp_unit_costs[6,7] <- gp_unit_costs[5,7] * 10
   
   nurse_unit_costs[4,1] <- "NICE productivity adjusment"
   nurse_unit_costs[4,-1] <- nurse_unit_costs[2,-1] + training_non_doctor[7,"adjusted"] / nurse_unit_costs[1,-1]
@@ -86,19 +139,18 @@ generate_PSSRU_tables <- function(qual, direct, year){
     output_hospital_doctors <- t(doctors_unit_costs[2,, drop = FALSE])
     
     if(direct == 1){
-      output_practice_GP <- gp_unit_costs[, "excluding.qualification.and.including.direct.care.staff.cost", drop = FALSE]
+      output_practice_GP <- gp_unit_costs[, "excluding qualification and including direct care staff cost", drop = FALSE]
     } else {
-      output_practice_GP <- gp_unit_costs[, "excluding.qualification.and.excluding.direct.care.staff.cost", drop = FALSE]
+      output_practice_GP <- gp_unit_costs[, "excluding qualification and excluding direct care staff cost", drop = FALSE]
     }
   }
 
   colnames(output_practice_nurse) <- colnames(output_practice_GP) <- c("Cost in £")
   colnames(output_hospital_doctors) <- c("Cost per working hour (£)")
   output_hospital_doctors <- as.data.frame(output_hospital_doctors[-1,, drop = FALSE])
-  rownames(output_practice_GP) <- gp_unit_costs[,1]
   output_practice_nurse <- round(output_practice_nurse, 2)
   output_practice_GP <- round(output_practice_GP, 2)
   
-  PSSRU <- list("source" = source, "practice_nurse" = output_practice_nurse, "practice_GP" = output_practice_GP, "hospital_doctors" = output_hospital_doctors)
+  PSSRU <- list("source" = source, "URL" = URL, "practice_nurse" = output_practice_nurse, "practice_GP" = output_practice_GP, "hospital_doctors" = output_hospital_doctors)
   return(PSSRU)
 }

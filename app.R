@@ -51,7 +51,8 @@ ui <- fluidPage(
             # Show a plot of the generated distribution
             mainPanel(
               DTOutput("table"),
-              downloadButton("healthcare_professional", "Download Table")
+              downloadButton("healthcare_professional", "Download Table"),
+             uiOutput("dynamic_link")
             )
         )
       )
@@ -91,6 +92,11 @@ server <- function(input, output, session) {
     content = function(file) {
       write.csv(selected_data(), file, row.names = FALSE)
     })
+  
+ output$dynamic_link <- renderUI({
+   dat <- UI_outputs()          # safe to call inside renderUI
+   tags$a(href = dat$URL, paste("Link to",dat$source), target = "_blank")
+ })
 }
 
 # Run the application 
