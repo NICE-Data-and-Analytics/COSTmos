@@ -9,28 +9,33 @@
 
 library(shiny)
 library(DT)
-library(here)
 library(reactable)
+library(tidyverse)
+library(glue)
+library(fs)
 
-costs_app <- function() {
+costmos_app <- function(...) {
   
   # Define UI for application that draws a histogram
   ui <- fluidPage(
   
       # Application title
-      titlePanel("NICE project X"),
+      titlePanel("COSTmos"),
       
       navlistPanel(
         widths = c(2, 10),  
-        "Reference Prices",
+        "Data sets",
         tabPanel("Drug Tariff",
           sidebarLayout(
             sidebarPanel(
               selectInput("drug_tariff_section",
                           label = "Select section",
-                          choices = list("Part VIIIA" = "viiia", "Part VIIIB" = "viiib", "Part VIIID" = "viiid", "Category M" = "cat_m", "Part IX" = "ix"))
+                          choices = drug_tariff_sections),
+              width = 2
             ),
             mainPanel(
+              h3(textOutput("drug_tariff_title")),
+              textOutput("drug_tariff_date_caption"),
               reactableOutput("drug_tariff_table")
             )
           )
@@ -107,6 +112,33 @@ costs_app <- function() {
       content = function(file) {
         write.csv(selected_data(), file, row.names = FALSE)
       })
+    
+    # Drug Tariff
+    ## Reactive expressions
+    drug_tariff_df <- reactive(get(paste0("drug_tariff_", input$drug_tariff_section)))
+    drug_tariff_df_colspec <- reactive(drug_tariff_col_spec[[input$drug_tariff_section]])
+    drug_tariff_section_name <- reactive(glue::glue("Drug Tariff - {names(drug_tariff_sections)[[stringr::str_which(drug_tariff_sections, input$drug_tariff_section)]]}"))
+    drug_tariff_df_date <- reactive({
+      fs::path_package("extdata", package = "costmos") %>%
+        list.files() %>%
+        stringr::str_subset(pattern = input$drug_tariff_section) %>%
+        stringr::str_sort(decreasing = T, numeric = T) %>%
+        purrr::pluck(1) %>%
+        stringr::str_extract("\\d{6}(?=\\.csv)") %>%
+        lubridate::ym()
+    })
+    drug_tariff_df_date_caption <- reactive(glue::glue("{format(drug_tariff_df_date(), '%B %Y')} version"))
+    
+    output$drug_tariff_title <- renderText(drug_tariff_section_name())
+    
+    output$drug_tariff_date_caption <- renderText(drug_tariff_df_date_caption())
+    
+    output$drug_tariff_table <- renderReactable({
+      reactable(drug_tariff_df(),
+                searchable = T,
+                defaultPageSize = 10,
+                columns = drug_tariff_df_colspec())
+    })
   }
   
   # Run the application 
