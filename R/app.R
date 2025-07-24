@@ -17,71 +17,36 @@ library(fs)
 costmos_app <- function(...) {
   
   # Define UI for application that draws a histogram
-  ui <- fluidPage(
-  
-      # Application title
-      titlePanel("COSTmos"),
-      
-      navlistPanel(
-        widths = c(2, 10),  
-        "Data sets",
-        tabPanel("Drug Tariff",
-          sidebarLayout(
-            sidebarPanel(
-              selectInput("drug_tariff_section",
-                          label = "Select section",
-                          choices = drug_tariff_sections),
-              width = 2
-            ),
-            mainPanel(
-              h3(textOutput("drug_tariff_title")),
-              textOutput("drug_tariff_date_caption"),
-              reactableOutput("drug_tariff_table")
-            )
-          )
-                 ),
-        tabPanel("NHS Collection Costs"),
-        tabPanel("Healthcare professionals unit costs",
-          sidebarLayout(
-              sidebarPanel(
-                selectInput("year",
-                            label = "Select year",
-                            choices = c("2023", "2024", "2025"),
-                            selected = "2024"),  
-                selectInput("healthcare_professional",
-                              label = "healthcare professional",
-                              choices = c("Practice GP", "Practice nurse", "Hospital doctors", "Other healthcare professionals"),
-                              selected = "Practice nurse"),
-                radioButtons("qualification_cost",
-                               label = "Qualification cost (excluding individual/productivity)",
-                               choices = c("Include qualification cost" = 1, "Exclude qualification cost" = 2),
-                               selected = 1),
-                conditionalPanel(
-                  condition = "input.healthcare_professional == 'Practice GP'",
-                  radioButtons("direct_cost",
-                                 label = "Direct care staff cost",
-                                 choices = c("Include direct care staff costs" = 1, "Exclude direct care staff costs" = 2),
-                                 selected = 1)
-                    ),
+  ui <- page_navbar(
+    title = "COSTmos",
+    nav_panel("Data sets",
+              navset_pill_list(
+                widths = c(2, 10),
+                nav_panel("Drug Tariff",
+                          card(
+                            layout_sidebar(
+                              fillable = T,
+                              sidebar = sidebar(
+                                selectInput("drug_tariff_section",
+                                            label = "Select section",
+                                            choices = drug_tariff_sections)
+                              ),
+                              h3(textOutput("drug_tariff_title")),
+                              uiOutput("drug_tariff_date_caption"),
+                              reactableOutput("drug_tariff_table")
+                            )
+                          )
+                          ),
+                nav_panel("NHS Collection Costs"),
+                nav_panel("Healthcare professionals unit costs")
+                )
               ),
-      
-              # Show a plot of the generated distribution
-              mainPanel(
-                DTOutput("table"),
-                downloadButton("healthcare_professional", "Download Table")
-              )
-          )
-        )
-      )
+    nav_panel("About")
   )
   
   # Define server logic required to draw a histogram
   server <- function(input, output, session) {
   
-    # output$drug_tariff_table <- renderReactable({
-    #   reactable(iris)
-    # })
-    # 
     UI_outputs <- reactive({
       generate_PSSRU_tables(
         qual = input$qualification_cost,
@@ -127,11 +92,15 @@ costmos_app <- function(...) {
         stringr::str_extract("\\d{6}(?=\\.csv)") %>%
         lubridate::ym()
     })
-    drug_tariff_df_date_caption <- reactive(glue::glue("{format(drug_tariff_df_date(), '%B %Y')} version"))
+    drug_tariff_df_date_caption <- reactive(glue::glue("{format(drug_tariff_df_date(), '%B %Y')}. Download the latest version of the Drug Tariff from the "))
     
     output$drug_tariff_title <- renderText(drug_tariff_section_name())
     
-    output$drug_tariff_date_caption <- renderText(drug_tariff_df_date_caption())
+    output$drug_tariff_date_caption <- renderUI(withTags({
+      div(p(drug_tariff_df_date_caption(),
+            a(href="https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff", "NHSBSA website"))
+      )
+    }))
     
     output$drug_tariff_table <- renderReactable({
       reactable(drug_tariff_df(),
