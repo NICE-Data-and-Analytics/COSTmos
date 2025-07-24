@@ -33,19 +33,38 @@ ui <- fluidPage(
                           selected = "2024"),  
               selectInput("healthcare_professional",
                             label = "healthcare professional",
-                            choices = c("Practice GP", "Practice nurse", "Hospital doctors", "Other healthcare professionals"),
-                            selected = "Practice nurse"),
+                            choices = c("Practice GP", 
+                                        "Practice nurse", 
+                                        "Hospital doctors", 
+                                        "Qualified nurses", 
+                                        "Community-based scientific and professional staff",
+                                        "Training costs"),
+                            selected = "Practice GP"),
+              conditionalPanel(
+                condition = "input.healthcare_professional == 'Practice GP' ||
+                            input.healthcare_professional == 'Practice nurse' ||
+                            input.healthcare_professional == 'Hospital doctors'||
+                input.healthcare_professional == 'Qualified nurses'",
               radioButtons("qualification_cost",
                              label = "Qualification cost (excluding individual/productivity)",
                              choices = c("Include qualification cost" = 1, "Exclude qualification cost" = 2),
                              selected = 1),
+              ),
               conditionalPanel(
                 condition = "input.healthcare_professional == 'Practice GP'",
                 radioButtons("direct_cost",
                                label = "Direct care staff cost",
                                choices = c("Include direct care staff costs" = 1, "Exclude direct care staff costs" = 2),
+                               selected = 1),
+              ),
+                conditionalPanel(
+                  condition = "input.healthcare_professional == 'Training costs'",
+                  radioButtons("training_HCP",
+                               label = "Select",
+                               choices = c("Training cost of health and social care professionals (excluding doctors)" = 1, 
+                                           "Training costs of doctors (after discounting)" = 2),
                                selected = 1)
-                  ),
+                  )
             ),
     
             # Show a plot of the generated distribution
@@ -66,7 +85,8 @@ server <- function(input, output, session) {
     generate_PSSRU_tables(
       qual = input$qualification_cost,
       direct = input$direct_cost,
-      year = input$year
+      year = input$year,
+      training_HCP = input$training_HCP
     )
   })
   
@@ -75,12 +95,15 @@ server <- function(input, output, session) {
            "Practice nurse" = UI_outputs()$practice_nurse,
            "Practice GP" = UI_outputs()$practice_GP,
            "Hospital doctors" = UI_outputs()$hospital_doctors,
-           "Other healthcare professionals" = UI_outputs()$other_healthcare_professionals
+           "Community-based scientific and professional staff" = UI_outputs()$HCP_table,
+           "Qualified nurses" = UI_outputs()$qualified_nurse,
+           "Training costs" = UI_outputs()$training_costs
+           
     )
   })
   
   output$table <- renderDT({
-    datatable(selected_data(), caption = paste(input$healthcare_professional, UI_outputs()$source), options = list(pageLength = 10))
+    datatable(selected_data(), caption = paste(input$healthcare_professional, UI_outputs()$source), options = list(pageLength = 15))
   })
   
   

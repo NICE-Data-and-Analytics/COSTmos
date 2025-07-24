@@ -1,6 +1,6 @@
 #script for analysis on PSSRU
 
-generate_PSSRU_tables <- function(qual, direct, year){
+generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
 
   library(dplyr)
   library(pdftools)
@@ -70,6 +70,8 @@ generate_PSSRU_tables <- function(qual, direct, year){
   nurse_table[] <- lapply(nurse_table, function(x) {
     as.numeric(gsub("[£,]", "", x))
   })
+  #delete empy rows
+  nurse_table <- na.omit(nurse_table)
   
   doctors_table <- doctors_table[-(1:12),-(9:10)]
   doctors_table <- doctors_table[-(17:30),]
@@ -85,6 +87,25 @@ generate_PSSRU_tables <- function(qual, direct, year){
   doctors_table[] <- lapply(doctors_table, function(x) {
       as.numeric(gsub("[£,]", "", x))
     })
+  
+  HCP_table <- HCP_table[-(1:11),]
+  HCP_table <- HCP_table[-(19:30),]
+  rownames(HCP_table) <- make.unique(HCP_table[,1])
+  HCP_table <- HCP_table[,-1]
+  colnames(HCP_table) <- c("Band 4", 
+                             "Band 5", 
+                             "Band 6", 
+                             "Band 7", 
+                             "Band 8a", 
+                             "Band 8b", 
+                             "Band 8c", 
+                             "Band 8d", 
+                             "Band 9")
+  HCP_table[] <- lapply(HCP_table, function(x) {
+    as.numeric(gsub("[£,]", "", x))
+  })
+  #delete empty rows
+  HCP_table <- na.omit(HCP_table)
 
   #create training tables
   training_doctor <- matrix(NA, 7, 7)
@@ -195,9 +216,10 @@ generate_PSSRU_tables <- function(qual, direct, year){
   gp_unit_costs[6,5] <- gp_unit_costs[5,5] * 10
   gp_unit_costs[6,6] <- gp_unit_costs[5,6] * 10
   
-  rownames(nurse_table)[20] <- "NICE productivity adjusment"
+  rownames(nurse_table)[nrow(nurse_table)] <- "NICE productivity adjusment"
   nurse_table["NICE productivity adjusment",] <- nurse_table["Cost per working hour",] + 
     training_non_doctor["Nurse","adjusted"] / nurse_table["Working hours per year",]
+  nurse_table <- round(nurse_table, 2)
   
   doctors_table["NICE productivity adjusment",] <- NA
   doctors_table["NICE productivity adjusment",1:4] <- doctors_table["Cost per working hour", 1:4] + 
@@ -228,6 +250,7 @@ generate_PSSRU_tables <- function(qual, direct, year){
   if(qual == 1){
     output_practice_nurse <- practice_nurse_costs[, "including qualification (NICE)", drop = FALSE]
     output_hospital_doctors <- t(doctors_table["NICE productivity adjusment",, drop = FALSE])
+    output_qualified_nurse <- t(nurse_table["NICE productivity adjusment",, drop = FALSE])
     
     if(direct == 1){
       output_practice_GP <- gp_unit_costs[, "incl_direct_qual_adjust", drop = FALSE]
@@ -237,6 +260,7 @@ generate_PSSRU_tables <- function(qual, direct, year){
   } else {
     output_practice_nurse <- practice_nurse_costs[, "excluding qualification", drop = FALSE]
     output_hospital_doctors <- t(doctors_table["Cost per working hour",, drop = FALSE])
+    output_qualified_nurse <- t(nurse_table["Cost per working hour",, drop = FALSE])
     
     if(direct == 1){
       output_practice_GP <- gp_unit_costs[, "excluding qualification and including direct care staff cost", drop = FALSE]
@@ -244,12 +268,28 @@ generate_PSSRU_tables <- function(qual, direct, year){
       output_practice_GP <- gp_unit_costs[, "excluding qualification and excluding direct care staff cost", drop = FALSE]
     }
   }
+  
+  if(training_HCP == 1){
+    training_costs = training_non_doctor 
+    } else {
+      training_costs = training_doctor
+    }
+  training_costs$adjustment_factor <- NULL
+  names(training_costs)[names(training_costs)=="adjusted"] <- "NICE-adjusted qualification cost"
+  training_costs <- round(training_costs, 2)
 
   colnames(output_practice_nurse) <- colnames(output_practice_GP) <- c("Cost in £")
-  colnames(output_hospital_doctors) <- c("Cost per working hour (£)")
+  colnames(output_hospital_doctors) <- colnames(output_qualified_nurse) <- c("Cost per working hour (£)")
   output_practice_nurse <- round(output_practice_nurse, 2)
   output_practice_GP <- round(output_practice_GP, 2)
   
-  PSSRU <- list("source" = source, "URL" = URL, "practice_nurse" = output_practice_nurse, "practice_GP" = output_practice_GP, "hospital_doctors" = output_hospital_doctors)
+  PSSRU <- list("source" = source, 
+                "URL" = URL, 
+                "practice_nurse" = output_practice_nurse, 
+                "practice_GP" = output_practice_GP, 
+                "hospital_doctors" = output_hospital_doctors, 
+                "qualified_nurse" = output_qualified_nurse, 
+                "HCP_table" = HCP_table, 
+                "training_costs" = training_costs)
   return(PSSRU)
 }
