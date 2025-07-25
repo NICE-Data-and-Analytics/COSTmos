@@ -13,6 +13,7 @@ library(reactable)
 library(tidyverse)
 library(glue)
 library(fs)
+library(bslib)
 
 costmos_app <- function(...) {
   
@@ -41,7 +42,11 @@ costmos_app <- function(...) {
                 nav_panel("Unit Costs of Health and Social Care")
                 )
               ),
-    nav_panel("About")
+    nav_panel("About",
+              card(
+                includeMarkdown(rprojroot::find_package_root_file("R", "about.md"))
+                )
+              )
   )
   
   # Define server logic required to draw a histogram
@@ -84,7 +89,7 @@ costmos_app <- function(...) {
     drug_tariff_df_colspec <- reactive(drug_tariff_col_spec[[input$drug_tariff_section]])
     drug_tariff_section_name <- reactive(glue::glue("Drug Tariff - {names(drug_tariff_sections)[[stringr::str_which(drug_tariff_sections, input$drug_tariff_section)]]}"))
     drug_tariff_df_date <- reactive({
-      fs::path_package("extdata", package = "costmos") %>%
+      fs::path_package("extdata", package = "COSTmos") %>%
         list.files() %>%
         stringr::str_subset(pattern = input$drug_tariff_section) %>%
         stringr::str_sort(decreasing = T, numeric = T) %>%
