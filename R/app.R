@@ -38,7 +38,7 @@ costmos_app <- function(...) {
                           )
                           ),
                 nav_panel("NHS Collection Costs"),
-                nav_panel("Healthcare professionals unit costs")
+                nav_panel("Unit Costs of Health and Social Care")
                 )
               ),
     nav_panel("About")
