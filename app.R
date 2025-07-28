@@ -57,6 +57,10 @@ ui <- fluidPage(
                                choices = c("Include direct care staff costs" = 1, "Exclude direct care staff costs" = 2),
                                selected = 1),
               ),
+              conditionalPanel(
+                condition = "input.healthcare_professional == 'Community-based scientific and professional staff'",
+                helpText("To calculate the cost per hour, including qualifications for scientific and professional staff, the appropriate expected annual cost shown in the 'Training cost' section should be divided by the number of working hours. This can then be added to the cost per working hour."),
+              ),
                 conditionalPanel(
                   condition = "input.healthcare_professional == 'Training costs'",
                   radioButtons("training_HCP",
