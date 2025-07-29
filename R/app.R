@@ -29,7 +29,7 @@ costmos_app <- function(...) {
                               fillable = T,
                               sidebar = sidebar(
                                 selectInput("drug_tariff_section",
-                                            label = "Select section",
+                                            label = "Section",
                                             choices = drug_tariff_sections)
                               ),
                               h3(textOutput("drug_tariff_title")),
@@ -39,8 +39,37 @@ costmos_app <- function(...) {
                           )
                           ),
                 nav_panel("NHS Collection Costs"),
-                nav_panel("Unit Costs of Health and Social Care")
+                nav_panel("Unit Costs of Health and Social Care",
+                          card(
+                            layout_sidebar(
+                              fillable = T,
+                              sidebar = sidebar(
+                                width = "25%",
+                                selectInput("pssru_year",
+                                            label = "Year",
+                                            choices = c("2023", "2024", "2025"),
+                                            selected = "2024"),  
+                                selectInput("pssru_healthcare_professional",
+                                            label = "Healthcare professional",
+                                            choices = c("Practice GP", "Practice nurse", "Hospital doctors", "Other healthcare professionals"),
+                                            selected = "Practice nurse"),
+                                radioButtons("pssru_qualification_cost",
+                                             label = "Qualification cost (excluding individual/productivity)",
+                                             choices = c("Include" = 1, "Exclude" = 2),
+                                             selected = 1),
+                                conditionalPanel(
+                                  condition = "input.pssru_healthcare_professional == 'Practice GP'",
+                                  radioButtons("pssru_direct_cost",
+                                               label = "Direct care staff cost",
+                                               choices = c("Include" = 1, "Exclude" = 2),
+                                               selected = 1)
+                                )
+                              ),
+                              reactableOutput("pssru_table")
+                            ),
+                          )
                 )
+              )
               ),
     nav_panel("About",
               card(
@@ -52,32 +81,32 @@ costmos_app <- function(...) {
   # Define server logic required to draw a histogram
   server <- function(input, output, session) {
   
-    UI_outputs <- reactive({
-      generate_PSSRU_tables(
-        qual = input$qualification_cost,
-        direct = input$direct_cost,
-        year = input$year
+    pssru_ui_outputs <- reactive({
+      generate_pssru_tables(
+        qual = input$pssru_qualification_cost,
+        direct = input$pssru_direct_cost,
+        year = input$pssru_year
       )
     })
     
-    selected_data <- reactive({
-      switch(input$healthcare_professional,
-             "Practice nurse" = UI_outputs()$practice_nurse,
-             "Practice GP" = UI_outputs()$practice_GP,
-             "Hospital doctors" = UI_outputs()$hospital_doctors,
-             "Other healthcare professionals" = UI_outputs()$other_healthcare_professionals
+    pssru_selected_data <- reactive({
+      switch(input$pssru_healthcare_professional,
+             "Practice nurse" = pssru_ui_outputs()$practice_nurse,
+             "Practice GP" = pssru_ui_outputs()$practice_GP,
+             "Hospital doctors" = pssru_ui_outputs()$hospital_doctors,
+             "Other healthcare professionals" = pssru_ui_outputs()$other_healthcare_professionals
       )
     })
     
-    output$table <- renderDT({
-      datatable(selected_data(), caption = paste(input$healthcare_professional, UI_outputs()$source), options = list(pageLength = 10))
+    output$pssru_table <- renderReactable({
+      reactable(pssru_selected_data())
     })
     
     
     #download buttons
     output$healthcare_professional <- downloadHandler(
       filename = function() {
-        paste(input$healthcare_professional, UI_outputs()$source, ".csv", sep = " ")
+        paste(input$pssru_healthcare_professional, UI_outputs()$source, ".csv", sep = " ")
       },
       content = function(file) {
         write.csv(selected_data(), file, row.names = FALSE)

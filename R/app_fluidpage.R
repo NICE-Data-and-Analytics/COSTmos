@@ -14,8 +14,9 @@ library(tidyverse)
 library(glue)
 library(fs)
 
-costmos_fluidpage_app <- function(...) {
-  
+source(rprojroot::find_package_root_file("R", "drug_tariff.R"))
+source(rprojroot::find_package_root_file("R", "PSSRU.R"))
+
   # Define UI for application that draws a histogram
   ui <- fluidPage(
   
@@ -83,7 +84,7 @@ costmos_fluidpage_app <- function(...) {
     # })
     # 
     UI_outputs <- reactive({
-      generate_PSSRU_tables(
+      generate_pssru_tables(
         qual = input$qualification_cost,
         direct = input$direct_cost,
         year = input$year
@@ -119,7 +120,7 @@ costmos_fluidpage_app <- function(...) {
     drug_tariff_df_colspec <- reactive(drug_tariff_col_spec[[input$drug_tariff_section]])
     drug_tariff_section_name <- reactive(glue::glue("Drug Tariff - {names(drug_tariff_sections)[[stringr::str_which(drug_tariff_sections, input$drug_tariff_section)]]}"))
     drug_tariff_df_date <- reactive({
-      fs::path_package("extdata", package = "costmos") %>%
+      fs::path_package("extdata", package = "COSTmos") %>%
         list.files() %>%
         stringr::str_subset(pattern = input$drug_tariff_section) %>%
         stringr::str_sort(decreasing = T, numeric = T) %>%
@@ -143,4 +144,3 @@ costmos_fluidpage_app <- function(...) {
   
   # Run the application 
   shinyApp(ui = ui, server = server)
-}

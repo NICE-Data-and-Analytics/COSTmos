@@ -1,43 +1,63 @@
 #script for analysis on PSSRU
 
-generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
+library(dplyr)
+library(pdftools)
+library(stringr)
+options(scipen = 999)
 
-  library(dplyr)
-  library(pdftools)
-  library(stringr)
-  options(scipen = 999)
+generate_pssru_tables <- function(qual, direct, year_selected, training_HCP){
   
-  #data scraping function that returns table from PDF file as data frames
-  PDF_scrape <- function(file, search_term){
-    table <- file[grepl(search_term, file)]
-    table <- strsplit(table, "\n")
-    table <- table[[2]]
-    table <- trimws(table)
-    table <- str_split_fixed(table, " {2,}", 10)
-    table = as.data.frame(table)
+  # Data scraping function that returns table with selected string from PDF file as data frames
+  pdf_scrape <- function(file_text, search_term) {
+    scraped <- file_text %>% 
+      # Select element with search term
+      stringr::str_subset(search_term) %>% 
+      # Split by new line
+      stringr::str_split("\n") %>% 
+      # Get the second element
+      purrr::pluck(2) %>% 
+      # Remove white space
+      stringr::str_trim() %>% 
+      # Split where there are two or more spaces, returning a maximum of 10 pieces
+      stringr::str_split_fixed(" {2,}", 10) %>% 
+      # Convert character matrix to data frame
+      as.data.frame()
   }
+
+  # Extract all text in PDF file into character vector, each page an element
+  pssru_text <- suppressMessages(pdf_text(rprojroot::find_package_root_file("Data", "PSSRU", paste0("PSSRU_", year_selected , ".pdf"))))
   
-  folder_path <- file.path("Data", "PSSRU")
+  #write here source and year_selected of the publication
+  source_year <- paste("PSSRU", year_selected)
   
-  PSSRU_PDF <- pdf_text(file.path(folder_path, paste0("PSSRU_", year , ".PDF")))
-  
-  #write here source and year of the publication
-  source <- paste("PSSRU", year)
-  
-  if(year == "2023"){
+  if(year_selected == "2023"){
     URL <- "https://kar.kent.ac.uk/105685/1/The%20unit%20costs%20of%20health%20and%20social%20care_Final3.pdf"
-  } else if (year == "2024") {
+  } else if (year_selected == "2024") {
     URL <- "https://kar.kent.ac.uk/109563/1/The%20unit%20costs%20of%20health%20and%20social%20care%202024%20%28for%20publication%29_Final.pdf"
   }
   
   #find GP table
-  GP_table <- PDF_scrape(PSSRU_PDF, "Table 9.4.2: Unit costs for a GP")
-  training_doctor_table <- PDF_scrape(PSSRU_PDF, "Table 12.4.2: Training costs of doctors")
-  training_non_doctor_table <- PDF_scrape(PSSRU_PDF, "Table 12.4.1: Training costs of health and social care professionals, excluding doctors")
-  nurse_table <- PDF_scrape(PSSRU_PDF, "Table 9.2.1: Annual and unit costs for qualified nurses")  
-  doctors_table <- PDF_scrape(PSSRU_PDF, "Table 11.3.2: Annual and unit costs for hospital-based doctors")
+  gp_table <- pdf_scrape(pssru_text, "Table 9.4.2: Unit costs for a GP") %>% 
+    slice(-(1:4)) %>% 
+    slice(-(16:23))
+  
+  GP_table <- pdf_scrape(pssru_text, "Table 9.4.2: Unit costs for a GP")
+  GP_table <- GP_table[-(1:4),]
+  GP_table <- GP_table[-(16:23),]
+  rownames(GP_table) <- make.unique(GP_table[,1])
+  GP_table <- GP_table[,-1]
+    
+  training_doctor_table <- pdf_scrape(pssru_text, "Table 12.4.2: Training costs of doctors")
+  
+  training_non_doctor_table <- pdf_scrape(pssru_text, "Table 12.4.1: Training costs of health and social care professionals, excluding doctors")
+  
+  nurse_table <- pdf_scrape(pssru_text, "Table 9.2.1: Annual and unit costs for qualified nurses")  
+  
+  doctors_table <- pdf_scrape(pssru_text, "Table 11.3.2: Annual and unit costs for hospital-based doctors")
+  
   #AFC_table <- PDF_scrape(PSSRU_PDF, "Table 8.1: Agenda for Change bands for scientific and professional staff") #very messy
-  HCP_table <- PDF_scrape(PSSRU_PDF, "Table 8.2.1: Annual and unit costs for community-based scientific and professional staff")
+  
+  HCP_table <- pdf_scrape(pssru_text, "Table 8.2.1: Annual and unit costs for community-based scientific and professional staff")
   
   #clean data frames
   GP_table <- GP_table[-(1:4),]
@@ -218,15 +238,15 @@ generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
   
   rownames(nurse_table)[nrow(nurse_table)] <- "NICE productivity adjusment"
   nurse_table["NICE productivity adjusment",] <- nurse_table["Cost per working hour",] + 
-    training_non_doctor["Nurse","adjusted"] / nurse_table["Working hours per year",]
+    training_non_doctor["Nurse","adjusted"] / nurse_table["Working hours per year_selected",]
   nurse_table <- round(nurse_table, 2)
   
   doctors_table["NICE productivity adjusment",] <- NA
   doctors_table["NICE productivity adjusment",1:4] <- doctors_table["Cost per working hour", 1:4] + 
-    training_doctor[1:4,"adjusted"]/doctors_table["Working hours per year",1:4]
+    training_doctor[1:4,"adjusted"]/doctors_table["Working hours per year_selected",1:4]
   
   doctors_table["NICE productivity adjusment",5:7] <- doctors_table["Cost per working hour", 5:7] + 
-    training_doctor["Consultant","adjusted"]/doctors_table["Working hours per year",5:7]
+    training_doctor["Consultant","adjusted"]/doctors_table["Working hours per year_selected",5:7]
   
   doctors_table<- round(doctors_table, 2)
   
