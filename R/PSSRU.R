@@ -1,49 +1,12 @@
 #script for analysis on PSSRU
 
-library(dplyr)
-library(pdftools)
-library(stringr)
-library(janitor)
-options(scipen = 999)
-
-generate_pssru_tables <- function(qual, direct, year_selected, training_HCP){
+generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
   
-# <<<<<<< HEAD:R/PSSRU.R
-  # Data scraping function that returns table with selected string from PDF file as data frames
-  pdf_scrape <- function(file_text, search_term) {
-    scraped <- file_text %>% 
-      # Select element with search term
-      stringr::str_subset(search_term) %>% 
-      # Split by new line
-      stringr::str_split("\n") %>% 
-      # Get the second element
-      purrr::pluck(2) %>% 
-      # Remove white space
-      stringr::str_trim() %>% 
-      # Split where there are two or more spaces, returning a maximum of 10 pieces
-      stringr::str_split_fixed(" {2,}", 10) %>% 
-      # Convert character matrix to data frame
-      as.data.frame()
-    
-    # Identify rows where cost is in first column
-    error_row <- stringr::str_which(scraped[,1], "£")
-    # Shift row to row above and one column to the right
-    scraped[error_row-1, 2:ncol(scraped)] <- scraped[error_row, 1:(ncol(scraped)-1)]
-    # Drop the error row
-    if (length(error_row) > 0) {scraped <- scraped[-error_row, ]}
-    
-    # Make the first column the row name then drop the first column
-    rownames(scraped) <- make.unique(scraped[ ,1])
-    
-    scraped <- scraped %>% 
-      select(-1) %>% 
-      # Delete pound symbol and commas in costs
-      mutate(across(everything(), \(x) stringr::str_remove_all(x, "(?<=\\d),(?=\\d)") %>%
-                      stringr::str_remove_all("£"))) %>% 
-      filter(!if_all(everything(), is.na))
-      
-}
-# =======
+  library(dplyr)
+  library(pdftools)
+  library(stringr)
+  options(scipen = 999)
+  
   #data scraping function that returns table from PDF file as data frames
   PDF_scrape <- function(file, search_term){
     table <- file[grepl(search_term, file)]
@@ -52,100 +15,72 @@ generate_pssru_tables <- function(qual, direct, year_selected, training_HCP){
     table <- trimws(table)
     table <- str_split_fixed(table, " {2,}", 10)
     table = as.data.frame(table)
-    
     error_row <- which(grepl("£", table [,1]))
-    
     table[error_row -1,2:ncol(table)] <-
       table[error_row ,1:(ncol(table))-1]
-    
     if (length(error_row) > 0) {
       table <- table[-error_row, ]
     }
     rownames(table) <- make.unique(table[,1])
     table <- table[,-1]
-    
     table[] <- lapply(table, function(x) {
       as.numeric(gsub("[£,]", "", x))
     })
     table <- table[!apply(table, 1, function(row) all(is.na(row))), ]
     table <- table[, !apply(table, 2, function(col) all(is.na(col)))]
-# >>>>>>> master:Scripts/PSSRU.R
   }
-
-  # Extract all text in PDF file into character vector, each page an element
-  pssru_text <- suppressMessages(pdf_text(rprojroot::find_package_root_file("Data", "PSSRU", paste0("PSSRU_", year_selected , ".pdf"))))
   
-  #write here source and year_selected of the publication
-  source_year <- paste("PSSRU", year_selected)
+  folder_path <- file.path("Data", "PSSRU")
   
-  if(year_selected == "2023"){
+  PSSRU_PDF <- pdf_text(file.path(folder_path, paste0("PSSRU_", year , ".PDF")))
+  
+  #write here source and year of the publication
+  source <- paste("PSSRU", year)
+  
+  if(year == "2023"){
     URL <- "https://kar.kent.ac.uk/105685/1/The%20unit%20costs%20of%20health%20and%20social%20care_Final3.pdf"
-  } else if (year_selected == "2024") {
+  } else if (year == "2024") {
     URL <- "https://kar.kent.ac.uk/109563/1/The%20unit%20costs%20of%20health%20and%20social%20care%202024%20%28for%20publication%29_Final.pdf"
   }
   
   AfC_table <- read.csv(file.path(folder_path, "AfC.csv"), check.names = FALSE)
   
   #find GP table
-# <<<<<<< HEAD:R/PSSRU.R
-  gp_table <- pdf_scrape(pssru_text, "Table 9.4.2: Unit costs for a GP") %>% 
-    slice(-(1:4)) %>% 
-    slice(-(16:23))
-  
-  GP_table <- pdf_scrape(pssru_text, "Table 9.4.2: Unit costs for a GP")
-  GP_table <- GP_table[-(1:4),]
-  GP_table <- GP_table[-(16:23),]
-  rownames(GP_table) <- make.unique(GP_table[,1])
-  GP_table <- GP_table[,-1]
-    
-  training_doctor_table <- pdf_scrape(pssru_text, "Table 12.4.2: Training costs of doctors")
-  
-  training_non_doctor_table <- pdf_scrape(pssru_text, "Table 12.4.1: Training costs of health and social care professionals, excluding doctors")
-  
-  nurse_table <- pdf_scrape(pssru_text, "Table 9.2.1: Annual and unit costs for qualified nurses")  
-  
-  doctors_table <- pdf_scrape(pssru_text, "Table 11.3.2: Annual and unit costs for hospital-based doctors")
-  
-  #AFC_table <- PDF_scrape(PSSRU_PDF, "Table 8.1: Agenda for Change bands for scientific and professional staff") #very messy
-  
-  HCP_table <- pdf_scrape(pssru_text, "Table 8.2.1: Annual and unit costs for community-based scientific and professional staff")
-# =======
   GP_table <- PDF_scrape(PSSRU_PDF, "Table 9.4.2: Unit costs for a GP")
   training_doctor_table <- PDF_scrape(PSSRU_PDF, "Table 12.4.2: Training costs of doctors")
   training_non_doctor_table <- PDF_scrape(PSSRU_PDF, "Table 12.4.1: Training costs of health and social care professionals, excluding doctors")
   nurse_table <- PDF_scrape(PSSRU_PDF, "Table 9.2.1: Annual and unit costs for qualified nurses")  
   doctors_table <- PDF_scrape(PSSRU_PDF, "Table 11.3.2: Annual and unit costs for hospital-based doctors")
   HCP_table <- PDF_scrape(PSSRU_PDF, "Table 8.2.1: Annual and unit costs for community-based scientific and professional staff")
-# >>>>>>> master:Scripts/PSSRU.R
   
   #add correct names
   rownames(GP_table)[6] <- "Per surgery consultation lasting 10 minutes"
   
   
   rownames(training_doctor_table) <- c("Pre-registration training", "Foundation Officer 1",
-                                 "Foundation officer 2",  "Registrar group", "Associate specialist",
-                                 "GP","Consultant")
+                                       "Foundation officer 2",  "Registrar group", "Associate specialist",
+                                       "GP","Consultant")
   colnames(training_doctor_table) <- c("Tuition", "Living expenses/lost production costs",
-                                 "Clinical placement", "Placement fee plus Market Forces Factor",
-                                 "Salary (inc overheads) and post-graduate centre costs",
-                                 "Total investment", "Expected annual cost discounted at 3.5%")
+                                       "Clinical placement", "Placement fee plus Market Forces Factor",
+                                       "Salary (inc overheads) and post-graduate centre costs",
+                                       "Total investment", "Expected annual cost discounted at 3.5%")
   
-
+  
   
   rownames(training_non_doctor_table) <- c("Physiotherapist",
-                                     "Occupational therapist",
-                                     "Speech and language therapist", 
-                                     "Dietitian", 
-                                     "Radiographer",
-                                     "Hospital pharmacist",
-                                     "Nurse",
-                                     "Social worker")
+                                           "Occupational therapist",
+                                           "Speech and language therapist", 
+                                           "Dietitian", 
+                                           "Radiographer",
+                                           "Hospital pharmacist",
+                                           "Nurse",
+                                           "Social worker")
   
   colnames(training_non_doctor_table) <- c("Tuition",
-                                     "Living expenses/lost production costs",
-                                     "Clinical placement",
-                                     "Total investment",
-                                     "Expected annual cost discounted at 3.5%")
+                                           "Living expenses/lost production costs",
+                                           "Clinical placement",
+                                           "Total investment",
+                                           "Expected annual cost discounted at 3.5%")
   
   colnames(nurse_table) <- c("Band 4", 
                              "Band 5", 
@@ -156,8 +91,8 @@ generate_pssru_tables <- function(qual, direct, year_selected, training_HCP){
                              "Band 8c", 
                              "Band 8d", 
                              "Band 9")
-
-
+  
+  
   colnames(doctors_table) <- c("Foundation doctor FY1",
                                "Foundation doctor FY2",
                                "Registrar",
@@ -165,24 +100,24 @@ generate_pssru_tables <- function(qual, direct, year_selected, training_HCP){
                                "Consultant: Medical",
                                "Consultant: surgical",
                                "Consultant: psychiatric")
-
+  
   colnames(HCP_table) <- c("Band 4", 
-                             "Band 5", 
-                             "Band 6", 
-                             "Band 7", 
-                             "Band 8a", 
-                             "Band 8b", 
-                             "Band 8c", 
-                             "Band 8d", 
-                             "Band 9")
-
+                           "Band 5", 
+                           "Band 6", 
+                           "Band 7", 
+                           "Band 8a", 
+                           "Band 8b", 
+                           "Band 8c", 
+                           "Band 8d", 
+                           "Band 9")
+  
   #adjustment to qualification cost to exclude living expenses and lost production
   training_doctor_table$adjustment_factor <- (training_doctor_table[,"Total investment"] - 
                                                 training_doctor_table[,"Living expenses/lost production costs"])/
     training_doctor_table[,"Total investment"]
   
   training_doctor_table$adjusted <- training_doctor_table$adjustment_factor * training_doctor_table[,"Expected annual cost discounted at 3.5%"]
-
+  
   training_non_doctor_table$adjustment_factor <- (training_non_doctor_table[,"Total investment"] - 
                                                     training_non_doctor_table[,"Living expenses/lost production costs"])/
     training_non_doctor_table[,"Total investment"]
@@ -205,10 +140,10 @@ generate_pssru_tables <- function(qual, direct, year_selected, training_HCP){
   gp_unit_costs["Annual (including travel)","incl_direct_qual_adjust"] <- 
     gp_unit_costs["Annual (including travel)","excluding qualification and including direct care staff cost"] + 
     training_doctor_table["GP", "adjusted"]
- 
-   gp_unit_costs["Annual (including travel)","excl_direct_qual_adjust"] <-
-     gp_unit_costs["Annual (including travel)","excluding qualification and excluding direct care staff cost"] + 
-     training_doctor_table["GP", "adjusted"]
+  
+  gp_unit_costs["Annual (including travel)","excl_direct_qual_adjust"] <-
+    gp_unit_costs["Annual (including travel)","excluding qualification and excluding direct care staff cost"] + 
+    training_doctor_table["GP", "adjusted"]
   
   gp_unit_costs["Annual (excluding travel)","incl_direct_qual_adjust"] <- 
     gp_unit_costs["Annual (excluding travel)","excluding qualification and including direct care staff cost"] + 
@@ -232,26 +167,15 @@ generate_pssru_tables <- function(qual, direct, year_selected, training_HCP){
   
   rownames(nurse_table)[nrow(nurse_table)] <- "NICE productivity adjusment"
   nurse_table["NICE productivity adjusment",] <- nurse_table["Cost per working hour",] + 
-# <<<<<<< HEAD:R/PSSRU.R
-    training_non_doctor["Nurse","adjusted"] / nurse_table["Working hours per year_selected",]
-# =======
     training_non_doctor_table["Nurse","adjusted"] / nurse_table["Working hours per year",]
-# >>>>>>> master:Scripts/PSSRU.R
   nurse_table <- round(nurse_table, 2)
   
   doctors_table["NICE productivity adjusment",] <- NA
   doctors_table["NICE productivity adjusment",1:4] <- doctors_table["Cost per working hour", 1:4] + 
-# <<<<<<< HEAD:R/PSSRU.R
-    training_doctor[1:4,"adjusted"]/doctors_table["Working hours per year_selected",1:4]
-  
-  doctors_table["NICE productivity adjusment",5:7] <- doctors_table["Cost per working hour", 5:7] + 
-    training_doctor["Consultant","adjusted"]/doctors_table["Working hours per year_selected",5:7]
-# =======
     training_doctor_table[1:4,"adjusted"]/doctors_table["Working hours per year",1:4]
   
   doctors_table["NICE productivity adjusment",5:7] <- doctors_table["Cost per working hour", 5:7] + 
     training_doctor_table["Consultant","adjusted"]/doctors_table["Working hours per year",5:7]
-# >>>>>>> master:Scripts/PSSRU.R
   
   doctors_table<- round(doctors_table, 2)
   
@@ -269,7 +193,7 @@ generate_pssru_tables <- function(qual, direct, year_selected, training_HCP){
   practice_nurse_costs["Cost per visits (15.5 mins)",] <- practice_nurse_costs[1,] * 15.5/60   # Not reported in this report; used 15.5 min from 2015 report (cited as based on 2006/7 survey)
   practice_nurse_costs["Cost per face-to-face consulation (10 mins)",] <- practice_nurse_costs[1,] * 10/60   # Not reported in this report; used 10 mins based on Stevens 2017
   practice_nurse_costs["Cost per phone consultation (6 mins)",] <- practice_nurse_costs[1,] * 6/60   # Not reported in this report; used 6 mins based on Stevens 2017
-
+  
   # https://bmjopen.bmj.com/content/7/11/e018261
   
   if(qual == 1){
@@ -300,13 +224,13 @@ generate_pssru_tables <- function(qual, direct, year_selected, training_HCP){
   
   if(training_HCP == 1){
     training_costs = training_non_doctor_table 
-    } else {
-      training_costs = training_doctor_table
-    }
+  } else {
+    training_costs = training_doctor_table
+  }
   training_costs$adjustment_factor <- NULL
   names(training_costs)[names(training_costs)=="adjusted"] <- "NICE-adjusted qualification cost"
   training_costs <- round(training_costs, 2)
-
+  
   colnames(output_practice_nurse) <- colnames(output_practice_GP) <- c("Cost in £")
   colnames(output_hospital_doctors) <- colnames(output_qualified_nurse) <- c("Cost per working hour (£)")
   output_practice_nurse <- round(output_practice_nurse, 2)
