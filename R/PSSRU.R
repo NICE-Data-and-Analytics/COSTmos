@@ -3,6 +3,7 @@
 library(dplyr)
 library(pdftools)
 library(stringr)
+library(janitor)
 options(scipen = 999)
 
 generate_pssru_tables <- function(qual, direct, year_selected, training_HCP){
@@ -23,6 +24,25 @@ generate_pssru_tables <- function(qual, direct, year_selected, training_HCP){
       stringr::str_split_fixed(" {2,}", 10) %>% 
       # Convert character matrix to data frame
       as.data.frame()
+    
+    # Identify rows where cost is in first column
+    error_row <- stringr::str_which(scraped[,1], "£")
+    # Shift row to row above and one column to the right
+    scraped[error_row-1, 2:ncol(scraped)] <- scraped[error_row, 1:(ncol(scraped)-1)]
+    # Drop the error row
+    if (length(error_row) > 0) {scraped <- scraped[-error_row, ]}
+    
+    # Make the first column the row name then drop the first column
+    rownames(scraped) <- make.unique(scraped[ ,1])
+    
+    scraped <- scraped %>% 
+      select(-1) %>% 
+      # Delete pound symbol and commas in costs
+      mutate(across(everything(), \(x) stringr::str_remove_all(x, "(?<=\\d),(?=\\d)") %>%
+                      stringr::str_remove_all("£"))) %>% 
+      filter(!if_all(everything(), is.na))
+      
+}
 # =======
   #data scraping function that returns table from PDF file as data frames
   PDF_scrape <- function(file, search_term){
@@ -32,14 +52,18 @@ generate_pssru_tables <- function(qual, direct, year_selected, training_HCP){
     table <- trimws(table)
     table <- str_split_fixed(table, " {2,}", 10)
     table = as.data.frame(table)
+    
     error_row <- which(grepl("£", table [,1]))
+    
     table[error_row -1,2:ncol(table)] <-
       table[error_row ,1:(ncol(table))-1]
+    
     if (length(error_row) > 0) {
       table <- table[-error_row, ]
     }
     rownames(table) <- make.unique(table[,1])
     table <- table[,-1]
+    
     table[] <- lapply(table, function(x) {
       as.numeric(gsub("[£,]", "", x))
     })
