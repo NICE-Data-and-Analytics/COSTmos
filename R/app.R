@@ -62,7 +62,7 @@ costmos_app <- function(...) {
                                 width = "25%",
                                 selectInput("pssru_year",
                                             label = "Year",
-                                            choices = c("2023", "2024", "2025"),
+                                            choices = c("2023", "2024"),
                                             selected = "2024"),  
                                 selectInput("pssru_healthcare_professional",
                                             label = "Healthcare professional",
