@@ -9,11 +9,18 @@
 
 library(shiny)
 library(reactable)
-library(tidyverse)
+library(dplyr)
+library(purrr)
+library(readr)
+library(tibble)
+library(stringr)
+library(lubridate)
+library(tidyr)
 library(glue)
 library(fs)
 library(bslib)
 library(htmltools)
+library(pdftools)
 
 costmos_app <- function(...) {
   
