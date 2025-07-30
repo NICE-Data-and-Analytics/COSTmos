@@ -32,7 +32,7 @@ generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
   
   folder_path <- file.path("data", "PSSRU")
   
-  PSSRU_PDF <- pdf_text(file.path(folder_path, paste0("PSSRU_", year , ".PDF")))
+  PSSRU_PDF <- pdf_text(file.path(folder_path, paste0("PSSRU_", year , ".pdf")))
   
   #write here source and year of the publication
   source <- paste("PSSRU", year)

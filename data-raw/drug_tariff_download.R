@@ -1,6 +1,12 @@
 # Script to download latest CSV's from NHSBSA Drug Tariff
 # Load packages
-library(tidyverse)
+library(dplyr)
+library(purrr)
+library(readr)
+library(tibble)
+library(stringr)
+library(lubridate)
+library(tidyr)
 library(rvest)
 library(lubridate)
 library(usethis)
