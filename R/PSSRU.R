@@ -30,7 +30,7 @@ generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
     table <- table[, !apply(table, 2, function(col) all(is.na(col)))]
   }
   
-  folder_path <- file.path("Data", "PSSRU")
+  folder_path <- file.path("data", "PSSRU")
   
   PSSRU_PDF <- pdf_text(file.path(folder_path, paste0("PSSRU_", year , ".PDF")))
   
