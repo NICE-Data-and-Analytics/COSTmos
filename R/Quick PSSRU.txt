@@ -1,0 +1,4 @@
+year <- 2024
+qual <- 1
+direct <- 1
+training_HCP<- 1
