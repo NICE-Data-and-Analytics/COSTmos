@@ -1,6 +1,7 @@
 # Drug Tariff section selectInput choices
 drug_tariff_sections <- list("Part VIIIA" = "viii_a", "Part VIIIB" = "viii_b", "Part VIIID" = "viii_d", "Category M" = "cat_m", "Part IX" = "ix")
 
+
 # Define reactable column specification
 drug_tariff_col_spec <- list(
   viii_a = list(
@@ -9,7 +10,10 @@ drug_tariff_col_spec <- list(
     pack_size = colDef(name = "Pack size",
                        format = colFormat(separators = T)),
     unit_of_measure = colDef(name = "Unit of measure"),
-    basic_price = colDef(name = "Basic price",
+    basic_price = colDef(name = "Basic price (£)",
+                         cell = function(value) {
+                           format(value / 100, nsmall = 2)
+                         },
                          format = colFormat(separators = T)),
     vmp_snomed_code = colDef(name = "VMP SNOMED code"),
     vmpp_snomed_code = colDef(name = "VMPP SNOMED code")
@@ -19,7 +23,10 @@ drug_tariff_col_spec <- list(
       pack_size = colDef(name = "Pack size",
                          format = colFormat(separators = T)),
       unit_of_measure = colDef(name = "Unit of measure"),
-      basic_price = colDef(name = "Basic price",
+      basic_price = colDef(name = "Basic price (£)",
+                           cell = function(value) {
+                             format(value / 100, nsmall = 2)
+                           },
                            format = colFormat(separators = T)),
       formulations = colDef(name = "Formulations"),
       special_container_indicator = colDef(name = "Special container indicator"),
@@ -31,7 +38,10 @@ drug_tariff_col_spec <- list(
     pack_size = colDef(name = "Pack size",
                        format = colFormat(separators = T)),
     unit_of_measure = colDef(name = "Unit of measure"),
-    basic_price = colDef(name = "Basic price",
+    basic_price = colDef(name = "Basic price (£)",
+                         cell = function(value) {
+                           format(value / 100, nsmall = 2)
+                         },
                          format = colFormat(separators = T)),
     vmpp_snomed_code = colDef(name = "VMPP SNOMED code")
   ),
@@ -43,7 +53,10 @@ drug_tariff_col_spec <- list(
     quantity = colDef(name = "Quantity",
                       format = colFormat(separators = T)),
     quantity_unit_of_measure = colDef(name = "Quantity unit of measure"),
-    price = colDef(name = "Price",
+    price = colDef(name = "Price (£)",
+                   cell = function(value) {
+                     format(value / 100, nsmall = 2)
+                   },
                    format = colFormat(separators = T)),
     colour = colDef(name = "Colour"),
     size_or_weight = colDef(name = "Size or weight"),
