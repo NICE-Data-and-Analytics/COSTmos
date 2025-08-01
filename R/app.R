@@ -60,6 +60,23 @@ costmos_app <- function(...) {
                             )
                           )
                           ),
+                nav_panel("Prescription Cost Analysis",
+                          card(
+                            layout_sidebar(
+                              fillable = T,
+                              h3("Prescription cost analysis"),
+                              card_body(
+                                layout_column_wrap(
+                                  width = NULL,
+                                  style = css(grid_template_columns = "3fr 1fr"),
+                                  uiOutput("PCA_caption"),
+                                  csvDownloadButton("PCA_table", filename = "PCA_table_extract.csv")
+                                )
+                              ),
+                              reactableOutput("PCA_table")
+                            )
+                          )
+                          ),
                 nav_panel("NHS Collection Costs"),
                 nav_panel("Unit Costs of Health and Social Care",
                           card(
@@ -79,7 +96,7 @@ costmos_app <- function(...) {
                                                         "Qualified nurses", 
                                                         "Community-based scientific and professional staff",
                                                         "Training costs"),
-                                            selected = "Practice nurse"),
+                                            selected = "Practice GP"),
                                 conditionalPanel(
                                   condition = "input.pssru_healthcare_professional == 'Practice GP' || 
                                   input.pssru_healthcare_professional == 'Practice nurse' ||
@@ -218,6 +235,27 @@ costmos_app <- function(...) {
                 defaultPageSize = 10,
                 columns = drug_tariff_df_colspec())
     })
+  
+  output$PCA_table <- renderReactable({
+    reactable(PCA,
+              searchable = T,
+              defaultPageSize = 10)
+  })
+  
+  
+  output$PCA_caption<- renderUI({
+    withTags({
+      div(p("Access the latest version of the PCA from the ",
+            a(href="https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england/prescription-cost-analysis-england-202425",
+              "NHSBSA website", 
+              target = "_blank",
+              .noWS = "outside"),
+            "."
+      )
+      )
+    })
+  })
+  
   }
   
   # Run the application 

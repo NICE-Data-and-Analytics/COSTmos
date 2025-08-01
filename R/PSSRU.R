@@ -41,6 +41,8 @@ generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
     URL <- "https://kar.kent.ac.uk/105685/1/The%20unit%20costs%20of%20health%20and%20social%20care_Final3.pdf"
   } else if (year == "2024") {
     URL <- "https://kar.kent.ac.uk/109563/1/The%20unit%20costs%20of%20health%20and%20social%20care%202024%20%28for%20publication%29_Final.pdf"
+  } else {
+    URL <- "to be added"
   }
   
   AfC_table <- read.csv(file.path(folder_path, "AfC.csv"), check.names = FALSE)
@@ -54,8 +56,14 @@ generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
   HCP_table <- PDF_scrape(PSSRU_PDF, "Table 8.2.1: Annual and unit costs for community-based scientific and professional staff")
   
   #add correct names
-  rownames(GP_table)[6] <- "Per surgery consultation lasting 10 minutes"
-  
+  rownames(GP_table) <- c("Annual (including travel)",
+                          "Annual (excluding travel)",
+                          "Per hour of GMS activity",
+                          "Per hour of patient contact",
+                          "Per minute of patient contact",
+                          "Per surgery consultation lasting 10 minutes",
+                          "Prescription costs per consultation",
+                          "Prescription costs per consultation (actual cost)")
   
   rownames(training_doctor_table) <- c("Pre-registration training", "Foundation Officer 1",
                                        "Foundation officer 2",  "Registrar group", "Associate specialist",
