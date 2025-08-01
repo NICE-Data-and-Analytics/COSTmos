@@ -10,9 +10,9 @@ PCA <- PCA[-1,-(23:25)]
 
 PCA <- PCA %>%
   select("Generic BNF Presentation Name",
+         "BNF Chapter Name",
          "SNOMED Code",
          "Unit of Measure",
          "Total Items",
-         "Total Quantity",
-         "BNF Chapter Name"
+         "Total Quantity"
   )
