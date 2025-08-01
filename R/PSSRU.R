@@ -45,7 +45,7 @@ generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
   
   AfC_table <- read.csv(file.path(folder_path, "AfC.csv"), check.names = FALSE)
   
-  #find GP table
+  #find all tables in the PDF
   GP_table <- PDF_scrape(PSSRU_PDF, "Table 9.4.2: Unit costs for a GP")
   training_doctor_table <- PDF_scrape(PSSRU_PDF, "Table 12.4.2: Training costs of doctors")
   training_non_doctor_table <- PDF_scrape(PSSRU_PDF, "Table 12.4.1: Training costs of health and social care professionals, excluding doctors")

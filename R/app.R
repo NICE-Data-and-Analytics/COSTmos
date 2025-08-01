@@ -110,6 +110,7 @@ costmos_app <- function(...) {
                                                selected = 1)
                                 )
                               ),
+                              h3(textOutput("PSSRU_title")),
                               card_body(
                                 layout_column_wrap(
                                   width = NULL,
@@ -173,6 +174,11 @@ costmos_app <- function(...) {
         )
       })
     })
+    
+    output$PSSRU_title <- renderText({
+      input$pssru_healthcare_professional
+    })
+      
     
     # Drug Tariff
     drug_tariff_df <- reactive(get(paste0("drug_tariff_", input$drug_tariff_section)))
