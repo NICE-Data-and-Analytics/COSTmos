@@ -159,3 +159,47 @@ write_csv(drug_tariff_ix, ix_download_path)
 
 # Also save as .rda object
 usethis::use_data(drug_tariff_ix, overwrite = T)
+
+#PCA
+url_PCA <- "https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england"
+
+page <- read_html(url_PCA)
+
+elements <- page %>%
+  html_nodes("a") %>%
+  {
+    data.frame(
+      text = html_text(., trim = TRUE),
+      href = html_attr(., "href"),
+      class = html_attr(., "class"),
+      stringsAsFactors = FALSE
+    )
+  }
+
+links <- na.omit(elements[elements$class == "cklinklinkitem",])
+
+latest <- links[1,"href"]
+
+page <- read_html(latest)
+
+elements <- page %>%
+  html_nodes("a") %>%
+  {
+    data.frame(
+      text = html_text(., trim = TRUE),
+      href = html_attr(., "href"),
+      class = html_attr(., "class"),
+      stringsAsFactors = FALSE
+    )
+  }
+
+excels <- na.omit(elements[elements$class == "ckfile excel",])
+
+#download the second one as it is the calendar year PCA
+calendar_PCA <- excels[2,"href"]
+
+# Generate download file path, save to temporary directory
+PCA_download_path <-  rprojroot::find_package_root_file("Data", "pca_summary_tables_2024_v001.xlsx")
+
+# Download IX file to "drug_tariff" folder in "data", label with section ID and date (YYYYMM)
+download.file(calendar_PCA, PCA_download_path, mode = "wb")
