@@ -199,7 +199,22 @@ excels <- na.omit(elements[elements$class == "ckfile excel",])
 calendar_PCA <- excels[2,"href"]
 
 # Generate download file path, save to temporary directory
-PCA_download_path <-  rprojroot::find_package_root_file("Data", "pca_summary_tables_2024_v001.xlsx")
+download_path <- rprojroot::find_package_root_file("inst", "extdata", "calendar_PCA.xlsx")
+download.file(calendar_PCA, download_path, mode = "wb")
 
-# Download IX file to "drug_tariff" folder in "data", label with section ID and date (YYYYMM)
-download.file(calendar_PCA, PCA_download_path, mode = "wb")
+PCA <- read_excel(download_path, sheet = "SNOMED_Codes")
+PCA <- PCA[-(1:3),]
+colnames(PCA) <- PCA[1,]
+PCA <- PCA[-1,-(23:25)]
+
+PCA <- PCA %>%
+  select("Generic BNF Presentation Name",
+         "BNF Chapter Name",
+         "SNOMED Code",
+         "Unit of Measure",
+         "Total Items",
+         "Total Quantity"
+  )
+
+# Overwrite downloaded file
+write_csv(PCA, download_path)

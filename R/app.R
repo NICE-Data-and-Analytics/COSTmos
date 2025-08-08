@@ -64,6 +64,12 @@ costmos_app <- function(...) {
                           card(
                             layout_sidebar(
                               fillable = T,
+                              sidebar = sidebar(
+                                selectInput("PCA_section",
+                                            label = "Section",
+                                            choices = PCA_sections
+                                ),
+                              ),
                               h3("Prescription cost analysis"),
                               card_body(
                                 layout_column_wrap(
@@ -236,12 +242,55 @@ costmos_app <- function(...) {
                 columns = drug_tariff_df_colspec())
     })
   
+      
+    #PCA
+    
+    PCA_df <- reactive(PCA_list[[input$PCA_section]])
+    PCA_df_colspec <- reactive(PCA_col_spec[[input$PCA_section]])
+    #PCA_section_name <- input$PCA_section
+    
   output$PCA_table <- renderReactable({
-    reactable(PCA,
-              searchable = T,
-              defaultPageSize = 10)
+    # cat("=== DEBUGGING PCA_df ===\n")
+    # 
+    # # Check if input exists
+    # cat("input$PCA_section:", input$PCA_section, "\n")
+    # 
+    # # Check what PCA_df() returns
+    # data <- PCA_df()
+    # cat("PCA_df() class:", class(data), "\n")
+    # cat("PCA_df() is null:", is.null(data), "\n")
+    # 
+    # if (!is.null(data)) {
+    #   cat("PCA_df() structure:\n")
+    #   str(data)
+    # }
+    # 
+    # # Check what's in PCA_list
+    # cat("Available PCA_list names:", names(PCA_list), "\n")
+    # cat("Does input$PCA_section exist in PCA_list:", input$PCA_section %in% names(PCA_list), "\n")
+    # 
+    # # Return a simple table for now
+    # reactable(data.frame(Debug = "Check console for debug info"))
+    
+    
+    data <- PCA_df()
+
+    if (is.null(data) || nrow(data) == 0) {
+      return(reactable(data = data.frame(Message = "No data available")))
+    }
+    
+
+    columns <- PCA_df_colspec()
+
+
+    reactable(data,
+              searchable = TRUE,
+              defaultPageSize = 10,
+              columns = columns)
   })
   
+  
+    
   
   output$PCA_caption<- renderUI({
     withTags({
