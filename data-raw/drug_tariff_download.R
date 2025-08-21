@@ -11,6 +11,7 @@ library(rvest)
 library(lubridate)
 library(usethis)
 library(rprojroot)
+library(readxl)
 
 # Set root
 root <- rprojroot::is_r_package
@@ -180,6 +181,10 @@ links <- na.omit(elements[elements$class == "cklinklinkitem",])
 
 latest <- links[1,"href"]
 
+#Extract year
+PCA_year <- str_extract_all(latest,"\\d+")
+PCA_year <- gsub("(.{4})", "\\1/",PCA_year[[1]])
+
 page <- read_html(latest)
 
 elements <- page %>%
@@ -199,13 +204,13 @@ excels <- na.omit(elements[elements$class == "ckfile excel",])
 calendar_PCA <- excels[2,"href"]
 
 # Generate download file path, save to temporary directory
-download_path <- rprojroot::find_package_root_file("inst", "extdata", "calendar_PCA.xlsx")
+download_path <- rprojroot::find_package_root_file("inst", "extdata", "calendar_PCA.csv")
 download.file(calendar_PCA, download_path, mode = "wb")
 
 PCA <- read_excel(download_path, sheet = "SNOMED_Codes")
 PCA <- PCA[-(1:3),]
 colnames(PCA) <- PCA[1,]
-PCA <- PCA[-1,-(23:25)]
+PCA <- PCA[-1,]
 
 PCA <- PCA %>%
   select("Generic BNF Presentation Name",
@@ -213,8 +218,11 @@ PCA <- PCA %>%
          "SNOMED Code",
          "Unit of Measure",
          "Total Items",
-         "Total Quantity"
+         "Total Quantity",
+         "Total Cost (£)",
+         "Cost Per Quantity (£)"
   )
+PCA$`Cost Per Quantity (£)` <- round(as.numeric(PCA$`Cost Per Quantity (£)`),2)
 
 # Overwrite downloaded file
 write_csv(PCA, download_path)

@@ -66,8 +66,9 @@ costmos_app <- function(...) {
                               fillable = T,
                               sidebar = sidebar(
                                 selectInput("PCA_section",
-                                            label = "Section",
-                                            choices = PCA_sections
+                                            label = "Select BNF chapters",
+                                            choices = c("All", PCA_sections),
+                                            selected = "All"
                                 ),
                               ),
                               h3("Prescription cost analysis"),
@@ -245,33 +246,17 @@ costmos_app <- function(...) {
       
     #PCA
     
-    PCA_df <- reactive(PCA_list[[input$PCA_section]])
-    PCA_df_colspec <- reactive(PCA_col_spec[[input$PCA_section]])
-    #PCA_section_name <- input$PCA_section
+    PCA_df <- reactive({
+      if (input$PCA_section == "All") {
+        PCA
+      } else {
+        PCA_list[[input$PCA_section]]
+      }
+    })
+    
+    PCA_df_colspec <- reactive({PCA_col_spec})
     
   output$PCA_table <- renderReactable({
-    # cat("=== DEBUGGING PCA_df ===\n")
-    # 
-    # # Check if input exists
-    # cat("input$PCA_section:", input$PCA_section, "\n")
-    # 
-    # # Check what PCA_df() returns
-    # data <- PCA_df()
-    # cat("PCA_df() class:", class(data), "\n")
-    # cat("PCA_df() is null:", is.null(data), "\n")
-    # 
-    # if (!is.null(data)) {
-    #   cat("PCA_df() structure:\n")
-    #   str(data)
-    # }
-    # 
-    # # Check what's in PCA_list
-    # cat("Available PCA_list names:", names(PCA_list), "\n")
-    # cat("Does input$PCA_section exist in PCA_list:", input$PCA_section %in% names(PCA_list), "\n")
-    # 
-    # # Return a simple table for now
-    # reactable(data.frame(Debug = "Check console for debug info"))
-    
     
     data <- PCA_df()
 
@@ -280,8 +265,9 @@ costmos_app <- function(...) {
     }
     
 
-    columns <- PCA_df_colspec()
-
+    columns <- PCA_df_colspec() 
+    
+      
 
     reactable(data,
               searchable = TRUE,
@@ -290,12 +276,10 @@ costmos_app <- function(...) {
   })
   
   
-    
-  
   output$PCA_caption<- renderUI({
     withTags({
-      div(p("Access the latest version of the PCA from the ",
-            a(href="https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england/prescription-cost-analysis-england-202425",
+      div(p("Calendar PCA ", PCA_year, ". Access the latest version of the PCA from the ",
+            a(href="https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england",
               "NHSBSA website", 
               target = "_blank",
               .noWS = "outside"),

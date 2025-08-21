@@ -1,6 +1,5 @@
 
-PCA_sections <- list(
-                     "Gastro-Intestinal System" = "Gastro-Intestinal System",
+PCA_sections <- list("Gastro-Intestinal System" = "Gastro-Intestinal System",
                      "Cardiovascular System" = "Cardiovascular System",
                      "Respiratory System" = "Respiratory System",
                      "Central Nervous System" = "Central Nervous System",
@@ -24,17 +23,28 @@ PCA_sections <- list(
 
 PCA_list <- split(PCA, PCA$`BNF Chapter Name`)
 
-PCA_col_spec <- list()
-for(i in PCA_sections){
-  PCA_col_spec[[i]] <- list(
-    `Generic BNF Presentation Name` = colDef(name = "Generic BNF Presentation Name"),  
-    `BNF Chapter Name` = colDef(name = "BNF Chapter"),
-    `SNOMED Code` = colDef(name = "SNOMED Code"),
-    `Unit of Measure` = colDef(name = "Unit of Measure"),
-    `Total Items` = colDef(name = "Total Items"),
-    `Total Quantity` = colDef(name = "Total Quantity")
-  )
-}
+PCA_col_spec <- list(
+  `Generic BNF Presentation Name` = colDef(name = "Generic BNF Presentation Name"),
+  `BNF Chapter Name` = colDef(name = "BNF Chapter"),
+  `SNOMED Code` = colDef(name = "SNOMED Code"),
+  `Unit of Measure` = colDef(name = "Unit of Measure"),
+  `Total Items` = colDef(name = "Total Items"),
+  `Total Quantity` = colDef(name = "Total Quantity"),
+  `Total Cost (£)` = colDef(name = "Total Cost (£)"),
+  `Cost Per Quantity (£)` = colDef(name = "Cost Per Quantity (£)")
+)
+
+# PCA_col_spec <- list()
+# for(i in PCA_sections){
+#   PCA_col_spec[[i]] <- list(
+#     `Generic BNF Presentation Name` = colDef(name = "Generic BNF Presentation Name"),  
+#     `BNF Chapter Name` = colDef(name = "BNF Chapter"),
+#     `SNOMED Code` = colDef(name = "SNOMED Code"),
+#     `Unit of Measure` = colDef(name = "Unit of Measure"),
+#     `Total Items` = colDef(name = "Total Items"),
+#     `Total Quantity` = colDef(name = "Total Quantity")
+#   )
+# }
 
 
   
