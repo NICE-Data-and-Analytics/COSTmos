@@ -183,7 +183,7 @@ latest <- links[1,"href"]
 
 #Extract year
 PCA_year <- str_extract_all(latest,"\\d+")
-PCA_year <- gsub("(.{4})", "\\1/",PCA_year[[1]])
+PCA_year <- gsub("(.{4})", "\\1",PCA_year[[1]])
 
 page <- read_html(latest)
 
@@ -204,7 +204,7 @@ excels <- na.omit(elements[elements$class == "ckfile excel",])
 calendar_PCA <- excels[2,"href"]
 
 # Generate download file path, save to temporary directory
-download_path <- rprojroot::find_package_root_file("inst", "extdata", "calendar_PCA.csv")
+download_path <- rprojroot::find_package_root_file("inst", "extdata", paste0("calendar_PCA_", PCA_year ,".csv"))
 download.file(calendar_PCA, download_path, mode = "wb")
 
 PCA <- read_excel(download_path, sheet = "SNOMED_Codes")
@@ -226,3 +226,11 @@ PCA$`Cost Per Quantity (£)` <- round(as.numeric(PCA$`Cost Per Quantity (£)`),2
 
 # Overwrite downloaded file
 write_csv(PCA, download_path)
+
+# Also save as .rda object
+usethis::use_data(PCA, overwrite = T)
+
+PCA_list <- split(PCA, PCA$`BNF Chapter Name`)
+# Also save as .rda object
+usethis::use_data(PCA_list, overwrite = T)
+

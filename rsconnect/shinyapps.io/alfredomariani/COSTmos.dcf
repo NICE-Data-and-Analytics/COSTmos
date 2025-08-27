@@ -5,7 +5,7 @@ account: alfredomariani
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 15141633
-bundleId: 10712774
+bundleId: 10826231
 url: https://alfredomariani.shinyapps.io/COSTmos/
 version: 1
 asMultiple: FALSE

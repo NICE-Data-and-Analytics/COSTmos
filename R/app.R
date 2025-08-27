@@ -256,7 +256,7 @@ costmos_app <- function(...) {
     
     PCA_df_colspec <- reactive({PCA_col_spec})
     
-  output$PCA_table <- renderReactable({
+    output$PCA_table <- renderReactable({
     
     data <- PCA_df()
 
@@ -266,8 +266,6 @@ costmos_app <- function(...) {
     
 
     columns <- PCA_df_colspec() 
-    
-      
 
     reactable(data,
               searchable = TRUE,
@@ -275,7 +273,13 @@ costmos_app <- function(...) {
               columns = columns)
   })
   
-  
+    PCA_year <- 
+      fs::path_package("extdata", package = "COSTmos") %>%
+        list.files() %>%
+        stringr::str_subset(pattern = "PCA") %>%
+        stringr::str_extract("\\d{6}(?=\\.csv)") %>%
+        gsub("(.{4})", "\\1/", x = .)
+    
   output$PCA_caption<- renderUI({
     withTags({
       div(p("Calendar PCA ", PCA_year, ". Access the latest version of the PCA from the ",
