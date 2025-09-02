@@ -4,7 +4,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of COSTmos is to create a selection of cost datasets for use in a dashboard and r package. Further information (and name) to be added later..
+The goal of COSTmos is to create a selection of cost datasets for use in a dashboard and r package. Further information to be added later..
 
 List of planned contents:
 
