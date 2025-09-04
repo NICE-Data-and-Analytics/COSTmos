@@ -110,7 +110,7 @@ costmos_app <- function(...) {
                                   input.pssru_healthcare_professional == 'Hospital doctors'||
                                   input.pssru_healthcare_professional == 'Qualified nurses'",
                                   radioButtons("pssru_qualification_cost",
-                                               label = "Qualification cost (excluding individual/productivity)",
+                                               label = "Qualification cost",
                                                choices = c("Include" = 1, "Exclude" = 2),
                                                selected = 1),
                                 ),
