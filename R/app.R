@@ -120,7 +120,14 @@ costmos_app <- function(...) {
                                                label = "Direct care staff cost",
                                                choices = c("Include" = 1, "Exclude" = 2),
                                                selected = 1)
-                                ),
+                                ),                 conditionalPanel(
+                                  condition = "input.pssru_healthcare_professional == 'Practice nurse'",
+                                  p("Ratio of direct to indirect time = 1:0.30. ",
+                                    a("See PSSRU 2015.", 
+                                      href = "https://www.pssru.ac.uk/pub/uc/uc2015/full.pdf",
+                                      target = "_blank"),
+                                  )
+                                ),  
                                 conditionalPanel(
                                   condition = "input.pssru_healthcare_professional == 'Community-based scientific and professional staff'",
                                   helpText("To calculate the cost per hour, including qualifications for scientific and professional staff, the appropriate expected annual cost shown in the 'Training cost' section should be divided by the number of working hours. This can then be added to the cost per working hour."),
