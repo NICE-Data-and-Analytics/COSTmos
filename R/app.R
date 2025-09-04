@@ -53,7 +53,7 @@ costmos_app <- function(...) {
                                   width = NULL,
                                   style = css(grid_template_columns = "3fr 1fr"),
                                   uiOutput("drug_tariff_date_caption"),
-                                  csvDownloadButton("drug_tariff_table", filename = "drug_tariff_extract.csv")
+                                  uiOutput("drug_tariff_download_button")
                                   )
                                 ),
                               reactableOutput("drug_tariff_table")
@@ -71,13 +71,13 @@ costmos_app <- function(...) {
                                             selected = "All"
                                 ),
                               ),
-                              h3("Prescription cost analysis"),
+                              h3("Prescription Cost Analysis"),
                               card_body(
                                 layout_column_wrap(
                                   width = NULL,
                                   style = css(grid_template_columns = "3fr 1fr"),
                                   uiOutput("PCA_caption"),
-                                  csvDownloadButton("PCA_table", filename = "PCA_table_extract.csv")
+                                  uiOutput("PCA_download_button")
                                 )
                               ),
                               reactableOutput("PCA_table")
@@ -242,7 +242,11 @@ costmos_app <- function(...) {
                 defaultPageSize = 10,
                 columns = drug_tariff_df_colspec())
     })
-  
+
+    output$drug_tariff_download_button <- renderUI({
+      csvDownloadButton("drug_tariff_table",
+                        filename = paste0("drug_tariff_extract_", gsub("/", "-", drug_tariff_df_date_caption()), ".csv"))
+    })
       
     #PCA
     
@@ -273,16 +277,17 @@ costmos_app <- function(...) {
               columns = columns)
   })
   
-    PCA_year <- 
+  PCA_year <- reactive({
       fs::path_package("extdata", package = "COSTmos") %>%
-        list.files() %>%
-        stringr::str_subset(pattern = "PCA") %>%
-        stringr::str_extract("\\d{6}(?=\\.csv)") %>%
-        gsub("(.{4})", "\\1/", x = .)
+         list.files() %>%
+         stringr::str_subset(pattern = "PCA") %>%
+         stringr::str_extract("\\d{6}(?=\\.csv)") %>%
+         gsub("(.{4})", "\\1/", x = .)
+  })
     
   output$PCA_caption<- renderUI({
     withTags({
-      div(p("Calendar PCA ", PCA_year, ". Access the latest version of the PCA from the ",
+      div(p("Calendar PCA ", PCA_year(), ". Access the latest version of the PCA from the ",
             a(href="https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england",
               "NHSBSA website", 
               target = "_blank",
@@ -293,8 +298,12 @@ costmos_app <- function(...) {
     })
   })
   
-  }
+  output$PCA_download_button <- renderUI({
+    csvDownloadButton("PCA_table", 
+                      filename = paste0("PCA_extract_", gsub("/", "-", PCA_year()), ".csv"))
+  })
   
+  }
   # Run the application 
   shinyApp(ui = ui, server = server)
 }

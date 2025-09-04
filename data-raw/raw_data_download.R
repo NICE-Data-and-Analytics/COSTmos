@@ -223,6 +223,8 @@ PCA <- PCA %>%
          "Cost Per Quantity (£)"
   )
 PCA$`Cost Per Quantity (£)` <- round(as.numeric(PCA$`Cost Per Quantity (£)`),2)
+PCA$`Total Cost (£)` <- round(as.numeric(PCA$`Total Cost (£)`),2)
+
 
 # Overwrite downloaded file
 write_csv(PCA, download_path)
