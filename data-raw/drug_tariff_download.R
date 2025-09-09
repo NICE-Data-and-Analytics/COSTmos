@@ -156,5 +156,6 @@ drug_tariff_ix <- read_csv(ix_download_path,
 # Overwrite downloaded file
 write_csv(drug_tariff_ix, ix_download_path)
 
+
 # Also save as .rda object
 usethis::use_data(drug_tariff_ix, overwrite = T)

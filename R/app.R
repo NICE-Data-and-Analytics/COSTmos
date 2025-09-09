@@ -60,7 +60,30 @@ costmos_app <- function(...) {
                             )
                           )
                           ),
-                nav_panel("NHS Collection Costs"),
+                nav_panel("NHS Collection Costs",
+                          card(
+                            layout_sidebar(
+                              fillable = TRUE,
+                              sidebar = sidebar(
+                                selectInput(
+                                  "ncc_service_code",
+                                  label = "Service Code",
+                                  choices = c("All" = "_ALL_") # remaining choices defined on load
+                                )
+                              ),
+                              h3(textOutput("ncc_title")),
+                              card_body(
+                                layout_column_wrap(
+                                  width = NULL,
+                                  style = css(grid_template_columns = "3fr 1fr"),
+                                  uiOutput("ncc_dynamic_link"),
+                                  csvDownloadButton("ncc_table", filename = "ncc_2023_24_extract.csv")
+                                )
+                              ),
+                              reactableOutput("ncc_table")
+                            )
+                          )
+                ),
                 nav_panel("Unit Costs of Health and Social Care",
                           card(
                             layout_sidebar(
@@ -212,6 +235,87 @@ costmos_app <- function(...) {
                 defaultPageSize = 10,
                 columns = drug_tariff_df_colspec())
     })
+    
+    # COST COLLECTION SERVER LOGIC
+    
+    # Expect a CSV file saved inst/extdata/ncc_2023_24.csv
+    
+    ncc_df <- reactive({
+      ext_path <- fs::path_package("extdata", package = "COSTmos")
+      file <- fs::path(ext_path, "ncc_2023_24.csv")
+      validate(need(fs::file_exists(file), paste0("CSV not found: ", file)))
+      readr::read_csv(file, show_col_types = FALSE)
+    })
+    
+    # Populate Service Code choices (with "All")
+    observeEvent(ncc_df(), {
+      df <- ncc_df()
+      # Assumes CSV has clean "Service Code" column with alphabetic values
+      levels <- sort(unique(df[["Service Code"]]))
+      updateSelectInput(
+        session, "ncc_service_code",
+        choices  = c("All" = "_ALL_", levels),
+        selected = "_ALL_"
+      )
+    }, ignoreInit = FALSE)
+    
+
+    # Filtered data
+    ncc_filtered <- reactive({
+      sc <- input$ncc_service_code
+      req(sc)
+      df <- ncc_df()
+      
+      if (identical(sc, "_ALL_")) return(df)
+      
+      df[df[["Service Code"]] == sc, , drop = FALSE]
+    })
+    
+    # Title
+    output$ncc_title <- renderText({
+      sc <- input$ncc_service_code
+      label <- if (is.null(sc) || identical(sc, "_ALL_")) "All" else sc
+      paste0("National Cost Collection — Service Code: ", label)
+    })
+    
+    # Table
+    output$ncc_table <- renderReactable({
+      reactable(
+        ncc_filtered(),
+        searchable = TRUE,
+        defaultPageSize = 10,
+        columns = list(
+          Activity = colDef(format = colFormat(separators = T)),
+          `Unit cost` = colDef(name = "Unit cost (£)",
+                               cell = function(value) {
+                                 format(round(value, 2), nsmall = 2, big.mark = ",")
+                               }),
+          `Cost` = colDef(name = "Cost (£)",
+                          cell = function(value) {
+                            format(round(value, 2), nsmall = 2, big.mark = ",")
+                          })
+        )
+      )
+    })
+ 
+    output$ncc_dynamic_link <- renderUI({
+      withTags({
+        div(
+          p(
+            "Access the National Cost Collection data (2023/24) on the ",
+            a(
+              href = "https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/",
+              "NHS England website",
+              target = "_blank",
+              .noWS = "outside"
+            ),
+            "."
+          )
+        )
+      })
+    })
+    
+    
   }
   
   # Run the application 
