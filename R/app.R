@@ -283,7 +283,18 @@ costmos_app <- function(...) {
       reactable(
         ncc_filtered(),
         searchable = TRUE,
-        defaultPageSize = 10
+        defaultPageSize = 10,
+        columns = list(
+          Activity = colDef(format = colFormat(separators = T)),
+          `Unit cost` = colDef(name = "Unit cost (£)",
+                               cell = function(value) {
+                                 format(round(value, 2), nsmall = 2, big.mark = ",")
+                               }),
+          `Cost` = colDef(name = "Cost (£)",
+                          cell = function(value) {
+                            format(round(value, 2), nsmall = 2, big.mark = ",")
+                          })
+        )
       )
     })
  

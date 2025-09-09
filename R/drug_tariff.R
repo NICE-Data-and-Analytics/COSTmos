@@ -12,9 +12,8 @@ drug_tariff_col_spec <- list(
     unit_of_measure = colDef(name = "Unit of measure"),
     basic_price = colDef(name = "Basic price (£)",
                          cell = function(value) {
-                           format(value / 100, nsmall = 2)
-                         },
-                         format = colFormat(separators = T)),
+                           format(round(value/100, 2), nsmall = 2, big.mark = ",")
+                         }),
     vmp_snomed_code = colDef(name = "VMP SNOMED code"),
     vmpp_snomed_code = colDef(name = "VMPP SNOMED code")
   ),
@@ -25,9 +24,8 @@ drug_tariff_col_spec <- list(
       unit_of_measure = colDef(name = "Unit of measure"),
       basic_price = colDef(name = "Basic price (£)",
                            cell = function(value) {
-                             format(value / 100, nsmall = 2)
-                           },
-                           format = colFormat(separators = T)),
+                             format(round(value/100, 2), nsmall = 2, big.mark = ",")
+                           }),
       formulations = colDef(name = "Formulations"),
       special_container_indicator = colDef(name = "Special container indicator"),
       vmp_snomed_code = colDef(name = "VMP SNOMED code"),
@@ -40,9 +38,8 @@ drug_tariff_col_spec <- list(
     unit_of_measure = colDef(name = "Unit of measure"),
     basic_price = colDef(name = "Basic price (£)",
                          cell = function(value) {
-                           format(value / 100, nsmall = 2)
-                         },
-                         format = colFormat(separators = T)),
+                           format(round(value/100, 2), nsmall = 2, big.mark = ",")
+                         }),
     vmpp_snomed_code = colDef(name = "VMPP SNOMED code")
   ),
   ix = list(
@@ -55,9 +52,8 @@ drug_tariff_col_spec <- list(
     quantity_unit_of_measure = colDef(name = "Quantity unit of measure"),
     price = colDef(name = "Price (£)",
                    cell = function(value) {
-                     format(value / 100, nsmall = 2)
-                   },
-                   format = colFormat(separators = T)),
+                     format(round(value/100, 2), nsmall = 2, big.mark = ",")
+                   }),
     colour = colDef(name = "Colour"),
     size_or_weight = colDef(name = "Size or weight"),
     product_order_number = colDef(name = "Product order number"),
