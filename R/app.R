@@ -49,18 +49,44 @@ costmos_app <- function(...) {
                                 ),
                               h3(textOutput("drug_tariff_title")),
                               card_body(
+                                padding = c(0, 10),
                                 layout_column_wrap(
                                   width = NULL,
                                   style = css(grid_template_columns = "3fr 1fr"),
-                                  uiOutput("drug_tariff_date_caption"),
-                                  csvDownloadButton("drug_tariff_table", filename = "drug_tariff_extract.csv")
+                                  uiOutput("drug_tariff_caption"),
+                                  uiOutput("drug_tariff_download_button")
                                   )
                                 ),
                               reactableOutput("drug_tariff_table")
                             )
                           )
                           ),
-                nav_panel("NHS Collection Costs",
+                nav_panel("Prescription Cost Analysis",
+                          card(
+                            layout_sidebar(
+                              fillable = T,
+                              sidebar = sidebar(
+                                selectInput("PCA_section",
+                                            label = "Select BNF chapters",
+                                            choices = c("All", PCA_sections),
+                                            selected = "All"
+                                ),
+                              ),
+                              h3("Prescription Cost Analysis"),
+                              card_body(
+                                padding = c(0, 10),
+                                layout_column_wrap(
+                                  width = NULL,
+                                  style = css(grid_template_columns = "3fr 1fr"),
+                                  uiOutput("PCA_caption"),
+                                  uiOutput("PCA_download_button")
+                                )
+                              ),
+                              reactableOutput("PCA_table")
+                            )
+                          )
+                          ),
+                nav_panel("National Cost Collection",
                           card(
                             layout_sidebar(
                               fillable = TRUE,
@@ -73,11 +99,12 @@ costmos_app <- function(...) {
                               ),
                               h3(textOutput("ncc_title")),
                               card_body(
+                                padding = c(0, 10),
                                 layout_column_wrap(
                                   width = NULL,
                                   style = css(grid_template_columns = "3fr 1fr"),
-                                  uiOutput("ncc_dynamic_link"),
-                                  csvDownloadButton("ncc_table", filename = "ncc_2023_24_extract.csv")
+                                  uiOutput("ncc_caption"),
+                                  uiOutput("ncc_download_button")
                                 )
                               ),
                               reactableOutput("ncc_table")
@@ -102,14 +129,14 @@ costmos_app <- function(...) {
                                                         "Qualified nurses", 
                                                         "Community-based scientific and professional staff",
                                                         "Training costs"),
-                                            selected = "Practice nurse"),
+                                            selected = "Practice GP"),
                                 conditionalPanel(
                                   condition = "input.pssru_healthcare_professional == 'Practice GP' || 
                                   input.pssru_healthcare_professional == 'Practice nurse' ||
                                   input.pssru_healthcare_professional == 'Hospital doctors'||
                                   input.pssru_healthcare_professional == 'Qualified nurses'",
                                   radioButtons("pssru_qualification_cost",
-                                               label = "Qualification cost (excluding individual/productivity)",
+                                               label = "Qualification cost",
                                                choices = c("Include" = 1, "Exclude" = 2),
                                                selected = 1),
                                 ),
@@ -119,7 +146,14 @@ costmos_app <- function(...) {
                                                label = "Direct care staff cost",
                                                choices = c("Include" = 1, "Exclude" = 2),
                                                selected = 1)
-                                ),
+                                ),                 conditionalPanel(
+                                  condition = "input.pssru_healthcare_professional == 'Practice nurse'",
+                                  p("Ratio of direct to indirect time = 1:0.30. ",
+                                    a("See PSSRU 2015.", 
+                                      href = "https://www.pssru.ac.uk/pub/uc/uc2015/full.pdf",
+                                      target = "_blank"),
+                                  )
+                                ),  
                                 conditionalPanel(
                                   condition = "input.pssru_healthcare_professional == 'Community-based scientific and professional staff'",
                                   helpText("To calculate the cost per hour, including qualifications for scientific and professional staff, the appropriate expected annual cost shown in the 'Training cost' section should be divided by the number of working hours. This can then be added to the cost per working hour."),
@@ -133,12 +167,14 @@ costmos_app <- function(...) {
                                                selected = 1)
                                 )
                               ),
+                              h3(textOutput("pssru_title")),
                               card_body(
+                                padding = c(0, 10),
                                 layout_column_wrap(
                                   width = NULL,
                                   style = css(grid_template_columns = "3fr 1fr"),
-                                  uiOutput("pssru_dynamic_link"),
-                                  csvDownloadButton("pssru_table", filename = "pssru_extract.csv")
+                                  uiOutput("pssru_caption"),
+                                  uiOutput("pssru_download_button")
                                 )
                               ),
                               reactableOutput("pssru_table")
@@ -157,7 +193,9 @@ costmos_app <- function(...) {
   # Define server logic required to draw a histogram
   server <- function(input, output, session) {
   
-    # PSSRU
+    # PSSRU SERVER LOGIC ---------------------------------------------
+    
+    # Filtered data
     pssru_ui_outputs <- reactive({
       generate_PSSRU_tables(
         qual = input$pssru_qualification_cost,
@@ -178,47 +216,88 @@ costmos_app <- function(...) {
       )
     })
     
+    # Table
     output$pssru_table <- renderReactable({
       reactable(pssru_selected_data(),
                 searchable = T,
                 defaultPageSize = 10)
     })
+    
+    # Get version
+    pssru_year <- reactive(input$pssru_year)
 
-    output$pssru_dynamic_link <- renderUI({
+    # Caption
+    output$pssru_caption <- renderUI({
       withTags({
-        div(p("Access the full PSSRU ",
-              a(href=pssru_ui_outputs()$URL, 
-                paste("Unit Costs of Health and Social Care ", str_extract(pssru_ui_outputs()$source, "\\d{4}$"), " report"), 
+        div(p("Version: ", pssru_year()),
+            p("Access the latest version of the Unit Costs of Health and Social Care manual from the ",
+              a(href="https://www.pssru.ac.uk/unitcostsreport/",
+                "PSSRU website", 
                 target = "_blank",
                 .noWS = "outside"),
-              " here."
+              "."
               )
         )
       })
     })
     
-    # Drug Tariff
+    # Title
+    output$pssru_title <- renderText({
+      glue::glue("Unit Costs of Health and Social Care - {input$pssru_healthcare_professional}")
+    })
+    
+    # Download button
+    output$pssru_download_button <- renderUI({
+      csvDownloadButton("pssru_table",
+                        filename = paste0("unit_costs_hsc_extract_",
+                                          stringr::str_to_lower(
+                                            stringr::str_replace_all(
+                                              input$pssru_healthcare_professional, " ", "_"
+                                              )
+                                            ),
+                                          "_",
+                                          pssru_year(),
+                                          ".csv"))
+    })
+      
+    
+    # DRUG TARIFF SERVER LOGIC ---------------------------------------------
+    
+    # Filtered data
     drug_tariff_df <- reactive(get(paste0("drug_tariff_", input$drug_tariff_section)))
+    
+    # Table
     drug_tariff_df_colspec <- reactive(drug_tariff_col_spec[[input$drug_tariff_section]])
-    drug_tariff_section_name <- reactive(glue::glue("Drug Tariff - {names(drug_tariff_sections)[[stringr::str_which(drug_tariff_sections, input$drug_tariff_section)]]}"))
+    
+    output$drug_tariff_table <- renderReactable({
+      reactable(drug_tariff_df(),
+                searchable = T,
+                defaultPageSize = 10,
+                columns = drug_tariff_df_colspec())
+    })
+    
+    # Title
+    output$drug_tariff_title <- renderText(glue::glue("Drug Tariff - {names(drug_tariff_sections)[[stringr::str_which(drug_tariff_sections, input$drug_tariff_section)]]}"))
+    
+    # Get version
     drug_tariff_df_date <- reactive({
-      fs::path_package("extdata", package = "COSTmos") %>%
-        list.files() %>%
-        stringr::str_subset(pattern = input$drug_tariff_section) %>%
-        stringr::str_sort(decreasing = T, numeric = T) %>%
-        purrr::pluck(1) %>%
-        stringr::str_extract("\\d{6}(?=\\.csv)") %>%
+      fs::path_package("extdata", package = "COSTmos") |>
+        list.files() |>
+        stringr::str_subset(pattern = input$drug_tariff_section) |>
+        stringr::str_sort(decreasing = T, numeric = T) |>
+        purrr::pluck(1) |>
+        stringr::str_extract("\\d{6}(?=\\.csv)") |>
         lubridate::ym()
     })
-    drug_tariff_df_date_caption <- reactive(glue::glue("{format(drug_tariff_df_date(), '%B %Y')}. Access the latest version of the Drug Tariff from the "))
     
-    output$drug_tariff_title <- renderText(drug_tariff_section_name())
+    # Caption
+    drug_tariff_df_date_caption <- reactive(glue::glue("Version: {format(drug_tariff_df_date(), '%B %Y')}"))
     
-    output$drug_tariff_date_caption <- renderUI({
+    output$drug_tariff_caption <- renderUI({
       withTags({
         div(
-          p(
-            drug_tariff_df_date_caption(),
+          p(drug_tariff_df_date_caption()),
+          p("Access the latest version of the Drug Tariff from the ",
             a(href="https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff", 
               "NHSBSA website", 
               target = "_blank", 
@@ -229,14 +308,81 @@ costmos_app <- function(...) {
       })
     })
     
-    output$drug_tariff_table <- renderReactable({
-      reactable(drug_tariff_df(),
-                searchable = T,
-                defaultPageSize = 10,
-                columns = drug_tariff_df_colspec())
+    # Download button
+    output$drug_tariff_download_button <- renderUI({
+      csvDownloadButton("drug_tariff_table",
+                        filename = paste0("drug_tariff_extract_",
+                                          input$drug_tariff_section,
+                                          "_",
+                                          stringr::str_to_lower(
+                                            stringr::str_replace_all(
+                                              format(drug_tariff_df_date(), "%b %Y"), " ", "_")), 
+                                          ".csv"))
+    })
+      
+    # PCA SERVER LOGIC ---------------------------------------------
+    
+    # Filtered data
+    PCA_df <- reactive({
+      if (input$PCA_section == "All") {
+        PCA
+      } else {
+        PCA_list[[input$PCA_section]]
+      }
     })
     
-    # COST COLLECTION SERVER LOGIC
+    PCA_df_colspec <- reactive({PCA_col_spec})
+    
+    # Table
+    output$PCA_table <- renderReactable({
+    
+      data <- PCA_df()
+  
+      if (is.null(data) || nrow(data) == 0) {
+        return(reactable(data = data.frame(Message = "No data available")))
+      }
+      
+  
+      columns <- PCA_df_colspec() 
+  
+      reactable(data,
+                searchable = TRUE,
+                defaultPageSize = 10,
+                columns = columns)
+  })
+    
+    # Get version
+    PCA_year <- reactive({
+      fs::path_package("extdata", package = "COSTmos") |>
+        list.files() |>
+        stringr::str_subset(pattern = "PCA") |>
+        stringr::str_extract("\\d{6}(?=\\.csv)") |>
+        gsub("(.{4})", "\\1/", x = _)
+    })
+    
+    # Caption
+    output$PCA_caption<- renderUI({
+      withTags({
+        div(p("Version: ", PCA_year()), 
+            p("Access the latest version of the Prescription Cost Analysis from the ",
+              a(href="https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england",
+                "NHSBSA website", 
+                target = "_blank",
+                .noWS = "outside"),
+              "."
+        )
+        )
+      })
+    })
+    
+    # Download button
+    output$PCA_download_button <- renderUI({
+      csvDownloadButton("PCA_table", 
+                        filename = paste0("pca_extract_", gsub("/", "_", PCA_year()), ".csv"))
+    })
+    
+    
+    # NATIONAL COST COLLECTION SERVER LOGIC -----------------------------------
     
     # Expect a CSV file saved inst/extdata/ncc_2023_24.csv
     
@@ -297,12 +443,23 @@ costmos_app <- function(...) {
         )
       )
     })
+    
+    # Get version
+    ncc_date <- reactive({
+      fs::path_package("extdata", package = "COSTmos") |>
+        list.files() |>
+        stringr::str_subset(pattern = "ncc") |>
+        stringr::str_sort(decreasing = T, numeric = T) |>
+        purrr::pluck(1) |>
+        stringr::str_extract("\\d{4}_\\d{2}(?=\\.csv)")
+    })
  
-    output$ncc_dynamic_link <- renderUI({
+    # Caption
+    output$ncc_caption <- renderUI({
       withTags({
         div(
-          p(
-            "Access the National Cost Collection data (2023/24) on the ",
+          p(glue::glue("Version: {stringr::str_replace_all(ncc_date(), '_', '/')}")),
+          p("Access the latest version of the National Cost Collection from the ",
             a(
               href = "https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/",
               "NHS England website",
@@ -315,9 +472,18 @@ costmos_app <- function(...) {
       })
     })
     
+    # Download button
+    output$ncc_download_button <- renderUI({
+      
+      sc <- input$ncc_service_code
+      label <- if (is.null(sc) || identical(sc, "_ALL_")) NA_character_ else paste0(stringr::str_to_lower(stringr::str_replace_all(sc, " ", "_")), "_")
+      
+      csvDownloadButton("ncc_table",
+                        filename = glue::glue("ncc_extract_{label}{ncc_date()}.csv", .na = ""))
+    })
     
   }
-  
+
   # Run the application 
   shinyApp(ui = ui, server = server)
 }

@@ -41,11 +41,13 @@ generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
     URL <- "https://kar.kent.ac.uk/105685/1/The%20unit%20costs%20of%20health%20and%20social%20care_Final3.pdf"
   } else if (year == "2024") {
     URL <- "https://kar.kent.ac.uk/109563/1/The%20unit%20costs%20of%20health%20and%20social%20care%202024%20%28for%20publication%29_Final.pdf"
+  } else {
+    URL <- "to be added"
   }
   
   AfC_table <- read.csv(file.path(folder_path, "AfC.csv"), check.names = FALSE)
   
-  #find GP table
+  #find all tables in the PDF
   GP_table <- PDF_scrape(PSSRU_PDF, "Table 9.4.2: Unit costs for a GP")
   training_doctor_table <- PDF_scrape(PSSRU_PDF, "Table 12.4.2: Training costs of doctors")
   training_non_doctor_table <- PDF_scrape(PSSRU_PDF, "Table 12.4.1: Training costs of health and social care professionals, excluding doctors")
@@ -54,8 +56,16 @@ generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
   HCP_table <- PDF_scrape(PSSRU_PDF, "Table 8.2.1: Annual and unit costs for community-based scientific and professional staff")
   
   #add correct names
-  rownames(GP_table)[6] <- "Per surgery consultation lasting 10 minutes"
-  
+  rownames(GP_table) <- c("Annual (including travel)",
+                          "Annual (excluding travel)",
+                          "Per hour of GMS activity",
+                          "Per hour of patient contact",
+                          "Per minute of patient contact",
+                          "Per surgery consultation lasting 10 minutes",
+                          "Prescription costs per consultation",
+                          "Prescription costs per consultation (actual cost)")
+  colnames(GP_table) <- c("including qualification and including direct care staff cost", "excluding qualification and including direct care staff cost",
+                               "including qualification and excluding direct care staff cost", "excluding qualification and excluding direct care staff cost")  
   
   rownames(training_doctor_table) <- c("Pre-registration training", "Foundation Officer 1",
                                        "Foundation officer 2",  "Registrar group", "Associate specialist",
@@ -92,6 +102,8 @@ generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
                              "Band 8d", 
                              "Band 9")
   
+  rownames(nurse_table)[nrow(nurse_table)] <- ("Cost per working hour (qualfications)")
+  
   
   colnames(doctors_table) <- c("Foundation doctor FY1",
                                "Foundation doctor FY2",
@@ -100,6 +112,8 @@ generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
                                "Consultant: Medical",
                                "Consultant: surgical",
                                "Consultant: psychiatric")
+  
+  rownames(doctors_table)[nrow(doctors_table)] <- ("Cost per working hour (qualfications)") 
   
   colnames(HCP_table) <- c("Band 4", 
                            "Band 5", 
@@ -111,84 +125,23 @@ generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
                            "Band 8d", 
                            "Band 9")
   
-  #adjustment to qualification cost to exclude living expenses and lost production
-  training_doctor_table$adjustment_factor <- (training_doctor_table[,"Total investment"] - 
-                                                training_doctor_table[,"Living expenses/lost production costs"])/
-    training_doctor_table[,"Total investment"]
-  
-  training_doctor_table$adjusted <- training_doctor_table$adjustment_factor * training_doctor_table[,"Expected annual cost discounted at 3.5%"]
-  
-  training_non_doctor_table$adjustment_factor <- (training_non_doctor_table[,"Total investment"] - 
-                                                    training_non_doctor_table[,"Living expenses/lost production costs"])/
-    training_non_doctor_table[,"Total investment"]
-  
-  training_non_doctor_table$adjusted <- training_non_doctor_table$adjustment_factor * training_non_doctor_table[,"Expected annual cost discounted at 3.5%"]
-  
-  
-  #create GP unit costs table
-  gp_unit_costs <- matrix(NA, 6, 6)
-  rownames(gp_unit_costs) <- c("Annual (including travel)", "Annual (excluding travel)", "Per hour of GMS activity" , "Per hour of patient contact", "Per minute of patient contact",  "Per surgery consultation lasting 10 minutes")
-  colnames(gp_unit_costs) <- c("including qualification and including direct care staff cost", "excluding qualification and including direct care staff cost",
-                               "including qualification and excluding direct care staff cost", "excluding qualification and excluding direct care staff cost",
-                               "incl_direct_qual_adjust", "excl_direct_qual_adjust")  
-  gp_unit_costs = as.data.frame(gp_unit_costs)
-  
-  common_rows <- intersect(rownames(gp_unit_costs), rownames(GP_table))
-  gp_unit_costs[common_rows,1:4] <- GP_table[common_rows,]
-  
-  
-  gp_unit_costs["Annual (including travel)","incl_direct_qual_adjust"] <- 
-    gp_unit_costs["Annual (including travel)","excluding qualification and including direct care staff cost"] + 
-    training_doctor_table["GP", "adjusted"]
-  
-  gp_unit_costs["Annual (including travel)","excl_direct_qual_adjust"] <-
-    gp_unit_costs["Annual (including travel)","excluding qualification and excluding direct care staff cost"] + 
-    training_doctor_table["GP", "adjusted"]
-  
-  gp_unit_costs["Annual (excluding travel)","incl_direct_qual_adjust"] <- 
-    gp_unit_costs["Annual (excluding travel)","excluding qualification and including direct care staff cost"] + 
-    training_doctor_table["GP", "adjusted"]
-  
-  gp_unit_costs["Annual (excluding travel)","excl_direct_qual_adjust"] <- 
-    gp_unit_costs["Annual (excluding travel)","excluding qualification and excluding direct care staff cost"] + 
-    training_doctor_table["GP", "adjusted"]
-  
-  gp_unit_costs[3,5] <- gp_unit_costs[2,5] / (gp_unit_costs[2,1] / gp_unit_costs[3,1])
-  gp_unit_costs[3,6] <- gp_unit_costs[2,6] / (gp_unit_costs[2,1] / gp_unit_costs[3,1])
-  
-  gp_unit_costs[4,5] <- gp_unit_costs[2,5] / (gp_unit_costs[2,1] / gp_unit_costs[4,1])
-  gp_unit_costs[4,6] <- gp_unit_costs[2,6] / (gp_unit_costs[2,1] / gp_unit_costs[4,1])
-  
-  gp_unit_costs[5,5] <- gp_unit_costs[4,5] / 60
-  gp_unit_costs[5,6] <- gp_unit_costs[4,6] / 60
-  
-  gp_unit_costs[6,5] <- gp_unit_costs[5,5] * 10
-  gp_unit_costs[6,6] <- gp_unit_costs[5,6] * 10
-  
-  rownames(nurse_table)[nrow(nurse_table)] <- "NICE productivity adjusment"
-  nurse_table["NICE productivity adjusment",] <- nurse_table["Cost per working hour",] + 
-    training_non_doctor_table["Nurse","adjusted"] / nurse_table["Working hours per year",]
-  nurse_table <- round(nurse_table, 2)
-  
-  doctors_table["NICE productivity adjusment",] <- NA
-  doctors_table["NICE productivity adjusment",1:4] <- doctors_table["Cost per working hour", 1:4] + 
-    training_doctor_table[1:4,"adjusted"]/doctors_table["Working hours per year",1:4]
-  
-  doctors_table["NICE productivity adjusment",5:7] <- doctors_table["Cost per working hour", 5:7] + 
-    training_doctor_table["Consultant","adjusted"]/doctors_table["Working hours per year",5:7]
-  
   doctors_table<- round(doctors_table, 2)
   
   #practice nurse calculation (band 5)
-  practice_nurse_costs <- matrix(NA, 4, 2)
-  colnames(practice_nurse_costs) <- c("excluding qualification", "including qualification (NICE)")
-  rownames(practice_nurse_costs) <- c("Cost per patient facing hour", "Cost per visits (15.5 mins)", "Cost per face-to-face consulation (10 mins)", "Cost per phone consultation (6 mins)")
+  practice_nurse_costs <- matrix(NA, 5, 2)
+  colnames(practice_nurse_costs) <- c("excluding qualification", "including qualification")
+  rownames(practice_nurse_costs) <- c("Cost per working hour", "Cost per patient facing hour", "Cost per visits (15.5 mins)", "Cost per face-to-face consulation (10 mins)", "Cost per phone consultation (6 mins)")
   practice_nurse_costs = as.data.frame(practice_nurse_costs)
+  
+  practice_nurse_costs["Cost per working hour","excluding qualification"] <- 
+    nurse_table["Cost per working hour","Band 5"] 
+  practice_nurse_costs["Cost per working hour","including qualification"] <- 
+    nurse_table["Cost per working hour (qualfications)","Band 5"]
   
   practice_nurse_costs["Cost per patient facing hour","excluding qualification"] <- 
     nurse_table["Cost per working hour","Band 5"] * 1.3   # Not reported in this report; used ratio 1:1.30 (total time:direct time) using data from 2015 report (cited as based on 2006/7 survey)
-  practice_nurse_costs["Cost per patient facing hour","including qualification (NICE)"] <- 
-    nurse_table["NICE productivity adjusmen","Band 5"] * 1.3   # Not reported in this report; used ratio 1:1.30 (total time:direct time) using data from 2015 report (cited as based on 2006/7 survey)
+  practice_nurse_costs["Cost per patient facing hour","including qualification"] <- 
+    nurse_table["Cost per working hour (qualfications)","Band 5"] * 1.3   # Not reported in this report; used ratio 1:1.30 (total time:direct time) using data from 2015 report (cited as based on 2006/7 survey)
   
   practice_nurse_costs["Cost per visits (15.5 mins)",] <- practice_nurse_costs[1,] * 15.5/60   # Not reported in this report; used 15.5 min from 2015 report (cited as based on 2006/7 survey)
   practice_nurse_costs["Cost per face-to-face consulation (10 mins)",] <- practice_nurse_costs[1,] * 10/60   # Not reported in this report; used 10 mins based on Stevens 2017
@@ -197,14 +150,14 @@ generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
   # https://bmjopen.bmj.com/content/7/11/e018261
   
   if(qual == 1){
-    output_practice_nurse <- practice_nurse_costs[, "including qualification (NICE)", drop = FALSE]
-    output_hospital_doctors <- t(doctors_table["NICE productivity adjusment",, drop = FALSE])
-    output_qualified_nurse <- t(nurse_table["NICE productivity adjusment",, drop = FALSE])
+    output_practice_nurse <- practice_nurse_costs[, "including qualification", drop = FALSE]
+    output_hospital_doctors <- t(doctors_table["Cost per working hour (qualfications)",, drop = FALSE])
+    output_qualified_nurse <- t(nurse_table["Cost per working hour (qualfications)",, drop = FALSE])
     
     if(direct == 1){
-      output_practice_GP <- gp_unit_costs[, "incl_direct_qual_adjust", drop = FALSE]
+      output_practice_GP <- GP_table[1:6, "including qualification and including direct care staff cost", drop = FALSE]
     } else {
-      output_practice_GP <- gp_unit_costs[, "excl_direct_qual_adjust", drop = FALSE]
+      output_practice_GP <- GP_table[1:6, "including qualification and excluding direct care staff cost", drop = FALSE]
     }
   } else {
     output_practice_nurse <- practice_nurse_costs[, "excluding qualification", drop = FALSE]
@@ -212,9 +165,9 @@ generate_PSSRU_tables <- function(qual, direct, year, training_HCP){
     output_qualified_nurse <- t(nurse_table["Cost per working hour",, drop = FALSE])
     
     if(direct == 1){
-      output_practice_GP <- gp_unit_costs[, "excluding qualification and including direct care staff cost", drop = FALSE]
+      output_practice_GP <- GP_table[1:6, "excluding qualification and including direct care staff cost", drop = FALSE]
     } else {
-      output_practice_GP <- gp_unit_costs[, "excluding qualification and excluding direct care staff cost", drop = FALSE]
+      output_practice_GP <- GP_table[1:6, "excluding qualification and excluding direct care staff cost", drop = FALSE]
     }
   }
   
