@@ -169,7 +169,7 @@ usethis::use_data(drug_tariff_ix, overwrite = T)
 # Remove previous versions of drug tariff IX section
 file.remove(stringr::str_subset(list.files(rprojroot::find_package_root_file("inst", "extdata"), pattern = "ix", full.names = T), ix_file_ym, negate = T))
 
-#PCA
+# PCA --------------------------------------------------------------------------------
 url_PCA <- "https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england"
 
 page <- read_html(url_PCA)
