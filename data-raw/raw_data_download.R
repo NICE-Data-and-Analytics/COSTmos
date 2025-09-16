@@ -176,40 +176,41 @@ page <- read_html(url_PCA)
 
 elements <- page |>
   html_nodes("a") |>
-  {
+  (\(x) {
     data.frame(
-      text = html_text(., trim = TRUE),
-      href = html_attr(., "href"),
-      class = html_attr(., "class"),
-      stringsAsFactors = FALSE
-    )
+        text = html_text(x, trim = TRUE),
+        href = html_attr(x, "href"),
+        class = html_attr(x, "class"),
+        stringsAsFactors = FALSE
+      )
   }
+  )()
 
 links <- na.omit(elements[elements$class == "cklinklinkitem",])
 
 latest <- links[1,"href"]
 
-#Extract year
-PCA_year <- str_extract_all(latest,"\\d+")
-PCA_year <- gsub("(.{4})", "\\1",PCA_year[[1]])
-
 page <- read_html(latest)
 
 elements <- page |>
   html_nodes("a") |>
-  {
+  (\(x) {
     data.frame(
-      text = html_text(., trim = TRUE),
-      href = html_attr(., "href"),
-      class = html_attr(., "class"),
+      text = html_text(x, trim = TRUE),
+      href = html_attr(x, "href"),
+      class = html_attr(x, "class"),
       stringsAsFactors = FALSE
     )
   }
+  )()
 
 excels <- na.omit(elements[elements$class == "ckfile excel",])
 
-#download the second one as it is the calendar year PCA
+#download the second one as it is the calendar year PCAlat
 calendar_PCA <- excels[2,"href"]
+
+#Extract year
+PCA_year <- stringr::str_extract(calendar_PCA, "\\d{4}(?=_v\\d{3})")
 
 # Generate download file path, save to temporary directory
 download_path <- rprojroot::find_package_root_file("inst", "extdata", paste0("calendar_PCA_", PCA_year ,".csv"))

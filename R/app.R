@@ -229,7 +229,7 @@ costmos_app <- function(...) {
     # Caption
     output$pssru_caption <- renderUI({
       withTags({
-        div(p("Version: ", pssru_year()),
+        div(p("Year: ", pssru_year()),
             p("Access the latest version of the Unit Costs of Health and Social Care manual from the ",
               a(href="https://www.pssru.ac.uk/unitcostsreport/",
                 "PSSRU website", 
@@ -291,7 +291,7 @@ costmos_app <- function(...) {
     })
     
     # Caption
-    drug_tariff_df_date_caption <- reactive(glue::glue("Version: {format(drug_tariff_df_date(), '%B %Y')}"))
+    drug_tariff_df_date_caption <- reactive(glue::glue("Release: {format(drug_tariff_df_date(), '%B %Y')}"))
     
     output$drug_tariff_caption <- renderUI({
       withTags({
@@ -351,19 +351,18 @@ costmos_app <- function(...) {
                 columns = columns)
   })
     
-    # Get version
+    # Get year
     PCA_year <- reactive({
       fs::path_package("extdata", package = "COSTmos") |>
         list.files() |>
         stringr::str_subset(pattern = "PCA") |>
-        stringr::str_extract("\\d{6}(?=\\.csv)") |>
-        gsub("(.{4})", "\\1/", x = _)
+        stringr::str_extract("\\d{4}(?=\\.csv)")
     })
     
     # Caption
     output$PCA_caption<- renderUI({
       withTags({
-        div(p("Version: ", PCA_year()), 
+        div(p("Calendar year: ", PCA_year()), 
             p("Access the latest version of the Prescription Cost Analysis from the ",
               a(href="https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england",
                 "NHSBSA website", 
@@ -378,7 +377,7 @@ costmos_app <- function(...) {
     # Download button
     output$PCA_download_button <- renderUI({
       csvDownloadButton("PCA_table", 
-                        filename = paste0("pca_extract_", gsub("/", "_", PCA_year()), ".csv"))
+                        filename = paste0("pca_extract_", PCA_year(), ".csv"))
     })
     
     
@@ -444,7 +443,7 @@ costmos_app <- function(...) {
       )
     })
     
-    # Get version
+    # Get year
     ncc_date <- reactive({
       fs::path_package("extdata", package = "COSTmos") |>
         list.files() |>
@@ -458,7 +457,7 @@ costmos_app <- function(...) {
     output$ncc_caption <- renderUI({
       withTags({
         div(
-          p(glue::glue("Version: {stringr::str_replace_all(ncc_date(), '_', '/')}")),
+          p(glue::glue("Financial year: {stringr::str_replace_all(ncc_date(), '_', '/')}")),
           p("Access the latest version of the National Cost Collection from the ",
             a(
               href = "https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/",
