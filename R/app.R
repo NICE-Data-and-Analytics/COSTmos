@@ -86,7 +86,7 @@ costmos_app <- function(...) {
                             )
                           )
                           ),
-                nav_panel("NHS Collection Costs",
+                nav_panel("National Cost Collection",
                           card(
                             layout_sidebar(
                               fillable = TRUE,
