@@ -281,12 +281,10 @@ costmos_app <- function(...) {
     
     # Get version
     drug_tariff_df_date <- reactive({
-      fs::path_package("extdata", package = "COSTmos") |>
-        list.files() |>
-        stringr::str_subset(pattern = input$drug_tariff_section) |>
-        stringr::str_sort(decreasing = T, numeric = T) |>
+      drug_tariff_version |> 
+        dplyr::filter(section == input$drug_tariff_section) |>
+        dplyr::pull(version_ym) |>
         purrr::pluck(1) |>
-        stringr::str_extract("\\d{6}(?=\\.csv)") |>
         lubridate::ym()
     })
     
