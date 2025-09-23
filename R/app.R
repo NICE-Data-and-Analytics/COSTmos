@@ -66,23 +66,22 @@ costmos_app <- function(...) {
                             layout_sidebar(
                               fillable = T,
                               sidebar = sidebar(
-                                selectInput("PCA_section",
-                                            label = "Select BNF chapters",
-                                            choices = c("All", PCA_sections),
-                                            selected = "All"
+                                selectInput("pca_bnf_chapter",
+                                            label = "Select BNF chapter",
+                                            choices = pca_bnf_chapter_choice
                                 ),
                               ),
-                              h3("Prescription Cost Analysis"),
+                              h3(textOutput("pca_title")),
                               card_body(
                                 padding = c(0, 10),
                                 layout_column_wrap(
                                   width = NULL,
                                   style = css(grid_template_columns = "3fr 1fr"),
-                                  uiOutput("PCA_caption"),
-                                  uiOutput("PCA_download_button")
+                                  uiOutput("pca_caption"),
+                                  uiOutput("pca_download_button")
                                 )
                               ),
-                              reactableOutput("PCA_table")
+                              reactableOutput("pca_table")
                             )
                           )
                           ),
@@ -321,64 +320,70 @@ costmos_app <- function(...) {
     # PCA SERVER LOGIC ---------------------------------------------
     
     # Filtered data
-    PCA_df <- reactive({
-      if (input$PCA_section == "All") {
-        PCA
+    pca_filtered <- reactive({
+      bnf_c <- input$pca_bnf_chapter
+      req(bnf_c)
+      
+      if (identical(bnf_c, "_ALL_")) {
+        df <- pca_calendar_year
       } else {
-        PCA_list[[input$PCA_section]]
-      }
-    })
-    
-    PCA_df_colspec <- reactive({PCA_col_spec})
-    
-    # Table
-    output$PCA_table <- renderReactable({
-    
-      data <- PCA_df()
-  
-      if (is.null(data) || nrow(data) == 0) {
-        return(reactable(data = data.frame(Message = "No data available")))
+        df <- pca_calendar_year |> 
+          dplyr::filter(bnf_chapter_name == bnf_c)
       }
       
-  
-      columns <- PCA_df_colspec() 
-  
-      reactable(data,
-                searchable = TRUE,
-                defaultPageSize = 10,
-                columns = columns)
-  })
+      df
+    })
+    
+    # Title
+    output$pca_title <- renderText({
+      bnf_c <- input$pca_bnf_chapter
+      label <- if (is.null(bnf_c) || identical(bnf_c, "_ALL_")) "" else paste0(" — BNF Chapter: ", bnf_c)
+      paste0("Prescription Cost Analysis", label)
+    })
+    
+    # Table
+    output$pca_table <- renderReactable({
+      reactable(
+        pca_filtered(),
+        searchable = TRUE,
+        defaultPageSize = 10,
+        columns = pca_col_spec
+      )
+    })
     
     # Get year
-    PCA_year <- reactive({
-      fs::path_package("extdata", package = "COSTmos") |>
-        list.files() |>
-        stringr::str_subset(pattern = "PCA") |>
-        stringr::str_extract("\\d{4}(?=\\.csv)")
+    pca_year <- reactive({
+      pca_version |> 
+        dplyr::filter(section == "calendar_year") |>
+        dplyr::pull(version) |>
+        purrr::pluck(1)
     })
     
     # Caption
-    output$PCA_caption<- renderUI({
+    output$pca_caption<- renderUI({
       withTags({
-        div(p("Calendar year: ", PCA_year()), 
+        div(p("Calendar year: ", pca_year()), 
             p("Access the latest version of the Prescription Cost Analysis from the ",
               a(href="https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england",
                 "NHSBSA website", 
                 target = "_blank",
                 .noWS = "outside"),
               "."
-        )
+            )
         )
       })
     })
     
     # Download button
-    output$PCA_download_button <- renderUI({
-      csvDownloadButton("PCA_table", 
-                        filename = paste0("pca_extract_", PCA_year(), ".csv"))
+    output$pca_download_button <- renderUI({
+      
+      bnf_c <- input$pca_bnf_chapter
+      label <- if (is.null(bnf_c) || identical(bnf_c, "_ALL_")) NA_character_ else paste0(stringr::str_to_lower(stringr::str_replace_all(bnf_c, " ", "_")), "_")
+      
+      csvDownloadButton("pca_table",
+                        filename = glue::glue("pca_calendar_year_extract_{label}{pca_year()}.csv", .na = ""))
     })
-    
-    
+
     # NATIONAL COST COLLECTION SERVER LOGIC -----------------------------------
     
     # Expect a CSV file saved inst/extdata/ncc_2023_24.csv
@@ -417,8 +422,8 @@ costmos_app <- function(...) {
     # Title
     output$ncc_title <- renderText({
       sc <- input$ncc_service_code
-      label <- if (is.null(sc) || identical(sc, "_ALL_")) "All" else sc
-      paste0("National Cost Collection — Service Code: ", label)
+      label <- if (is.null(sc) || identical(sc, "_ALL_")) "" else paste0(" — Service Code: ", sc)
+      paste0("National Cost Collection", label)
     })
     
     # Table

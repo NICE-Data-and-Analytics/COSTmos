@@ -77,19 +77,19 @@ download_csv <- function(name) {
   full_link <- paste0("https://www.nhsbsa.nhs.uk", viii_links[[name]])
   
   # Download file to temporary file, read in and save as R object
-  with_tempfile("dl_file", {
+  withr::with_tempfile("dl_file", {
     # Print temporary file name
     print(dl_file)
     
     # Download file to temporary file
-    download.file(full_link, dl_file)
+    download.file(full_link, dl_file, mode = "wb")
     
     # Read data and clean - Removes header and empty rows, renames columns sensibly
-    df <- read_csv(dl_file,
+    df <- readr::read_csv(dl_file,
                    skip = 5,
                    col_types = viii_read[[name]]$col_types,
                    col_names = viii_read[[name]]$col_names) |> 
-      select(all_of(viii_read[[name]]$col_order))
+      dplyr::select(all_of(viii_read[[name]]$col_order))
     
     # Create dataset name
     df_name <- paste0("drug_tariff_", name) 
@@ -135,15 +135,15 @@ ix_file_ym <- stringr::str_remove_all(
   "-|(01)")
 
 # Download IX file to temporary file, read in and save as R object
-with_tempfile("ix_dl_file", {
+withr::with_tempfile("ix_dl_file", {
   # Print temporary file name
   print(ix_dl_file)
   
   # Download file to temporary file
-  download.file(paste0("https://www.nhsbsa.nhs.uk", ix_link), ix_dl_file)
+  download.file(paste0("https://www.nhsbsa.nhs.uk", ix_link), ix_dl_file, mode = "wb")
   
   # Read data and clean - Removes header and empty rows, renames columns sensibly
-  drug_tariff_ix <- read_csv(ix_dl_file,
+  drug_tariff_ix <- readr::read_csv(ix_dl_file,
                     skip = 5,
                     col_types = "ccccccdcccdcccccc",
                     col_names = c("drug_tariff_part", "supplier_name", "vmp_name", "amp_name", 
@@ -151,7 +151,7 @@ with_tempfile("ix_dl_file", {
                                   "product_order_number", "pack_order_number", "price", "add_dispensing_indicator",
                                   "product_snomed_code", "pack_snomed_code", "gtin",
                                   "supplier_snomed_code","bnf_code")) |> 
-    select(all_of(c("drug_tariff_part", "vmp_name", "amp_name", "supplier_name",
+    dplyr::select(all_of(c("drug_tariff_part", "vmp_name", "amp_name", "supplier_name",
                     "quantity", "quantity_unit_of_measure", "price", "colour", "size_or_weight", 
                     "product_order_number", "pack_order_number", "add_dispensing_indicator",
                     "product_snomed_code", "pack_snomed_code", "gtin",
