@@ -1,4 +1,6 @@
 # PCA BNF chapters
+data(pca_calendar_year)
+
 pca_bnf_chapter_choice <- c("All" = "_ALL_", sort(unique(pca_calendar_year$bnf_chapter_name)))
 
 # PCA reactable column specification

@@ -68,7 +68,7 @@ withr::with_tempfile("dl_file", {
                   cost_per_quantity)
   
   # Save as .rda object
-  usethis::use_data(pca_calendar_year, overwrite = T)
+  usethis::use_data(pca_calendar_year, compress = "xz", overwrite = T)
 },
 fileext = ".xlsx")
 
