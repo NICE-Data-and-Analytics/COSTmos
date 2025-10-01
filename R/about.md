@@ -1,41 +1,55 @@
-# About COSTmos  
+# About COSTmos
 
 COSTmos collates and displays reference data sets on healthcare costs in England.
 
-Current data sets included are:  
-- [Drug Tariff](#drug-tariff)
-- [Prescription Cost Analysis](#prescription-cost-analysis)
-- [National Cost Collection](#national-cost-collection)
-- [Unit Costs of Health and Social Care](#unit-costs-of-health-and-social-care)
+Current data sets included are:\
+- [Drug Tariff](#drug-tariff) - [Prescription Cost Analysis](#prescription-cost-analysis) - [National Cost Collection](#national-cost-collection) - [Unit Costs of Health and Social Care](#unit-costs-of-health-and-social-care)
 
 COSTmos tries to display the latest version of the data sets. However, we recommend that you go to the original source to verify that it is the latest version.
 
-Find the code for COSTmos on [GitHub](https://github.com/NICE-Data-and-Analytics/COSTmos).  
+Find the code for COSTmos on [GitHub](https://github.com/NICE-Data-and-Analytics/COSTmos).
 
-## Data sets  
+## Data sets
 
-### Drug Tariff  
+### Drug Tariff {#drug-tariff}
 
-The [Drug Tariff](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff) is produced monthly by the NHS Business Services Authority (NHSBSA) for the Department of Health and Social Care. It "outlines what will be paid to pharmacy contractors for NHS services (reimbursement or remuneration), rules to follow when dispensing, value of the fees and allowances you will be paid, drug and appliance prices you will be paid". 
+The [Drug Tariff](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff) is produced monthly by the NHS Business Services Authority (NHSBSA) for the Department of Health and Social Care. It "outlines what will be paid to pharmacy contractors for NHS services (reimbursement or remuneration), rules to follow when dispensing, value of the fees and allowances you will be paid, drug and appliance prices you will be paid".
 
 COSTmos sources the following sections of the Drug Tariff from the web pages below:
 
-Section (link to source) | Title/description  
---------|------------  
-[Part VIIIA](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii) | Basic Prices of Drugs  
-[Part VIIIB](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii) | Arrangements for payment for Specials and Imported Unlicensed Medicines with a Price Per Unit Above a Minimum Quantity  
-[Part VIIID](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii) | Arrangements for payment for Specials & Imported Unlicensed Medicines with Prices Determined Relative to a Commonly Identified Pack Size  
-[Part VIII Category M](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii) | Drugs which are readily available as licensed generic medicines. Only certain pack sizes considered (versus all pack sizes for Category A)  
-[Part IX](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix) | Appliances  
+| Section (link to source) | Title/description |
+|-----------------------------|-------------------------------------------|
+| [Part VIIIA](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii) | Basic Prices of Drugs |
+| [Part VIIIB](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii) | Arrangements for payment for Specials and Imported Unlicensed Medicines with a Price Per Unit Above a Minimum Quantity |
+| [Part VIIID](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii) | Arrangements for payment for Specials & Imported Unlicensed Medicines with Prices Determined Relative to a Commonly Identified Pack Size |
+| [Part VIII Category M](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii) | Drugs which are readily available as licensed generic medicines. Only certain pack sizes considered (versus all pack sizes for Category A) |
+| [Part IX](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix) | Appliances |
 
-### Prescription Cost Analysis 
+### Prescription Cost Analysis {#prescription-cost-analysis}
 
 The [Prescription Cost Analysis](https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england) (PCA) is produced by the NHSBSA and "provides details of the number of items and the Net Ingredient Cost (NIC) of all prescriptions dispensed in the community in England".
 
-### National Cost Collection
+### National Cost Collection {#national-cost-collection}
 
 The [National Cost Collection](https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/) reports the national average unit cost and total cost for defined services provided to NHS patients across NHS providers, per financial year.
 
-### Unit Costs of Health and Social Care  
+### Unit Costs of Health and Social Care {#unit-costs-of-health-and-social-care}
 
 The [Unit Costs of Health and Social Care manual](https://www.pssru.ac.uk/unitcostsreport/) is published annually and estimates the unit cost of the delivery of health and social care services. COSTmos extracts only the estimates around the costs per working hour and training costs for various healthcare professionals. The manual is produced by the Personal Social Services Research Unit (PSSRU) at the University of Kent and the Centre for Health Economics at the University of York.
+
+## Data Source Citations
+
+1.  **NHS Business Services Authority.** *Drug Tariff Data*.\
+    <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>\
+    Accessed September 2025. **Licensed under:** [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)
+
+2.  **NHS Business Services Authority.** *Prescription Cost Analysis – England*.\
+    <https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england>.\
+    Accessed September 2025. **Licensed under:** [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)
+
+3.  **NHS England.** *National Cost Collection*.\
+    <https://www.england.nhs.uk/publication/2023-24-national-cost-collection-data-publication/>.\
+    Accessed September 2025. **Licensed under:** [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)
+
+4.  **Personal Social Services Research Unit (PSSRU)(University of Kent) & Centre for Health Economics (University of York).** *Unit Costs of Health and Social Care 2024 Manual.* <https://www.pssru.ac.uk/unitcostsreport/> [*Kent Academic Repository*](https://kar.kent.ac.uk/109563/)\
+    **Licensed under:** [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
