@@ -20,7 +20,6 @@ library(glue)
 library(fs)
 library(bslib)
 library(htmltools)
-library(pdftools)
 
 costmos_app <- function(...) {
   
@@ -116,67 +115,74 @@ costmos_app <- function(...) {
                               fillable = T,
                               sidebar = sidebar(
                                 width = "25%",
-                                selectInput("pssru_year",
+                                selectInput("uchsc_year",
                                             label = "Year",
-                                            choices = c("2023", "2024"),
-                                            selected = "2024"),  
-                                selectInput("pssru_healthcare_professional",
+                                            choices = uchsc_year_choice),  
+                                selectInput("uchsc_hcp",
                                             label = "Healthcare professional",
-                                            choices = c("Practice GP", 
-                                                        "Practice nurse", 
-                                                        "Hospital doctors", 
-                                                        "Qualified nurses", 
-                                                        "Community-based scientific and professional staff",
-                                                        "Training costs"),
-                                            selected = "Practice GP"),
+                                            choices = uchsc_hcp_choice),
                                 conditionalPanel(
-                                  condition = "input.pssru_healthcare_professional == 'Practice GP' || 
-                                  input.pssru_healthcare_professional == 'Practice nurse' ||
-                                  input.pssru_healthcare_professional == 'Hospital doctors'||
-                                  input.pssru_healthcare_professional == 'Qualified nurses'",
-                                  radioButtons("pssru_qualification_cost",
+                                  condition = "input.uchsc_hcp == 'gp' || 
+                                  input.uchsc_hcp == 'gp_nurse' ||
+                                  input.uchsc_hcp == 'hospital_doctor'||
+                                  input.uchsc_hcp == 'nurse'",
+                                  radioButtons("uchsc_qualification_cost",
                                                label = "Qualification cost",
-                                               choices = c("Include" = 1, "Exclude" = 2),
-                                               selected = 1),
+                                               choices = c("Include" = "including", "Exclude" = "excluding")
+                                               ),
                                 ),
                                 conditionalPanel(
-                                  condition = "input.pssru_healthcare_professional == 'Practice GP'",
-                                  radioButtons("pssru_direct_cost",
+                                  condition = "input.uchsc_hcp == 'gp'",
+                                  radioButtons("uchsc_direct_cost",
                                                label = "Direct care staff cost",
-                                               choices = c("Include" = 1, "Exclude" = 2),
-                                               selected = 1)
-                                ),                 conditionalPanel(
-                                  condition = "input.pssru_healthcare_professional == 'Practice nurse'",
-                                  p("Ratio of direct to indirect time = 1:0.30. ",
-                                    a("See PSSRU 2015.", 
-                                      href = "https://www.pssru.ac.uk/pub/uc/uc2015/full.pdf",
-                                      target = "_blank"),
-                                  )
+                                               choices = c("Include" = "including", "Exclude" = "excluding")
+                                               )
+                                ),                 
+                                conditionalPanel(
+                                  condition = "input.uchsc_hcp == 'gp_nurse'",
+                                  withTags({
+                                    div(
+                                      p("Note, only the cost per working hour is from the selected Unit Costs report. All other values are calculated using that figure and the following figures:"),
+                                      ul(
+                                        li("Ratio of direct to indirect time on face-to-face contacts (1:0.30) and duration of contact from the ", 
+                                           a(href="https://www.pssru.ac.uk/project-pages/unit-costs/unit-costs-2015/",
+                                             "2015 Unit Costs report",
+                                             target = "_blank",
+                                             .noWS = "outside")
+                                           ),
+                                        li("Average duration of nurse face-to-face (10 mins) and telephone (6 mins) consultations from ",
+                                           a(href="https://doi.org/10.1136/bmjopen-2017-018261",
+                                             "Stevens et al. (2017)",
+                                             target = "_blank",
+                                             .noWS = "outside")
+                                           )
+                                      )
+                                    )
+                                  })
                                 ),  
                                 conditionalPanel(
-                                  condition = "input.pssru_healthcare_professional == 'Community-based scientific and professional staff'",
-                                  helpText("To calculate the cost per hour, including qualifications for scientific and professional staff, the appropriate expected annual cost shown in the 'Training cost' section should be divided by the number of working hours. This can then be added to the cost per working hour."),
+                                  condition = "input.uchsc_hcp == 'community_hcp'",
+                                  helpText("To calculate the cost per hour including qualifications for scientific and professional staff, the appropriate expected annual cost shown in the 'Training cost' table should be divided by the number of working hours. This can then be added to the cost per working hour.")
                                 ),
                                 conditionalPanel(
-                                  condition = "input.pssru_healthcare_professional == 'Training costs'",
-                                  radioButtons("pssru_training_hcp",
+                                  condition = "input.uchsc_hcp == 'training_costs'",
+                                  radioButtons("uchsc_training_hcp",
                                                label = "Select",
-                                               choices = c("Training costs of health and social care professionals, excluding doctors" = 1, 
-                                                           "Training costs of doctors (after discounting)" = 2),
-                                               selected = 1)
+                                               choices = uchsc_training_costs_choice
+                                               )
                                 )
-                              ),
-                              h3(textOutput("pssru_title")),
+                                ),
+                              h3(textOutput("uchsc_title")),
                               card_body(
                                 padding = c(0, 10),
                                 layout_column_wrap(
                                   width = NULL,
                                   style = css(grid_template_columns = "3fr 1fr"),
-                                  uiOutput("pssru_caption"),
-                                  uiOutput("pssru_download_button")
+                                  uiOutput("uchsc_caption"),
+                                  uiOutput("uchsc_download_button")
                                 )
                               ),
-                              reactableOutput("pssru_table")
+                              reactableOutput("uchsc_table")
                             ),
                           )
                 )
@@ -192,43 +198,57 @@ costmos_app <- function(...) {
   # Define server logic required to draw a histogram
   server <- function(input, output, session) {
   
-    # PSSRU SERVER LOGIC ---------------------------------------------
+    # UNIT COSTS OF HEALTH AND SOCIAL CARE SERVER LOGIC ---------------------------------------------
+    
+    # Get year
+    ushsc_year <- reactive(input$uchsc_year)
+    
+    uchsc_hcp_full <- reactive({
+      if(input$uchsc_hcp == "training_costs") {
+        paste0(input$uchsc_hcp, "_", input$uchsc_training_hcp)
+      } else {
+        input$uchsc_hcp
+      }
+    })
     
     # Filtered data
-    pssru_ui_outputs <- reactive({
-      generate_PSSRU_tables(
-        qual = input$pssru_qualification_cost,
-        direct = input$pssru_direct_cost,
-        year = input$pssru_year,
-        training_HCP = input$pssru_training_hcp
-      )
-    })
-    
-    pssru_selected_data <- reactive({
-      switch(input$pssru_healthcare_professional,
-             "Practice nurse" = pssru_ui_outputs()$practice_nurse,
-             "Practice GP" = pssru_ui_outputs()$practice_GP,
-             "Hospital doctors" = pssru_ui_outputs()$hospital_doctors,
-             "Community-based scientific and professional staff" = pssru_ui_outputs()$HCP_table,
-             "Qualified nurses" = pssru_ui_outputs()$qualified_nurse,
-             "Training costs" = pssru_ui_outputs()$training_costs
-      )
-    })
+    uchsc_df <- reactive({
+
+      # Get table
+      df <- get(paste0("unit_costs_hsc_", uchsc_hcp_full())) |> 
+        # Filter to selected year
+        dplyr::filter(year == ushsc_year())
+
+      # Filter for inc/exc qualification cost
+      if (uchsc_hcp_full() %in% c("gp", "gp_nurse", "hospital_doctor", "nurse")) {
+        df <- df |>
+          dplyr::filter(qualification_cost == input$uchsc_qualification_cost)
+      }
+
+      # Filter for inc/exc direct staff care cost
+      if (uchsc_hcp_full() == "gp"){
+        df <- df |>
+          dplyr::filter(direct_care_staff_cost == input$uchsc_direct_cost)
+      }
+      
+      df
+      })
     
     # Table
-    output$pssru_table <- renderReactable({
-      reactable(pssru_selected_data(),
-                searchable = T,
-                defaultPageSize = 10)
-    })
+    uchsc_df_colspec <- reactive(uchsc_col_spec[[uchsc_hcp_full()]])
     
-    # Get version
-    pssru_year <- reactive(input$pssru_year)
+    output$uchsc_table <- renderReactable({
+      reactable(uchsc_df(),
+                searchable = T,
+                defaultPageSize = 10,
+                columns = uchsc_df_colspec()
+                )
+    })
 
     # Caption
-    output$pssru_caption <- renderUI({
+    output$uchsc_caption <- renderUI({
       withTags({
-        div(p("Year: ", pssru_year()),
+        div(p("Year: ", ushsc_year()),
             p("Access the latest version of the Unit Costs of Health and Social Care manual from the ",
               a(href="https://www.pssru.ac.uk/unitcostsreport/",
                 "PSSRU website", 
@@ -241,21 +261,21 @@ costmos_app <- function(...) {
     })
     
     # Title
-    output$pssru_title <- renderText({
-      glue::glue("Unit Costs of Health and Social Care - {input$pssru_healthcare_professional}")
+    output$uchsc_title <- renderText({
+      if(input$uchsc_hcp == "training_costs") {
+        glue::glue("Unit Costs of Health and Social Care - {names(uchsc_training_costs_choice)[uchsc_training_costs_choice == input$uchsc_training_hcp]}")
+      } else {
+        glue::glue("Unit Costs of Health and Social Care - {names(uchsc_hcp_choice)[uchsc_hcp_choice == input$uchsc_hcp]}")
+      }
     })
     
     # Download button
-    output$pssru_download_button <- renderUI({
-      csvDownloadButton("pssru_table",
+    output$uchsc_download_button <- renderUI({
+      csvDownloadButton("uchsc_table",
                         filename = paste0("unit_costs_hsc_extract_",
-                                          stringr::str_to_lower(
-                                            stringr::str_replace_all(
-                                              input$pssru_healthcare_professional, " ", "_"
-                                              )
-                                            ),
+                                          uchsc_hcp_full(),
                                           "_",
-                                          pssru_year(),
+                                          ushsc_year(),
                                           ".csv"))
     })
       

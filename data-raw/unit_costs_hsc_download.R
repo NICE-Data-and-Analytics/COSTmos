@@ -122,10 +122,7 @@ generate_unit_costs_hsc_tables <- function(report_year){
                                        "Foundation officer 2",  "Registrar group", "Associate specialist",
                                        "GP","Consultant")
   
-  training_costs_doctor <- training_costs_doctor |> 
-    dplyr::rename(variable = x)
-  
-  colnames(training_costs_doctor) <- c("variable", "tuition", "living_expenses_or_lost_production_costs",
+  colnames(training_costs_doctor) <- c("job_title", "tuition", "living_expenses_or_lost_production_costs",
                                        "clinical_placement", "placement_fee_plus_market_forces_factor",
                                        "salary_inc_overheads_and_postgraduate_centre_costs",
                                        "total_investment", "expected_annual_cost_discounted_at_3pt5perc")
@@ -147,7 +144,7 @@ generate_unit_costs_hsc_tables <- function(report_year){
                                            "Nurse",
                                            "Social worker")
   
-  colnames(training_costs_hcp) <- c("variable",
+  colnames(training_costs_hcp) <- c("job_title",
                                            "tuition",
                                            "living_expenses_or_lost_production_costs",
                                            "clinical_placement",
@@ -176,8 +173,8 @@ generate_unit_costs_hsc_tables <- function(report_year){
   nurse <- nurse |> 
     dplyr::filter(stringr::str_detect(variable, "Cost per working hour")) |>
     tidyr::pivot_longer(tidyselect::starts_with("Band"), names_to = "band", values_to = "cost_per_working_hour") |> 
-    dplyr::mutate(qualifications = dplyr::if_else(stringr::str_detect(variable, "including"), "including", "excluding")) |> 
-    dplyr::select(band, qualifications, cost_per_working_hour) |> 
+    dplyr::mutate(qualification_cost = dplyr::if_else(stringr::str_detect(variable, "including"), "including", "excluding")) |> 
+    dplyr::select(band, qualification_cost, cost_per_working_hour) |> 
     dplyr::mutate(year = report_year,
                   .before = 1)
   
@@ -209,9 +206,9 @@ generate_unit_costs_hsc_tables <- function(report_year){
   # Check with Alfredo if should use cost per patient facing hour for above calcs rather than cost per working hour
   
   gp_nurse <- tibble::tribble(
-    ~qualifications, ~cost_hr, 
-    "excluding", nurse$cost_per_working_hour[nurse$band == "Band 5" & nurse$qualifications == "excluding"], 
-    "including", nurse$cost_per_working_hour[nurse$band == "Band 5" & nurse$qualifications == "including"]
+    ~qualification_cost, ~cost_hr, 
+    "excluding", nurse$cost_per_working_hour[nurse$band == "Band 5" & nurse$qualification_cost == "excluding"], 
+    "including", nurse$cost_per_working_hour[nurse$band == "Band 5" & nurse$qualification_cost == "including"]
   ) |> 
     dplyr::mutate(patient_facing_hour = cost_hr*1.3,
                   visit = cost_hr*15.5/60,
@@ -223,7 +220,7 @@ generate_unit_costs_hsc_tables <- function(report_year){
                                               vars == "visit" ~ "Cost per visit (15.5 mins)",
                                               vars == "face_to_face" ~ "Cost per face-to-face consultation (10 mins)",
                                               vars == "phone" ~ "Cost per phone consultation (6 mins)")) |> 
-    dplyr::select(variable, qualifications, cost) |> 
+    dplyr::select(variable, qualification_cost, cost) |> 
     dplyr::mutate(year = report_year,
                   .before = 1)
 
@@ -243,9 +240,9 @@ generate_unit_costs_hsc_tables <- function(report_year){
   hospital_doctor <- hospital_doctor |> 
     dplyr::filter(stringr::str_detect(variable, "Cost per working hour")) |>
     dplyr::mutate(variable = stringr::str_replace(variable, "includingqualifications", "including qualifications")) |> 
-    tidyr::pivot_longer(!variable, names_to = "title", values_to = "cost_per_working_hour") |> 
-    dplyr::mutate(qualifications = dplyr::if_else(stringr::str_detect(variable, "including"), "including", "excluding")) |> 
-    dplyr::select(title, qualifications, cost_per_working_hour) |> 
+    tidyr::pivot_longer(!variable, names_to = "job_title", values_to = "cost_per_working_hour") |> 
+    dplyr::mutate(qualification_cost = dplyr::if_else(stringr::str_detect(variable, "including"), "including", "excluding")) |> 
+    dplyr::select(job_title, qualification_cost, cost_per_working_hour) |> 
     dplyr::mutate(year = report_year,
                   .before = 1)
   
