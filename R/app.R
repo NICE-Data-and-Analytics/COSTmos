@@ -203,6 +203,7 @@ costmos_app <- function(...) {
     # Get year
     ushsc_year <- reactive(input$uchsc_year)
     
+    # Make full name to select from lists
     uchsc_hcp_full <- reactive({
       if(input$uchsc_hcp == "training_costs") {
         paste0(input$uchsc_hcp, "_", input$uchsc_training_hcp)
