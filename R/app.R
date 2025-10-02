@@ -407,13 +407,8 @@ costmos_app <- function(...) {
 
     # NATIONAL COST COLLECTION SERVER LOGIC -----------------------------------
     
-    # Expect a CSV file saved inst/extdata/ncc_2023_24.csv
-    
     ncc_df <- reactive({
-      ext_path <- fs::path_package("extdata", package = "COSTmos")
-      file <- fs::path(ext_path, "ncc_2023_24.csv")
-      validate(need(fs::file_exists(file), paste0("CSV not found: ", file)))
-      readr::read_csv(file, show_col_types = FALSE)
+      ncc
     })
     
     # Populate Service Code choices (with "All")
@@ -468,20 +463,18 @@ costmos_app <- function(...) {
     })
     
     # Get year
-    ncc_date <- reactive({
-      fs::path_package("extdata", package = "COSTmos") |>
-        list.files() |>
-        stringr::str_subset(pattern = "ncc") |>
-        stringr::str_sort(decreasing = T, numeric = T) |>
-        purrr::pluck(1) |>
-        stringr::str_extract("\\d{4}_\\d{2}(?=\\.csv)")
+    ncc_year <- reactive({
+      ncc_version |> 
+        dplyr::filter(section == "summary") |>
+        dplyr::pull(version) |>
+        purrr::pluck(1)
     })
  
     # Caption
     output$ncc_caption <- renderUI({
       withTags({
         div(
-          p(glue::glue("Financial year: {stringr::str_replace_all(ncc_date(), '_', '/')}")),
+          p(glue::glue("Financial year: {ncc_year()}")),
           p("Access the latest version of the National Cost Collection from the ",
             a(
               href = "https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/",
@@ -502,7 +495,7 @@ costmos_app <- function(...) {
       label <- if (is.null(sc) || identical(sc, "_ALL_")) NA_character_ else paste0(stringr::str_to_lower(stringr::str_replace_all(sc, " ", "_")), "_")
       
       csvDownloadButton("ncc_table",
-                        filename = glue::glue("ncc_extract_{label}{ncc_date()}.csv", .na = ""))
+                        filename = glue::glue("ncc_extract_{label}{stringr::str_replace_all(ncc_year(), '_', '/')}.csv", .na = ""))
     })
     
   }
