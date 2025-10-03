@@ -29,6 +29,7 @@ uchsc_col_spec <- list(
     year = colDef(show = FALSE),
     variable = colDef(name = ""),
     qualification_cost = colDef(show = FALSE),
+    ratio_direct_to_indirect_time = colDef(show = FALSE),
     cost = colDef(name = "Cost (£)",
                   cell = function(value) {
                     format(round(value, 2), big.mark = ",")

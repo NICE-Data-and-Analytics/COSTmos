@@ -203,24 +203,23 @@ generate_unit_costs_hsc_tables <- function(report_year){
   # Patient-level and practice-level factors associated with consultation duration: a cross-sectional analysis of over one million consultations in English primary care
   # BMJ Open 2017;7:e018261. doi: 10.1136/bmjopen-2017-018261
   # "Nurse face-to-face and telephone consultations lasted 9.70 and 5.73 min on average, respectively"
-  # Check with Alfredo if should use cost per patient facing hour for above calcs rather than cost per working hour
   
   gp_nurse <- tibble::tribble(
     ~qualification_cost, ~cost_hr, 
     "excluding", nurse$cost_per_working_hour[nurse$band == "Band 5" & nurse$qualification_cost == "excluding"], 
     "including", nurse$cost_per_working_hour[nurse$band == "Band 5" & nurse$qualification_cost == "including"]
   ) |> 
-    dplyr::mutate(patient_facing_hour = cost_hr*1.3,
-                  visit = cost_hr*15.5/60,
+    dplyr::mutate(visit = cost_hr*15.5/60,
                   face_to_face = cost_hr*10/60,
                   phone = cost_hr*6/60) |>
-    tidyr::pivot_longer(cost_hr:phone, names_to = "vars", values_to = "cost") |> 
+    tidyr::pivot_longer(cost_hr:phone, names_to = "vars", values_to = "excluding") |> 
     dplyr::mutate(variable = dplyr::case_when(vars == "cost_hr" ~ "Cost per working hour",
-                                              vars == "patient_facing_hour" ~ "Cost per patient facing hour",
                                               vars == "visit" ~ "Cost per visit (15.5 mins)",
                                               vars == "face_to_face" ~ "Cost per face-to-face consultation (10 mins)",
                                               vars == "phone" ~ "Cost per phone consultation (6 mins)")) |> 
-    dplyr::select(variable, qualification_cost, cost) |> 
+    dplyr::mutate(including = excluding * 1.3) |> 
+    tidyr::pivot_longer(c(including, excluding), names_to = "ratio_direct_to_indirect_time", values_to = "cost") |> 
+    dplyr::select(variable, qualification_cost, ratio_direct_to_indirect_time, cost) |> 
     dplyr::mutate(year = report_year,
                   .before = 1)
 

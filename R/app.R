@@ -136,27 +136,47 @@ costmos_app <- function(...) {
                                   radioButtons("uchsc_direct_cost",
                                                label = "Direct care staff cost",
                                                choices = c("Include" = "including", "Exclude" = "excluding")
-                                               )
-                                ),                 
-                                conditionalPanel(
-                                  condition = "input.uchsc_hcp == 'gp_nurse'",
+                                               ),
                                   withTags({
                                     div(
-                                      p("Note, only the cost per working hour is from the selected Unit Costs report. All other values are calculated using that figure and the following figures:"),
+                                      small("Including direct care staff cost factors in the salary and on-costs of the average number of FTE nurses employed by a FTE GP.")
+                                    )
+                                  })
+                                ),
+                                conditionalPanel(
+                                  condition = "input.uchsc_hcp == 'gp_nurse'",
+                                  radioButtons("uchsc_direct_indirect_ratio",
+                                               label = "Ratio of direct to indirect time on face-to-face contacts",
+                                               choices = c("Include" = "including", "Exclude" = "excluding")
+                                  ),
+                                  withTags({
+                                    div(
+                                      small("Note, only the cost per working hour excluding the ratio of direct to indirect time is from the selected Unit Costs report. All other values are calculated using that figure and:"),
                                       ul(
-                                        li("Ratio of direct to indirect time on face-to-face contacts (1:0.30) and duration of contact from the ", 
-                                           a(href="https://www.pssru.ac.uk/project-pages/unit-costs/unit-costs-2015/",
-                                             "2015 Unit Costs report",
-                                             target = "_blank",
-                                             .noWS = "outside")
-                                           ),
-                                        li("Average duration of nurse face-to-face (10 mins) and telephone (6 mins) consultations from ",
+                                        li(
+                                          small("The duration of contact per surgery consultation (15.5 mins) from the ", 
+                                                a(href="https://www.pssru.ac.uk/project-pages/unit-costs/unit-costs-2015/",
+                                                  "2015 Unit Costs report",
+                                                  target = "_blank",
+                                                  .noWS = "outside")
+                                          )
+                                        ),
+                                        li(
+                                          small("The average duration of nurse face-to-face (10 mins) and telephone (6 mins) consultations from ",
                                            a(href="https://doi.org/10.1136/bmjopen-2017-018261",
                                              "Stevens et al. (2017)",
                                              target = "_blank",
                                              .noWS = "outside")
                                            )
-                                      )
+                                        )
+                                      ),
+                                      small("Including the ratio of direct to indirect time on face-to-face contacts factors in the 1:0.30 value for practice nurses from the ",
+                                            a(href="https://www.pssru.ac.uk/project-pages/unit-costs/unit-costs-2015/",
+                                              "2015 Unit Costs report",
+                                              target = "_blank",
+                                              .noWS = "outside"),
+                                            ", which suggests that each hour spent with a patient requires 1.3 paid hours."
+                                            )
                                     )
                                   })
                                 ),  
@@ -230,6 +250,12 @@ costmos_app <- function(...) {
       if (uchsc_hcp_full() == "gp"){
         df <- df |>
           dplyr::filter(direct_care_staff_cost == input$uchsc_direct_cost)
+      }
+      
+      # Filter for inc/exc ratio of direct to indirect time
+      if (uchsc_hcp_full() == "gp_nurse"){
+        df <- df |>
+          dplyr::filter(ratio_direct_to_indirect_time == input$uchsc_direct_indirect_ratio)
       }
       
       df
