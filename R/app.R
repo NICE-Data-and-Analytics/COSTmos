@@ -24,132 +24,132 @@ library(htmltools)
 costmos_app <- function(...) {
   
   csvDownloadButton <- function(id, filename = "data.csv", label = "Download table as CSV") {
-    tags$button(
-      tagList(icon("download"), label),
+    htmltools::tags$button(
+      htmltools::tagList(shiny::icon("download"), label),
       onclick = sprintf("Reactable.downloadDataCSV('%s', '%s')", id, filename)
     )
   }
   
   # Define UI for application that draws a histogram
-  ui <- page_navbar(
+  ui <- bslib::page_navbar(
     title = "COSTmos",
-    nav_panel("Data sets",
-              navset_pill_list(
-                widths = c(2, 10),
-                nav_panel("Drug Tariff",
-                          card(
-                            layout_sidebar(
-                              fillable = T,
-                              sidebar = sidebar(
-                                selectInput("drug_tariff_section",
-                                            label = "Section",
-                                            choices = drug_tariff_sections
+    bslib::nav_panel("Data sets",
+                     bslib::navset_pill_list(
+                       widths = c(2, 10),
+                       bslib::nav_panel("Drug Tariff",
+                                        bslib::card(
+                                          bslib::layout_sidebar(
+                                            fillable = T,
+                                            sidebar = bslib::sidebar(
+                                              shiny::selectInput("drug_tariff_section",
+                                                          label = "Section",
+                                                          choices = drug_tariff_sections
                                             ),
                                 ),
-                              h3(textOutput("drug_tariff_title")),
-                              card_body(
+                              htmltools::h3(shiny::textOutput("drug_tariff_title")),
+                              bslib::card_body(
                                 padding = c(0, 10),
-                                layout_column_wrap(
+                                bslib::layout_column_wrap(
                                   width = NULL,
-                                  style = css(grid_template_columns = "3fr 1fr"),
-                                  uiOutput("drug_tariff_caption"),
-                                  uiOutput("drug_tariff_download_button")
+                                  style = htmltools::css(grid_template_columns = "3fr 1fr"),
+                                  shiny::uiOutput("drug_tariff_caption"),
+                                  shiny::uiOutput("drug_tariff_download_button")
                                   )
                                 ),
-                              reactableOutput("drug_tariff_table")
+                              reactable::reactableOutput("drug_tariff_table")
                             )
                           )
                           ),
-                nav_panel("Prescription Cost Analysis",
-                          card(
-                            layout_sidebar(
+                       bslib::nav_panel("Prescription Cost Analysis",
+                                               bslib::card(
+                                                 bslib::layout_sidebar(
                               fillable = T,
-                              sidebar = sidebar(
-                                selectInput("pca_bnf_chapter",
+                              sidebar = bslib::sidebar(
+                                shiny::selectInput("pca_bnf_chapter",
                                             label = "Select BNF chapter",
                                             choices = pca_bnf_chapter_choice
                                 ),
                               ),
-                              h3(textOutput("pca_title")),
-                              card_body(
+                              htmltools::h3(shiny::textOutput("pca_title")),
+                              bslib::card_body(
                                 padding = c(0, 10),
-                                layout_column_wrap(
+                                bslib::layout_column_wrap(
                                   width = NULL,
-                                  style = css(grid_template_columns = "3fr 1fr"),
-                                  uiOutput("pca_caption"),
-                                  uiOutput("pca_download_button")
+                                  style = htmltools::css(grid_template_columns = "3fr 1fr"),
+                                  shiny::uiOutput("pca_caption"),
+                                  shiny::uiOutput("pca_download_button")
                                 )
                               ),
-                              reactableOutput("pca_table")
+                              reactable::reactableOutput("pca_table")
                             )
                           )
                           ),
-                nav_panel("National Cost Collection",
-                          card(
-                            layout_sidebar(
+                bslib::nav_panel("National Cost Collection",
+                                 bslib::card(
+                                   bslib::layout_sidebar(
                               fillable = TRUE,
-                              sidebar = sidebar(
-                                selectInput(
+                              sidebar = bslib::sidebar(
+                                shiny::selectInput(
                                   "ncc_service_code",
                                   label = "Service Code",
                                   choices = c("All" = "_ALL_") # remaining choices defined on load
                                 )
                               ),
-                              h3(textOutput("ncc_title")),
-                              card_body(
+                              htmltools::h3(shiny::textOutput("ncc_title")),
+                              bslib::card_body(
                                 padding = c(0, 10),
                                 layout_column_wrap(
                                   width = NULL,
-                                  style = css(grid_template_columns = "3fr 1fr"),
-                                  uiOutput("ncc_caption"),
-                                  uiOutput("ncc_download_button")
+                                  style = htmltools::css(grid_template_columns = "3fr 1fr"),
+                                  shiny::uiOutput("ncc_caption"),
+                                  shiny::uiOutput("ncc_download_button")
                                 )
                               ),
-                              reactableOutput("ncc_table")
+                              reactable::reactableOutput("ncc_table")
                             )
                           )
                 ),
-                nav_panel("Unit Costs of Health and Social Care",
-                          card(
-                            layout_sidebar(
+                bslib::nav_panel("Unit Costs of Health and Social Care",
+                                 bslib::card(
+                                   bslib::layout_sidebar(
                               fillable = T,
-                              sidebar = sidebar(
+                              sidebar = bslib::sidebar(
                                 width = "25%",
-                                selectInput("uchsc_year",
+                                shiny::selectInput("uchsc_year",
                                             label = "Year",
                                             choices = uchsc_year_choice),  
-                                selectInput("uchsc_hcp",
+                                shiny::selectInput("uchsc_hcp",
                                             label = "Healthcare professional",
                                             choices = uchsc_hcp_choice),
-                                conditionalPanel(
+                                shiny::conditionalPanel(
                                   condition = "input.uchsc_hcp == 'gp' || 
                                   input.uchsc_hcp == 'gp_nurse' ||
                                   input.uchsc_hcp == 'hospital_doctor'||
                                   input.uchsc_hcp == 'nurse'",
-                                  radioButtons("uchsc_qualification_cost",
+                                  shiny::radioButtons("uchsc_qualification_cost",
                                                label = "Qualification cost",
                                                choices = c("Include" = "including", "Exclude" = "excluding")
                                                ),
                                 ),
-                                conditionalPanel(
+                                shiny::conditionalPanel(
                                   condition = "input.uchsc_hcp == 'gp'",
-                                  radioButtons("uchsc_direct_cost",
+                                  shiny::radioButtons("uchsc_direct_cost",
                                                label = "Direct care staff cost",
                                                choices = c("Include" = "including", "Exclude" = "excluding")
                                                ),
-                                  withTags({
+                                  htmltools::withTags({
                                     div(
                                       small("Including direct care staff cost factors in the salary and on-costs of the average number of FTE nurses employed by a FTE GP.")
                                     )
                                   })
                                 ),
-                                conditionalPanel(
+                                shiny::conditionalPanel(
                                   condition = "input.uchsc_hcp == 'gp_nurse'",
-                                  radioButtons("uchsc_direct_indirect_ratio",
+                                  shiny::radioButtons("uchsc_direct_indirect_ratio",
                                                label = "Ratio of direct to indirect time on face-to-face contacts",
                                                choices = c("Include" = "including", "Exclude" = "excluding")
                                   ),
-                                  withTags({
+                                  htmltools::withTags({
                                     div(
                                       small("Note, only the cost per working hour excluding the ratio of direct to indirect time is from the selected Unit Costs report. All other values are calculated using that figure and:"),
                                       ul(
@@ -180,37 +180,37 @@ costmos_app <- function(...) {
                                     )
                                   })
                                 ),  
-                                conditionalPanel(
+                                shiny::conditionalPanel(
                                   condition = "input.uchsc_hcp == 'community_hcp'",
                                   helpText("To calculate the cost per hour including qualifications for scientific and professional staff, the appropriate expected annual cost shown in the 'Training cost' table should be divided by the number of working hours. This can then be added to the cost per working hour.")
                                 ),
-                                conditionalPanel(
+                                shiny::conditionalPanel(
                                   condition = "input.uchsc_hcp == 'training_costs'",
-                                  radioButtons("uchsc_training_hcp",
+                                  shiny::radioButtons("uchsc_training_hcp",
                                                label = "Select",
                                                choices = uchsc_training_costs_choice
                                                )
                                 )
                                 ),
-                              h3(textOutput("uchsc_title")),
-                              card_body(
+                              htmltools::h3(shiny::textOutput("uchsc_title")),
+                              bslib::card_body(
                                 padding = c(0, 10),
                                 layout_column_wrap(
                                   width = NULL,
-                                  style = css(grid_template_columns = "3fr 1fr"),
-                                  uiOutput("uchsc_caption"),
-                                  uiOutput("uchsc_download_button")
+                                  style = htmltools::css(grid_template_columns = "3fr 1fr"),
+                                  shiny::uiOutput("uchsc_caption"),
+                                  shiny::uiOutput("uchsc_download_button")
                                 )
                               ),
-                              reactableOutput("uchsc_table")
+                              reactable::reactableOutput("uchsc_table")
                             ),
                           )
                 )
               )
               ),
-    nav_panel("About",
-              card(
-                includeMarkdown(rprojroot::find_package_root_file("R", "about.md"))
+    bslib::nav_panel("About",
+              bslib::card(
+                htmltools::includeMarkdown(rprojroot::find_package_root_file("R", "about.md"))
                 )
               )
   )
@@ -221,10 +221,10 @@ costmos_app <- function(...) {
     # UNIT COSTS OF HEALTH AND SOCIAL CARE SERVER LOGIC ---------------------------------------------
     
     # Get year
-    ushsc_year <- reactive(input$uchsc_year)
+    ushsc_year <- shiny::reactive(input$uchsc_year)
     
     # Make full name to select from lists
-    uchsc_hcp_full <- reactive({
+    uchsc_hcp_full <- shiny::reactive({
       if(input$uchsc_hcp == "training_costs") {
         paste0(input$uchsc_hcp, "_", input$uchsc_training_hcp)
       } else {
@@ -233,7 +233,7 @@ costmos_app <- function(...) {
     })
     
     # Filtered data
-    uchsc_df <- reactive({
+    uchsc_df <- shiny::reactive({
 
       # Get table
       df <- get(paste0("unit_costs_hsc_", uchsc_hcp_full())) |> 
@@ -262,10 +262,10 @@ costmos_app <- function(...) {
       })
     
     # Table
-    uchsc_df_colspec <- reactive(uchsc_col_spec[[uchsc_hcp_full()]])
+    uchsc_df_colspec <- shiny::reactive(uchsc_col_spec[[uchsc_hcp_full()]])
     
-    output$uchsc_table <- renderReactable({
-      reactable(uchsc_df(),
+    output$uchsc_table <- reactable::renderReactable({
+      reactable::reactable(uchsc_df(),
                 searchable = T,
                 defaultPageSize = 10,
                 columns = uchsc_df_colspec()
@@ -273,8 +273,8 @@ costmos_app <- function(...) {
     })
 
     # Caption
-    output$uchsc_caption <- renderUI({
-      withTags({
+    output$uchsc_caption <- shiny::renderUI({
+      htmltools::withTags({
         div(p("Year: ", ushsc_year()),
             p("Access the latest version of the Unit Costs of Health and Social Care manual from the ",
               a(href="https://www.pssru.ac.uk/unitcostsreport/",
@@ -288,7 +288,7 @@ costmos_app <- function(...) {
     })
     
     # Title
-    output$uchsc_title <- renderText({
+    output$uchsc_title <- shiny::renderText({
       if(input$uchsc_hcp == "training_costs") {
         glue::glue("Unit Costs of Health and Social Care - {names(uchsc_training_costs_choice)[uchsc_training_costs_choice == input$uchsc_training_hcp]}")
       } else {
@@ -297,7 +297,7 @@ costmos_app <- function(...) {
     })
     
     # Download button
-    output$uchsc_download_button <- renderUI({
+    output$uchsc_download_button <- shiny::renderUI({
       csvDownloadButton("uchsc_table",
                         filename = paste0("unit_costs_hsc_extract_",
                                           uchsc_hcp_full(),
@@ -310,23 +310,23 @@ costmos_app <- function(...) {
     # DRUG TARIFF SERVER LOGIC ---------------------------------------------
     
     # Filtered data
-    drug_tariff_df <- reactive(get(paste0("drug_tariff_", input$drug_tariff_section)))
+    drug_tariff_df <- shiny::reactive(get(paste0("drug_tariff_", input$drug_tariff_section)))
     
     # Table
-    drug_tariff_df_colspec <- reactive(drug_tariff_col_spec[[input$drug_tariff_section]])
+    drug_tariff_df_colspec <- shiny::reactive(drug_tariff_col_spec[[input$drug_tariff_section]])
     
-    output$drug_tariff_table <- renderReactable({
-      reactable(drug_tariff_df(),
+    output$drug_tariff_table <- reactable::renderReactable({
+      reactable::reactable(drug_tariff_df(),
                 searchable = T,
                 defaultPageSize = 10,
                 columns = drug_tariff_df_colspec())
     })
     
     # Title
-    output$drug_tariff_title <- renderText(glue::glue("Drug Tariff - {names(drug_tariff_sections)[[stringr::str_which(drug_tariff_sections, input$drug_tariff_section)]]}"))
+    output$drug_tariff_title <- shiny::renderText(glue::glue("Drug Tariff - {names(drug_tariff_sections)[[stringr::str_which(drug_tariff_sections, input$drug_tariff_section)]]}"))
     
     # Get version
-    drug_tariff_df_date <- reactive({
+    drug_tariff_df_date <- shiny::reactive({
       drug_tariff_version |> 
         dplyr::filter(section == input$drug_tariff_section) |>
         dplyr::pull(version_ym) |>
@@ -335,10 +335,10 @@ costmos_app <- function(...) {
     })
     
     # Caption
-    drug_tariff_df_date_caption <- reactive(glue::glue("Release: {format(drug_tariff_df_date(), '%B %Y')}"))
+    drug_tariff_df_date_caption <- shiny::reactive(glue::glue("Release: {format(drug_tariff_df_date(), '%B %Y')}"))
     
-    output$drug_tariff_caption <- renderUI({
-      withTags({
+    output$drug_tariff_caption <- shiny::renderUI({
+      htmltools::withTags({
         div(
           p(drug_tariff_df_date_caption()),
           p("Access the latest version of the Drug Tariff from the ",
@@ -353,7 +353,7 @@ costmos_app <- function(...) {
     })
     
     # Download button
-    output$drug_tariff_download_button <- renderUI({
+    output$drug_tariff_download_button <- shiny::renderUI({
       csvDownloadButton("drug_tariff_table",
                         filename = paste0("drug_tariff_extract_",
                                           input$drug_tariff_section,
@@ -367,9 +367,9 @@ costmos_app <- function(...) {
     # PCA SERVER LOGIC ---------------------------------------------
     
     # Filtered data
-    pca_filtered <- reactive({
+    pca_filtered <- shiny::reactive({
       bnf_c <- input$pca_bnf_chapter
-      req(bnf_c)
+      shiny::req(bnf_c)
       
       if (identical(bnf_c, "_ALL_")) {
         df <- pca_calendar_year
@@ -382,15 +382,15 @@ costmos_app <- function(...) {
     })
     
     # Title
-    output$pca_title <- renderText({
+    output$pca_title <- shiny::renderText({
       bnf_c <- input$pca_bnf_chapter
       label <- if (is.null(bnf_c) || identical(bnf_c, "_ALL_")) "" else paste0(" \u2014 BNF Chapter: ", bnf_c)
       paste0("Prescription Cost Analysis", label)
     })
     
     # Table
-    output$pca_table <- renderReactable({
-      reactable(
+    output$pca_table <- reactable::renderReactable({
+      reactable::reactable(
         pca_filtered(),
         searchable = TRUE,
         defaultPageSize = 10,
@@ -399,7 +399,7 @@ costmos_app <- function(...) {
     })
     
     # Get year
-    pca_year <- reactive({
+    pca_year <- shiny::reactive({
       pca_version |> 
         dplyr::filter(section == "calendar_year") |>
         dplyr::pull(version) |>
@@ -407,8 +407,8 @@ costmos_app <- function(...) {
     })
     
     # Caption
-    output$pca_caption<- renderUI({
-      withTags({
+    output$pca_caption <- shiny::renderUI({
+      htmltools::withTags({
         div(p("Calendar year: ", pca_year()), 
             p("Access the latest version of the Prescription Cost Analysis from the ",
               a(href="https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england",
@@ -422,7 +422,7 @@ costmos_app <- function(...) {
     })
     
     # Download button
-    output$pca_download_button <- renderUI({
+    output$pca_download_button <- shiny::renderUI({
       
       bnf_c <- input$pca_bnf_chapter
       label <- if (is.null(bnf_c) || identical(bnf_c, "_ALL_")) NA_character_ else paste0(stringr::str_to_lower(stringr::str_replace_all(bnf_c, " ", "_")), "_")
@@ -433,16 +433,16 @@ costmos_app <- function(...) {
 
     # NATIONAL COST COLLECTION SERVER LOGIC -----------------------------------
     
-    ncc_df <- reactive({
+    ncc_df <- shiny::reactive({
       ncc
     })
     
     # Populate Service Code choices (with "All")
-    observeEvent(ncc_df(), {
+    shiny::observeEvent(ncc_df(), {
       df <- ncc_df()
       # Assumes CSV has clean "Service Code" column with alphabetic values
       levels <- sort(unique(df[["Service Code"]]))
-      updateSelectInput(
+      shiny::updateSelectInput(
         session, "ncc_service_code",
         choices  = c("All" = "_ALL_", levels),
         selected = "_ALL_"
@@ -451,9 +451,9 @@ costmos_app <- function(...) {
     
 
     # Filtered data
-    ncc_filtered <- reactive({
+    ncc_filtered <- shiny::reactive({
       sc <- input$ncc_service_code
-      req(sc)
+      shiny::req(sc)
       df <- ncc_df()
       
       if (identical(sc, "_ALL_")) return(df)
@@ -462,25 +462,25 @@ costmos_app <- function(...) {
     })
     
     # Title
-    output$ncc_title <- renderText({
+    output$ncc_title <- shiny::renderText({
       sc <- input$ncc_service_code
       label <- if (is.null(sc) || identical(sc, "_ALL_")) "" else paste0(" \u2014 Service Code: ", sc)
       paste0("National Cost Collection", label)
     })
     
     # Table
-    output$ncc_table <- renderReactable({
-      reactable(
+    output$ncc_table <- reactable::renderReactable({
+      reactable::reactable(
         ncc_filtered(),
         searchable = TRUE,
         defaultPageSize = 10,
         columns = list(
-          Activity = colDef(format = colFormat(separators = T)),
-          `Unit cost` = colDef(name = "Unit cost (\u00a3)",
+          Activity = reactable::colDef(format = reactable::colFormat(separators = T)),
+          `Unit cost` = reactable::colDef(name = "Unit cost (\u00a3)",
                                cell = function(value) {
                                  format(round(value, 2), nsmall = 2, big.mark = ",")
                                }),
-          `Cost` = colDef(name = "Cost (\u00a3)",
+          `Cost` = reactable::colDef(name = "Cost (\u00a3)",
                           cell = function(value) {
                             format(round(value, 2), nsmall = 2, big.mark = ",")
                           })
@@ -489,7 +489,7 @@ costmos_app <- function(...) {
     })
     
     # Get year
-    ncc_year <- reactive({
+    ncc_year <- shiny::reactive({
       ncc_version |> 
         dplyr::filter(section == "summary") |>
         dplyr::pull(version) |>
@@ -497,8 +497,8 @@ costmos_app <- function(...) {
     })
  
     # Caption
-    output$ncc_caption <- renderUI({
-      withTags({
+    output$ncc_caption <- shiny::renderUI({
+      htmltools::withTags({
         div(
           p(glue::glue("Financial year: {ncc_year()}")),
           p("Access the latest version of the National Cost Collection from the ",
@@ -515,7 +515,7 @@ costmos_app <- function(...) {
     })
     
     # Download button
-    output$ncc_download_button <- renderUI({
+    output$ncc_download_button <- shiny::renderUI({
       
       sc <- input$ncc_service_code
       label <- if (is.null(sc) || identical(sc, "_ALL_")) NA_character_ else paste0(stringr::str_to_lower(stringr::str_replace_all(sc, " ", "_")), "_")
@@ -527,5 +527,5 @@ costmos_app <- function(...) {
   }
 
   # Run the application 
-  shinyApp(ui = ui, server = server)
+  shiny::shinyApp(ui = ui, server = server)
 }
