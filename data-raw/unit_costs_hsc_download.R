@@ -7,7 +7,6 @@ library(tidyr)
 library(withr)
 library(purrr)
 library(usethis)
-options(scipen = 999)
 
 # Function to scrape values from PDF reports
 pdf_scrape <- function(pdf_chr, search_term) {
@@ -68,8 +67,9 @@ pdf_scrape <- function(pdf_chr, search_term) {
 
 # Function to generate tables from a Unit Costs of Health and Social Care PDF report
 generate_unit_costs_hsc_tables <- function(report_year){
-  
-  local({
+    # Temporarily change scipen
+    withr::local_options(list(scipen = 999))
+    
     # Create temporary file
     temp_pdf <- withr::local_tempfile(fileext = ".pdf")
     
@@ -290,8 +290,6 @@ generate_unit_costs_hsc_tables <- function(report_year){
               gp_nurse = gp_nurse,
               hospital_doctor = hospital_doctor,
               community_hcp = community_hcp))
-  
-  })
 }
 
 # Link to download PDF report
