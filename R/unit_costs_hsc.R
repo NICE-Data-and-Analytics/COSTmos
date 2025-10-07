@@ -20,7 +20,7 @@ uchsc_col_spec <- list(
     variable = colDef(name = ""),
     qualification_cost = colDef(show = FALSE),
     direct_care_staff_cost = colDef(show = FALSE),
-    cost = colDef(name = "Cost (£)",
+    cost = colDef(name = "Cost (\u00a3)",
                   cell = function(value) {
                     format(round(value, 2), big.mark = ",")
                   })
@@ -30,7 +30,7 @@ uchsc_col_spec <- list(
     variable = colDef(name = ""),
     qualification_cost = colDef(show = FALSE),
     ratio_direct_to_indirect_time = colDef(show = FALSE),
-    cost = colDef(name = "Cost (£)",
+    cost = colDef(name = "Cost (\u00a3)",
                   cell = function(value) {
                     format(round(value, 2), big.mark = ",")
                   })
@@ -39,7 +39,7 @@ uchsc_col_spec <- list(
     year = colDef(show = FALSE),
     job_title = colDef(name = "Job title"),
     qualification_cost = colDef(show = FALSE),
-    cost_per_working_hour = colDef(name = "Cost per working hour (£)",
+    cost_per_working_hour = colDef(name = "Cost per working hour (\u00a3)",
                   cell = function(value) {
                     format(round(value, 2), big.mark = ",")
                   })
@@ -48,7 +48,7 @@ uchsc_col_spec <- list(
     year = colDef(show = FALSE),
     band = colDef(name = "Band"),
     qualification_cost = colDef(show = FALSE),
-    cost_per_working_hour = colDef(name = "Cost per working hour (£)",
+    cost_per_working_hour = colDef(name = "Cost per working hour (\u00a3)",
                                    cell = function(value) {
                                      format(round(value, 2), big.mark = ",")
                                    })
@@ -56,7 +56,7 @@ uchsc_col_spec <- list(
   community_hcp = list(
     year = colDef(show = FALSE),
     band = colDef(name = "Band"),
-    cost_per_working_hour = colDef(name = "Cost per working hour (£)",
+    cost_per_working_hour = colDef(name = "Cost per working hour (\u00a3)",
                                    cell = function(value) {
                                      format(round(value, 2), big.mark = ",")
                                    }),
@@ -65,31 +65,31 @@ uchsc_col_spec <- list(
   training_costs_doctor = list(
     year = colDef(show = FALSE),
     job_title = colDef(name = "Job title"),
-    tuition = colDef(name = "Tuition (£)",
+    tuition = colDef(name = "Tuition (\u00a3)",
                                    cell = function(value) {
                                      format(round(value, 2), big.mark = ",")
                                    }),
-    living_expenses_or_lost_production_costs = colDef(name = "Living expenses/lost production costs (£)",
+    living_expenses_or_lost_production_costs = colDef(name = "Living expenses/lost production costs (\u00a3)",
                      cell = function(value) {
                        format(round(value, 2), big.mark = ",")
                      }),
-    clinical_placement = colDef(name = "Clinical placement (£)",
+    clinical_placement = colDef(name = "Clinical placement (\u00a3)",
                      cell = function(value) {
                        format(round(value, 2), big.mark = ",")
                      }),
-    placement_fee_plus_market_forces_factor = colDef(name = "Placement fee plus Market Forces Factor (£)",
+    placement_fee_plus_market_forces_factor = colDef(name = "Placement fee plus Market Forces Factor (\u00a3)",
                      cell = function(value) {
                        format(round(value, 2), big.mark = ",")
                      }),
-    salary_inc_overheads_and_postgraduate_centre_costs = colDef(name = "Salary (inc overheads) and post-graduate centre costs (£)",
+    salary_inc_overheads_and_postgraduate_centre_costs = colDef(name = "Salary (inc overheads) and post-graduate centre costs (\u00a3)",
                      cell = function(value) {
                        format(round(value, 2), big.mark = ",")
                      }),
-    total_investment = colDef(name = "Total investment (£)",
+    total_investment = colDef(name = "Total investment (\u00a3)",
                               cell = function(value) {
                                 format(round(value, 2), big.mark = ",")
                                 }),
-    expected_annual_cost_discounted_at_3pt5perc = colDef(name = "Expected annual cost discounted at 3.5% (£)",
+    expected_annual_cost_discounted_at_3pt5perc = colDef(name = "Expected annual cost discounted at 3.5% (\u00a3)",
                                                          cell = function(value) {
                                                            format(round(value, 2), big.mark = ",")
                                                            })
@@ -97,23 +97,23 @@ uchsc_col_spec <- list(
   training_costs_hcp = list(
     year = colDef(show = FALSE),
     job_title = colDef(name = "Job title"),
-    tuition = colDef(name = "Tuition (£)",
+    tuition = colDef(name = "Tuition (\u00a3)",
                      cell = function(value) {
                        format(round(value, 2), big.mark = ",")
                      }),
-    living_expenses_or_lost_production_costs = colDef(name = "Living expenses/lost production costs (£)",
+    living_expenses_or_lost_production_costs = colDef(name = "Living expenses/lost production costs (\u00a3)",
                                                       cell = function(value) {
                                                         format(round(value, 2), big.mark = ",")
                                                       }),
-    clinical_placement = colDef(name = "Clinical placement (£)",
+    clinical_placement = colDef(name = "Clinical placement (\u00a3)",
                                 cell = function(value) {
                                   format(round(value, 2), big.mark = ",")
                                 }),
-    total_investment = colDef(name = "Total investment (£)",
+    total_investment = colDef(name = "Total investment (\u00a3)",
                               cell = function(value) {
                                 format(round(value, 2), big.mark = ",")
                               }),
-    expected_annual_cost_discounted_at_3pt5perc = colDef(name = "Expected annual cost discounted at 3.5% (£)",
+    expected_annual_cost_discounted_at_3pt5perc = colDef(name = "Expected annual cost discounted at 3.5% (\u00a3)",
                                                          cell = function(value) {
                                                            format(round(value, 2), big.mark = ",")
                                                          })

@@ -384,7 +384,7 @@ costmos_app <- function(...) {
     # Title
     output$pca_title <- renderText({
       bnf_c <- input$pca_bnf_chapter
-      label <- if (is.null(bnf_c) || identical(bnf_c, "_ALL_")) "" else paste0(" — BNF Chapter: ", bnf_c)
+      label <- if (is.null(bnf_c) || identical(bnf_c, "_ALL_")) "" else paste0(" \u2014 BNF Chapter: ", bnf_c)
       paste0("Prescription Cost Analysis", label)
     })
     
@@ -464,7 +464,7 @@ costmos_app <- function(...) {
     # Title
     output$ncc_title <- renderText({
       sc <- input$ncc_service_code
-      label <- if (is.null(sc) || identical(sc, "_ALL_")) "" else paste0(" — Service Code: ", sc)
+      label <- if (is.null(sc) || identical(sc, "_ALL_")) "" else paste0(" \u2014 Service Code: ", sc)
       paste0("National Cost Collection", label)
     })
     
@@ -476,11 +476,11 @@ costmos_app <- function(...) {
         defaultPageSize = 10,
         columns = list(
           Activity = colDef(format = colFormat(separators = T)),
-          `Unit cost` = colDef(name = "Unit cost (£)",
+          `Unit cost` = colDef(name = "Unit cost (\u00a3)",
                                cell = function(value) {
                                  format(round(value, 2), nsmall = 2, big.mark = ",")
                                }),
-          `Cost` = colDef(name = "Cost (£)",
+          `Cost` = colDef(name = "Cost (\u00a3)",
                           cell = function(value) {
                             format(round(value, 2), nsmall = 2, big.mark = ",")
                           })

@@ -10,7 +10,7 @@ drug_tariff_col_spec <- list(
     pack_size = colDef(name = "Pack size",
                        format = colFormat(separators = T)),
     unit_of_measure = colDef(name = "Unit of measure"),
-    basic_price = colDef(name = "Basic price (£)",
+    basic_price = colDef(name = "Basic price (\u00a3)",
                          cell = function(value) {
                            format(round(value/100, 2), nsmall = 2, big.mark = ",")
                          }),
@@ -22,7 +22,7 @@ drug_tariff_col_spec <- list(
       pack_size = colDef(name = "Pack size",
                          format = colFormat(separators = T)),
       unit_of_measure = colDef(name = "Unit of measure"),
-      basic_price = colDef(name = "Basic price (£)",
+      basic_price = colDef(name = "Basic price (\u00a3)",
                            cell = function(value) {
                              format(round(value/100, 2), nsmall = 2, big.mark = ",")
                            }),
@@ -36,7 +36,7 @@ drug_tariff_col_spec <- list(
     pack_size = colDef(name = "Pack size",
                        format = colFormat(separators = T)),
     unit_of_measure = colDef(name = "Unit of measure"),
-    basic_price = colDef(name = "Basic price (£)",
+    basic_price = colDef(name = "Basic price (\u00a3)",
                          cell = function(value) {
                            format(round(value/100, 2), nsmall = 2, big.mark = ",")
                          }),
@@ -50,7 +50,7 @@ drug_tariff_col_spec <- list(
     quantity = colDef(name = "Quantity",
                       format = colFormat(separators = T)),
     quantity_unit_of_measure = colDef(name = "Quantity unit of measure"),
-    price = colDef(name = "Price (£)",
+    price = colDef(name = "Price (\u00a3)",
                    cell = function(value) {
                      format(round(value/100, 2), nsmall = 2, big.mark = ",")
                    }),
