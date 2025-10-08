@@ -1,7 +1,6 @@
 # Unit Costs of Health and Social Care
-data(unit_costs_hsc_gp)
 
-uchsc_year_choice <- unique(unit_costs_hsc_gp$year) |> 
+uchsc_year_choice <- unique(COSTmos::unit_costs_hsc_gp$year) |> 
   stringr::str_sort(decreasing = T, numeric = T)
 
 uchsc_hcp_choice <- c("GP" = "gp",

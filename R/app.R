@@ -7,20 +7,6 @@
 #    https://shiny.posit.co/
 #
 
-library(shiny)
-library(reactable)
-library(dplyr)
-library(purrr)
-library(readr)
-library(tibble)
-library(stringr)
-library(lubridate)
-library(tidyr)
-library(glue)
-library(fs)
-library(bslib)
-library(htmltools)
-
 costmos_app <- function(...) {
   
   csvDownloadButton <- function(id, filename = "data.csv", label = "Download table as CSV") {
@@ -98,7 +84,7 @@ costmos_app <- function(...) {
                               htmltools::h3(shiny::textOutput("ncc_title")),
                               bslib::card_body(
                                 padding = c(0, 10),
-                                layout_column_wrap(
+                                bslib::layout_column_wrap(
                                   width = NULL,
                                   style = htmltools::css(grid_template_columns = "3fr 1fr"),
                                   shiny::uiOutput("ncc_caption"),
@@ -137,11 +123,9 @@ costmos_app <- function(...) {
                                                label = "Direct care staff cost",
                                                choices = c("Include" = "including", "Exclude" = "excluding")
                                                ),
-                                  htmltools::withTags({
-                                    div(
-                                      small("Including direct care staff cost factors in the salary and on-costs of the average number of FTE nurses employed by a FTE GP.")
+                                  htmltools::tags$div(
+                                    htmltools::tags$small("Including direct care staff cost factors in the salary and on-costs of the average number of FTE nurses employed by a FTE GP.")
                                     )
-                                  })
                                 ),
                                 shiny::conditionalPanel(
                                   condition = "input.uchsc_hcp == 'gp_nurse'",
@@ -149,40 +133,38 @@ costmos_app <- function(...) {
                                                label = "Ratio of direct to indirect time on face-to-face contacts",
                                                choices = c("Include" = "including", "Exclude" = "excluding")
                                   ),
-                                  htmltools::withTags({
-                                    div(
-                                      small("Note, only the cost per working hour excluding the ratio of direct to indirect time is from the selected Unit Costs report. All other values are calculated using that figure and:"),
-                                      ul(
-                                        li(
-                                          small("The duration of contact per surgery consultation (15.5 mins) from the ", 
-                                                a(href="https://www.pssru.ac.uk/project-pages/unit-costs/unit-costs-2015/",
+                                  htmltools::tags$div(
+                                    htmltools::tags$small("Note, only the cost per working hour excluding the ratio of direct to indirect time is from the selected Unit Costs report. All other values are calculated using that figure and:"),
+                                    htmltools::tags$ul(
+                                      htmltools::tags$li(
+                                        htmltools::tags$small("The duration of contact per surgery consultation (15.5 mins) from the ", 
+                                                              htmltools::tags$a(href="https://www.pssru.ac.uk/project-pages/unit-costs/unit-costs-2015/",
                                                   "2015 Unit Costs report",
                                                   target = "_blank",
                                                   .noWS = "outside")
                                           )
                                         ),
-                                        li(
-                                          small("The average duration of nurse face-to-face (10 mins) and telephone (6 mins) consultations from ",
-                                           a(href="https://doi.org/10.1136/bmjopen-2017-018261",
+                                      htmltools::tags$li(
+                                        htmltools::tags$small("The average duration of nurse face-to-face (10 mins) and telephone (6 mins) consultations from ",
+                                                              htmltools::tags$a(href="https://doi.org/10.1136/bmjopen-2017-018261",
                                              "Stevens et al. (2017)",
                                              target = "_blank",
                                              .noWS = "outside")
                                            )
                                         )
                                       ),
-                                      small("Including the ratio of direct to indirect time on face-to-face contacts factors in the 1:0.30 value for practice nurses from the ",
-                                            a(href="https://www.pssru.ac.uk/project-pages/unit-costs/unit-costs-2015/",
+                                    htmltools::tags$small("Including the ratio of direct to indirect time on face-to-face contacts factors in the 1:0.30 value for practice nurses from the ",
+                                                          htmltools::tags$a(href="https://www.pssru.ac.uk/project-pages/unit-costs/unit-costs-2015/",
                                               "2015 Unit Costs report",
                                               target = "_blank",
                                               .noWS = "outside"),
                                             ", which suggests that each hour spent with a patient requires 1.3 paid hours."
                                             )
                                     )
-                                  })
                                 ),  
                                 shiny::conditionalPanel(
                                   condition = "input.uchsc_hcp == 'community_hcp'",
-                                  helpText("To calculate the cost per hour including qualifications for scientific and professional staff, the appropriate expected annual cost shown in the 'Training cost' table should be divided by the number of working hours. This can then be added to the cost per working hour.")
+                                  shiny::helpText("To calculate the cost per hour including qualifications for scientific and professional staff, the appropriate expected annual cost shown in the 'Training cost' table should be divided by the number of working hours. This can then be added to the cost per working hour.")
                                 ),
                                 shiny::conditionalPanel(
                                   condition = "input.uchsc_hcp == 'training_costs'",
@@ -195,7 +177,7 @@ costmos_app <- function(...) {
                               htmltools::h3(shiny::textOutput("uchsc_title")),
                               bslib::card_body(
                                 padding = c(0, 10),
-                                layout_column_wrap(
+                                bslib::layout_column_wrap(
                                   width = NULL,
                                   style = htmltools::css(grid_template_columns = "3fr 1fr"),
                                   shiny::uiOutput("uchsc_caption"),
@@ -274,17 +256,16 @@ costmos_app <- function(...) {
 
     # Caption
     output$uchsc_caption <- shiny::renderUI({
-      htmltools::withTags({
-        div(p("Year: ", ushsc_year()),
-            p("Access the latest version of the Unit Costs of Health and Social Care manual from the ",
-              a(href="https://www.pssru.ac.uk/unitcostsreport/",
+        htmltools::tags$div(
+          htmltools::tags$p("Year: ", ushsc_year()),
+          htmltools::tags$p("Access the latest version of the Unit Costs of Health and Social Care manual from the ",
+                            htmltools::tags$a(href="https://www.pssru.ac.uk/unitcostsreport/",
                 "PSSRU website", 
                 target = "_blank",
                 .noWS = "outside"),
               "."
               )
         )
-      })
     })
     
     # Title
@@ -338,18 +319,16 @@ costmos_app <- function(...) {
     drug_tariff_df_date_caption <- shiny::reactive(glue::glue("Release: {format(drug_tariff_df_date(), '%B %Y')}"))
     
     output$drug_tariff_caption <- shiny::renderUI({
-      htmltools::withTags({
-        div(
-          p(drug_tariff_df_date_caption()),
-          p("Access the latest version of the Drug Tariff from the ",
-            a(href="https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff", 
+        htmltools::tags$div(
+          htmltools::tags$p(drug_tariff_df_date_caption()),
+          htmltools::tags$p("Access the latest version of the Drug Tariff from the ",
+                            htmltools::tags$a(href="https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff", 
               "NHSBSA website", 
               target = "_blank", 
               .noWS = "outside"),
             "."
             )
         )
-      })
     })
     
     # Download button
@@ -408,17 +387,16 @@ costmos_app <- function(...) {
     
     # Caption
     output$pca_caption <- shiny::renderUI({
-      htmltools::withTags({
-        div(p("Calendar year: ", pca_year()), 
-            p("Access the latest version of the Prescription Cost Analysis from the ",
-              a(href="https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england",
+        htmltools::tags$div(
+          htmltools::tags$p("Calendar year: ", pca_year()), 
+          htmltools::tags$p("Access the latest version of the Prescription Cost Analysis from the ",
+                            htmltools::tags$a(href="https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england",
                 "NHSBSA website", 
                 target = "_blank",
                 .noWS = "outside"),
               "."
             )
         )
-      })
     })
     
     # Download button
@@ -498,11 +476,10 @@ costmos_app <- function(...) {
  
     # Caption
     output$ncc_caption <- shiny::renderUI({
-      htmltools::withTags({
-        div(
-          p(glue::glue("Financial year: {ncc_year()}")),
-          p("Access the latest version of the National Cost Collection from the ",
-            a(
+      htmltools::tags$div(
+        htmltools::tags$p(glue::glue("Financial year: {ncc_year()}")),
+        htmltools::tags$p("Access the latest version of the National Cost Collection from the ",
+                          htmltools::tags$a(
               href = "https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/",
               "NHS England website",
               target = "_blank",
@@ -511,7 +488,6 @@ costmos_app <- function(...) {
             "."
           )
         )
-      })
     })
     
     # Download button

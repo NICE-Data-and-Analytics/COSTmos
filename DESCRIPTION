@@ -21,26 +21,14 @@ Depends:
 LazyData: true
 Imports: 
     bslib,
-    cli,
     dplyr,
-    fs,
     glue,
     htmltools,
-    lifecycle,
     lubridate,
-    markdown,
-    pkgload,
     purrr,
     reactable,
-    readr,
-    rlang,
     rprojroot,
-    rvest,
     shiny,
-    stringr,
-    tibble,
-    tidyr,
-    usethis,
-    withr
+    stringr
 URL: https://github.com/NICE-Data-and-Analytics/COSTmos
 BugReports: https://github.com/NICE-Data-and-Analytics/COSTmos/issues
