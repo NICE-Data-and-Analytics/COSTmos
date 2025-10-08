@@ -1,4 +1,4 @@
-# Manually exported from 
+# Manually exported from
 # https://app.powerbi.com/links/RYCmc6t127?ctid=37c354b2-85b0-47f5-b222-07b48d774ee3&pbi_source=linkShare
 
 # library(readr)
@@ -18,7 +18,7 @@ options(scipen = 999)
 # Code for any manipulations/cleaning done
 
 # Temporary code to save CSV in extdata as R object - delete after detail above added
-# ncc <- readr::read_csv(fs::path_package("extdata", "ncc_2023_24.csv", package = "COSTmos"), col_types = "cccddd") |> 
+# ncc <- readr::read_csv(fs::path_package("extdata", "ncc_2023_24.csv", package = "COSTmos"), col_types = "cccddd") |>
 #   # Remove white space
 #   dplyr::mutate(dplyr::across(tidyselect::where(is.character), stringr::str_trim))
 
