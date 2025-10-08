@@ -10,6 +10,7 @@ library(tidyr)
 library(rvest)
 library(usethis)
 library(withr)
+library(utils)
 
 # Drug Tariff Part VIII
 
@@ -140,7 +141,7 @@ withr::with_tempfile("ix_dl_file", {
   print(ix_dl_file)
   
   # Download file to temporary file
-  download.file(paste0("https://www.nhsbsa.nhs.uk", ix_link), ix_dl_file, mode = "wb")
+  utils::download.file(paste0("https://www.nhsbsa.nhs.uk", ix_link), ix_dl_file, mode = "wb")
   
   # Read data and clean - Removes header and empty rows, renames columns sensibly
   drug_tariff_ix <- readr::read_csv(ix_dl_file,

@@ -7,6 +7,10 @@ library(tidyr)
 library(withr)
 library(purrr)
 library(usethis)
+library(tibble)
+library(janitor)
+library(tidyselect)
+library(utils)
 
 # Function to scrape values from PDF reports
 pdf_scrape <- function(pdf_chr, search_term) {
@@ -26,11 +30,11 @@ pdf_scrape <- function(pdf_chr, search_term) {
     # Clean column names
     janitor::clean_names() |>
     # Set "" as NA
-    mutate(across(where(is.character), \(x) na_if(x, ""))) |> 
+    dplyr::mutate(dplyr::across(tidyselect::where(is.character), \(x) dplyr::na_if(x, ""))) |> 
     # Drop NA rows
     janitor::remove_empty("rows") |> 
     # Label row number
-    mutate(rn = row_number())
+    dplyr::mutate(rn = dplyr::row_number())
 
   
   # Rows where first column crosses two lines misformatted, split over multiple rows
@@ -47,7 +51,7 @@ pdf_scrape <- function(pdf_chr, search_term) {
       df[error_row-1, 1] <- paste0(df[error_row-1, 1], df[error_row+1, 1])
       # Drop the error row and the row below where the row label is split
       df <- df |> 
-        slice(-error_row, -(error_row+1))
+        dplyr::slice(-error_row, -(error_row+1))
     }
   }
   
@@ -58,9 +62,9 @@ pdf_scrape <- function(pdf_chr, search_term) {
     # Drop row number column
     dplyr::select(-rn) |>
     # Remove pound sign, comma and convert to numeric (all chars replaced with NA's)
-    dplyr::mutate(across(starts_with("x_"), \(x) stringr::str_remove_all(x, "£|,") |> as.numeric())) |>
+    dplyr::mutate(dplyr::across(tidyselect::starts_with("x_"), \(x) stringr::str_remove_all(x, "£|,") |> as.numeric())) |>
     # Drop rows that have NA from col 2 onwards
-    dplyr::filter(!if_all(starts_with("x_"), is.na)))
+    dplyr::filter(!dplyr::if_all(tidyselect::starts_with("x_"), is.na)))
   
   return(df)
 }
@@ -74,10 +78,10 @@ generate_unit_costs_hsc_tables <- function(report_year){
     temp_pdf <- withr::local_tempfile(fileext = ".pdf")
     
     # Download PDF report to temporary file
-    download.file(unit_costs_hsc_pdf_link[[report_year]], temp_pdf, mode = "wb")
+    utils::download.file(unit_costs_hsc_pdf_link[[report_year]], temp_pdf, mode = "wb")
     
     # Extract text from PDF file
-    pdf_df <- pdf_text(temp_pdf) # PDF error: xref num 17102 not found but needed, try to reconstruct<0a>
+    pdf_df <- pdftools::pdf_text(temp_pdf) # PDF error: xref num 17102 not found but needed, try to reconstruct<0a>
   
   # GP table ---------------------
   # Scrape PDF
@@ -101,8 +105,8 @@ generate_unit_costs_hsc_tables <- function(report_year){
     # Make from wide to long table
     tidyr::pivot_longer(cols = !variable, names_to = "col", values_to = "cost") |>
     # Create variable for qualification cost and direct care staff cost using column names
-    dplyr::mutate(qualification_cost = if_else(col %in% c("inc_direct_care_staff_cost_inc_qual_cost", "exc_direct_care_staff_cost_inc_qual_cost"), "including", "excluding"),
-                  direct_care_staff_cost = if_else(col %in% c("inc_direct_care_staff_cost_inc_qual_cost", "inc_direct_care_staff_cost_exc_qual_cost"), "including", "excluding")) |> 
+    dplyr::mutate(qualification_cost = dplyr::if_else(col %in% c("inc_direct_care_staff_cost_inc_qual_cost", "exc_direct_care_staff_cost_inc_qual_cost"), "including", "excluding"),
+                  direct_care_staff_cost = dplyr::if_else(col %in% c("inc_direct_care_staff_cost_inc_qual_cost", "inc_direct_care_staff_cost_exc_qual_cost"), "including", "excluding")) |> 
     # Drop column name column from pivot
     dplyr::select(!col) |> 
     # Fill down, should only do it for prescription costs because the value applies to all four variations
@@ -278,8 +282,8 @@ generate_unit_costs_hsc_tables <- function(report_year){
   community_hcp <- community_hcp |> 
     dplyr::filter(variable == "Cost per working hour") |> 
     tidyr::pivot_longer(!variable, names_to = "band", values_to = "cost_per_working_hour") |> 
-    dplyr::left_join(afc_jobs, by = join_by(band)) |> 
-    select(band, cost_per_working_hour, job_title) |> 
+    dplyr::left_join(afc_jobs, by = dplyr::join_by(band)) |> 
+    dplyr::select(band, cost_per_working_hour, job_title) |> 
     dplyr::mutate(year = report_year,
                   .before = 1)
   

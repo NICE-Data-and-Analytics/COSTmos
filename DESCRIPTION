@@ -32,3 +32,13 @@ Imports:
     stringr
 URL: https://github.com/NICE-Data-and-Analytics/COSTmos
 BugReports: https://github.com/NICE-Data-and-Analytics/COSTmos/issues
+Suggests: 
+    janitor,
+    pdftools,
+    readxl,
+    rvest,
+    tibble,
+    tidyselect,
+    usethis,
+    utils,
+    withr
