@@ -27,9 +27,11 @@ Imports:
     lubridate,
     purrr,
     reactable,
+    rlang,
     rprojroot,
     shiny,
-    stringr
+    stringr,
+    utils
 URL: https://github.com/NICE-Data-and-Analytics/COSTmos
 BugReports: https://github.com/NICE-Data-and-Analytics/COSTmos/issues
 Suggests: 
@@ -40,5 +42,4 @@ Suggests:
     tibble,
     tidyselect,
     usethis,
-    utils,
     withr

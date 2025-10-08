@@ -7,6 +7,16 @@
 #    https://shiny.posit.co/
 #
 
+#' @importFrom rlang .data
+
+# Overcome check() note about undefined global variables
+utils::globalVariables(c("drug_tariff_version", "ncc", "ncc_version", "pca_calendar_year", "pca_version"))
+
+# Overcome check() note about utils not being used
+ignore_unused_imports <- function() {
+  utils::download.file
+}
+
 costmos_app <- function(...) {
   csvDownloadButton <- function(id, filename = "data.csv", label = "Download table as CSV") {
     htmltools::tags$button(
@@ -234,24 +244,24 @@ costmos_app <- function(...) {
       # Get table
       df <- get(paste0("unit_costs_hsc_", uchsc_hcp_full())) |>
         # Filter to selected year
-        dplyr::filter(year == ushsc_year())
+        dplyr::filter(.data$year == ushsc_year())
 
       # Filter for inc/exc qualification cost
       if (uchsc_hcp_full() %in% c("gp", "gp_nurse", "hospital_doctor", "nurse")) {
         df <- df |>
-          dplyr::filter(qualification_cost == input$uchsc_qualification_cost)
+          dplyr::filter(.data$qualification_cost == input$uchsc_qualification_cost)
       }
 
       # Filter for inc/exc direct staff care cost
       if (uchsc_hcp_full() == "gp") {
         df <- df |>
-          dplyr::filter(direct_care_staff_cost == input$uchsc_direct_cost)
+          dplyr::filter(.data$direct_care_staff_cost == input$uchsc_direct_cost)
       }
 
       # Filter for inc/exc ratio of direct to indirect time
       if (uchsc_hcp_full() == "gp_nurse") {
         df <- df |>
-          dplyr::filter(ratio_direct_to_indirect_time == input$uchsc_direct_indirect_ratio)
+          dplyr::filter(.data$ratio_direct_to_indirect_time == input$uchsc_direct_indirect_ratio)
       }
 
       df
@@ -330,8 +340,8 @@ costmos_app <- function(...) {
     # Get version
     drug_tariff_df_date <- shiny::reactive({
       drug_tariff_version |>
-        dplyr::filter(section == input$drug_tariff_section) |>
-        dplyr::pull(version_ym) |>
+        dplyr::filter(.data$section == input$drug_tariff_section) |>
+        dplyr::pull("version_ym") |>
         purrr::pluck(1) |>
         lubridate::ym()
     })
@@ -383,7 +393,7 @@ costmos_app <- function(...) {
         df <- pca_calendar_year
       } else {
         df <- pca_calendar_year |>
-          dplyr::filter(bnf_chapter_name == bnf_c)
+          dplyr::filter(.data$bnf_chapter_name == bnf_c)
       }
 
       df
@@ -409,8 +419,8 @@ costmos_app <- function(...) {
     # Get year
     pca_year <- shiny::reactive({
       pca_version |>
-        dplyr::filter(section == "calendar_year") |>
-        dplyr::pull(version) |>
+        dplyr::filter(.data$section == "calendar_year") |>
+        dplyr::pull("version") |>
         purrr::pluck(1)
     })
 
@@ -508,8 +518,8 @@ costmos_app <- function(...) {
     # Get year
     ncc_year <- shiny::reactive({
       ncc_version |>
-        dplyr::filter(section == "summary") |>
-        dplyr::pull(version) |>
+        dplyr::filter(.data$section == "summary") |>
+        dplyr::pull("version") |>
         purrr::pluck(1)
     })
 
