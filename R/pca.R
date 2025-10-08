@@ -1,5 +1,8 @@
 # PCA BNF chapters
-pca_bnf_chapter_choice <- c("All" = "_ALL_", sort(unique(COSTmos::pca_calendar_year$bnf_chapter_name)))
+
+data(pca_calendar_year) # Not recommended but lazy loading not working
+
+pca_bnf_chapter_choice <- c("All" = "_ALL_", sort(unique(pca_calendar_year$bnf_chapter_name)))
 
 # PCA reactable column specification
 pca_col_spec <- list(
