@@ -1,0 +1,40 @@
+
+# New drug tariff information is available 3 working days before the 1st of each month
+# Scedule action to run at 4am on the 1st of each month
+on:
+  schedule:
+    - cron: '0 4 1 * *'
+
+jobs:
+  # Set up action to import data
+  import-data:
+    runs-on: ubuntu-latest
+    steps:
+    
+  # Check out repository
+      - name: Check out repository
+        uses: actions/checkout@v5
+    
+    # Use existing r-lib action to load R onto virtual machine - use R version recorded in renv.lock file
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'renv'
+          
+    # Install packages from renv.lockfile
+      - name: Install packages
+        uses: r-lib/actions/setup-renv@v2
+
+    # Run script to download and save drug tariff data
+      - name: Import data
+        run: Rscript -e 'source("R/drug_tariff_download.R")'
+        
+    # Commit the new data files and push to repo only if changes present (amend)
+      - name: Commit results
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add data/*.rda
+          git commit -m 'Data updated' || echo "No changes to commit"
+          git push origin || echo "No changes to commit"
+          
