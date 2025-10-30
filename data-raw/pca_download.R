@@ -47,7 +47,9 @@ calendar_pca <- stringr::str_subset(pca_excels, paste0("pca_summary_tables_", pc
 
 # Download file to temporary file, read in and save as R object
 withr::with_tempfile("dl_file",
-  {
+  {# Temporarily change scipen
+    withr::local_options(list(scipen = 999))
+    
     # Print temporary file name
     print(dl_file)
 
@@ -81,5 +83,5 @@ withr::with_tempfile("dl_file",
 # Create version table
 pca_version <- tibble::tibble(section = "calendar_year", version = pca_year)
 
-# Save version table as R object
+# Save version table
 usethis::use_data(pca_version, overwrite = T)

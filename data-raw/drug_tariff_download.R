@@ -73,18 +73,18 @@ download_csv <- function(name) {
   viii_read <- list(
     cat_m = list(
       col_types = "ccdcd",
-      col_names = c("vmpp_snomed_code", "drug_name", "pack_size", "unit_of_measure", "basic_price"),
-      col_order = c("drug_name", "pack_size", "unit_of_measure", "basic_price", "vmpp_snomed_code")
+      col_names = c("vmpp_snomed_code", "drug_name", "pack_size", "unit_of_measure", "basic_price_in_p"),
+      col_order = c("drug_name", "pack_size", "unit_of_measure", "basic_price_in_p", "vmpp_snomed_code")
     ),
     viii_a = list(
       col_types = "cdccccd",
-      col_names = c("medicine", "pack_size", "unit_of_measure", "vmp_snomed_code", "vmpp_snomed_code", "drug_tariff_category", "basic_price"),
-      col_order = c("drug_tariff_category", "medicine", "pack_size", "unit_of_measure", "basic_price", "vmp_snomed_code", "vmpp_snomed_code")
+      col_names = c("medicine", "pack_size", "unit_of_measure", "vmp_snomed_code", "vmpp_snomed_code", "drug_tariff_category", "basic_price_in_p"),
+      col_order = c("drug_tariff_category", "medicine", "pack_size", "unit_of_measure", "basic_price_in_p", "vmp_snomed_code", "vmpp_snomed_code")
     ),
     viii_b = list(
       col_types = "cccdcccd",
-      col_names = c("vmp_snomed_code", "vmpp_snomed_code", "medicine", "pack_size", "unit_of_measure", "formulations", "special_container_indicator", "basic_price"),
-      col_order = c("medicine", "pack_size", "unit_of_measure", "basic_price", "formulations", "special_container_indicator", "vmp_snomed_code", "vmpp_snomed_code")
+      col_names = c("vmp_snomed_code", "vmpp_snomed_code", "medicine", "pack_size", "unit_of_measure", "formulations", "special_container_indicator", "basic_price_in_p"),
+      col_order = c("medicine", "pack_size", "unit_of_measure", "basic_price_in_p", "formulations", "special_container_indicator", "vmp_snomed_code", "vmpp_snomed_code")
     )
   )
 
@@ -173,14 +173,14 @@ withr::with_tempfile("ix_dl_file",
       col_names = c(
         "drug_tariff_part", "supplier_name", "vmp_name", "amp_name",
         "colour", "size_or_weight", "quantity", "quantity_unit_of_measure",
-        "product_order_number", "pack_order_number", "price", "add_dispensing_indicator",
+        "product_order_number", "pack_order_number", "price_in_p", "add_dispensing_indicator",
         "product_snomed_code", "pack_snomed_code", "gtin",
         "supplier_snomed_code", "bnf_code"
       )
     ) |>
       dplyr::select(all_of(c(
         "drug_tariff_part", "vmp_name", "amp_name", "supplier_name",
-        "quantity", "quantity_unit_of_measure", "price", "colour", "size_or_weight",
+        "quantity", "quantity_unit_of_measure", "price_in_p", "colour", "size_or_weight",
         "product_order_number", "pack_order_number", "add_dispensing_indicator",
         "product_snomed_code", "pack_snomed_code", "gtin",
         "supplier_snomed_code", "bnf_code"
