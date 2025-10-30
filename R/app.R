@@ -524,8 +524,8 @@ costmos_app <- function(...) {
     # Get year
     ncc_year <- shiny::reactive({
       ncc_version |>
-        dplyr::filter(.data$section == "summary") |>
-        dplyr::pull("version") |>
+        dplyr::filter(.data$df == "ncc") |>
+        dplyr::pull("year") |>
         purrr::pluck(1)
     })
 

@@ -26,8 +26,8 @@ library(usethis)
 
 # Save year info
 ncc_version <- tibble::tribble(
-  ~section, ~version,
-  "summary", "2023/24"
+  ~df, ~year,
+  "ncc", "2023/24"
 )
 
 # Save version table as external data 

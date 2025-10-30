@@ -63,3 +63,18 @@
 #' @seealso [pca_calendar_year] for the dataset.
 
 "pca_version"
+
+#' Metadata for the National Cost Collection (NCC) data
+#'
+#' Contains the financial year the `ncc` data is for.
+#'
+#' @format A data frame with 2 columns:
+#' \describe{
+#'   \item{df}{Name of the NCC table R object.}
+#'   \item{year}{The year the data is for.}
+#' }
+#' @source <https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/>
+#' 
+#' @seealso [ncc] for the dataset.
+
+"ncc_version"
