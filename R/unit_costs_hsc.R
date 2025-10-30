@@ -1,10 +1,5 @@
 # Unit Costs of Health and Social Care
 
-data(unit_costs_hsc_gp) # Not recommended but lazy loading not working
-
-uchsc_year_choice <- unique(unit_costs_hsc_gp$year) |>
-  stringr::str_sort(decreasing = T, numeric = T)
-
 uchsc_hcp_choice <- c(
   "GP" = "gp",
   "GP practice nurse" = "gp_nurse",

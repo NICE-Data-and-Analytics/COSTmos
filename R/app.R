@@ -10,7 +10,7 @@
 #' @importFrom rlang .data
 
 # Overcome check() note about undefined global variables
-utils::globalVariables(c("drug_tariff_version", "ncc", "ncc_version", "pca_calendar_year", "pca_version"))
+utils::globalVariables(c("drug_tariff_version", "ncc", "ncc_version", "pca_calendar_year", "pca_version", "unit_costs_hsc_gp"))
 
 # Overcome check() note about utils not being used
 ignore_unused_imports <- function() {
@@ -18,6 +18,12 @@ ignore_unused_imports <- function() {
 }
 
 costmos_app <- function(...) {
+  # Set some variables
+  uchsc_year_choice <- unique(unit_costs_hsc_gp$year) |>
+    stringr::str_sort(decreasing = T, numeric = T)
+  
+  pca_bnf_chapter_choice <- c("All" = "_ALL_", sort(unique(pca_calendar_year$bnf_chapter_name)))
+  
   csvDownloadButton <- function(id, filename = "data.csv", label = "Download table as CSV") {
     htmltools::tags$button(
       htmltools::tagList(shiny::icon("download"), label),

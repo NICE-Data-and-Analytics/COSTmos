@@ -1,7 +1,6 @@
 # Drug Tariff section selectInput choices
 drug_tariff_sections <- list("Part VIIIA" = "viii_a", "Part VIIIB" = "viii_b", "Part VIIID" = "viii_d", "Category M" = "cat_m", "Part IX" = "ix")
 
-
 # Define reactable column specification
 drug_tariff_col_spec <- list(
   viii_a = list(
