@@ -81,7 +81,7 @@ withr::with_tempfile("dl_file",
 )
 
 # Create version table
-pca_version <- tibble::tibble(section = "calendar_year", version = pca_year)
+pca_version <- tibble::tibble(df = "pca_calendar_year", year = pca_year)
 
 # Save version table
 usethis::use_data(pca_version, overwrite = T)

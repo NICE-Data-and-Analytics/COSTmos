@@ -425,8 +425,8 @@ costmos_app <- function(...) {
     # Get year
     pca_year <- shiny::reactive({
       pca_version |>
-        dplyr::filter(.data$section == "calendar_year") |>
-        dplyr::pull("version") |>
+        dplyr::filter(.data$df == "pca_calendar_year") |>
+        dplyr::pull("year") |>
         purrr::pluck(1)
     })
 
