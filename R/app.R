@@ -414,8 +414,8 @@ costmos_app <- function(...) {
     # Populate Service Code choices (with "All")
     observeEvent(ncc_df(), {
       df <- ncc_df()
-      # Assumes CSV has clean "Service Code" column with alphabetic values
-      levels <- sort(unique(df[["Service Code"]]))
+      # Assumes CSV has clean "service_code" column with alphabetic values
+      levels <- sort(unique(df[["service_code"]]))
       updateSelectInput(
         session, "ncc_service_code",
         choices  = c("All" = "_ALL_", levels),
@@ -432,7 +432,7 @@ costmos_app <- function(...) {
       
       if (identical(sc, "_ALL_")) return(df)
       
-      df[df[["Service Code"]] == sc, , drop = FALSE]
+      df[df[["service_code"]] == sc, , drop = FALSE]
     })
     
     # Title
@@ -449,12 +449,16 @@ costmos_app <- function(...) {
         searchable = TRUE,
         defaultPageSize = 10,
         columns = list(
-          Activity = colDef(format = colFormat(separators = T)),
-          `Unit cost` = colDef(name = "Unit cost (£)",
+          service_code = colDef(name = "Service Code"),
+          dept_or_currency_code = colDef(name = "Dept or Currency Code"),
+          dept_or_currency_desc = colDef(name = "Dept or Currency Desc"),
+          activity = colDef(name = "Activity",
+                            format = colFormat(separators = T)),
+          unit_cost = colDef(name = "Unit cost (£)",
                                cell = function(value) {
                                  format(round(value, 2), nsmall = 2, big.mark = ",")
                                }),
-          `Cost` = colDef(name = "Cost (£)",
+          cost = colDef(name = "Cost (£)",
                           cell = function(value) {
                             format(round(value, 2), nsmall = 2, big.mark = ",")
                           })
