@@ -3,7 +3,7 @@
 \docType{data}
 \name{pca_version}
 \alias{pca_version}
-\title{Metadata for the Prescription Cost Analysis (PCA) data}
+\title{Metadata for the Prescription Cost Analysis (PCA) Data}
 \format{
 A data frame with 2 columns:
 \describe{

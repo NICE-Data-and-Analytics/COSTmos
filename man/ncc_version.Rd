@@ -3,7 +3,7 @@
 \docType{data}
 \name{ncc_version}
 \alias{ncc_version}
-\title{Metadata for the National Cost Collection (NCC) data}
+\title{Metadata for the National Cost Collection (NCC) Data}
 \format{
 A data frame with 2 columns:
 \describe{

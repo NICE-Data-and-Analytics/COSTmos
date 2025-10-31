@@ -3,7 +3,7 @@
 \docType{data}
 \name{pca_calendar_year}
 \alias{pca_calendar_year}
-\title{Prescription Cost Analysis (PCA), England: national summary table, calendar year}
+\title{Prescription Cost Analysis (PCA), England: National Summary Table, Calendar Year}
 \format{
 A data frame with 8 columns:
 \describe{
