@@ -7,14 +7,14 @@
 \format{
 A data frame with 7 columns:
 \describe{
-\item{drug_tariff_category}{Whether the drug falls under category A, C or M.}
-\item{medicine}{Name of the medicinal product.}
-\item{pack_size}{Pack size.}
-\item{unit_of_measure}{Unit of measure.}
+\item{drug_tariff_category}{Whether the drug falls under category A, C or M}
+\item{medicine}{Name of the medicinal product}
+\item{pack_size}{Pack size}
+\item{unit_of_measure}{Unit of measure}
 \item{basic_price_in_p}{Basic price on which payment will be calculated for
 the dispensing of that drug, in pennies. This is converted to GBP in the COSTmos dashboard.}
-\item{vmp_snomed_code}{SNOMED code for the virtual medicinal product (VMP).}
-\item{vmpp_snomed_code}{SNOMED code for the virtual medicinal product pack (VMPP).}
+\item{vmp_snomed_code}{SNOMED code for the virtual medicinal product (VMP)}
+\item{vmpp_snomed_code}{SNOMED code for the virtual medicinal product pack (VMPP)}
 }
 }
 \source{

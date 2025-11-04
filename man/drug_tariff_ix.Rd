@@ -7,23 +7,24 @@
 \format{
 A data frame with 17 columns:
 \describe{
-\item{drug_tariff_part}{Name}
-\item{vmp_name}{Name}
-\item{amp_name}{Name}
-\item{supplier_name}{Name}
-\item{quantity}{Name}
-\item{quantity_unit_of_measure}{Name}
-\item{price_in_p}{Name}
-\item{colour}{Name}
-\item{size_or_weight}{Name}
-\item{product_order_number}{Name}
-\item{pack_order_number}{Name}
-\item{add_dispensing_indicator}{Name}
-\item{product_snomed_code}{Name}
-\item{pack_snomed_code}{Name}
-\item{gtin}{Name}
-\item{supplier_snomed_code}{Name}
-\item{bnf_code}{Name}
+\item{drug_tariff_part}{Drug Tariff part the appliance is listed in (IXA, IXB, IXC or IXR)}
+\item{vmp_name}{Name of the Virtual Medicinal Product (VMP)}
+\item{amp_name}{Name of the Actual Medicinal Product (AMP)}
+\item{supplier_name}{Supplier name}
+\item{quantity}{Quantity}
+\item{quantity_unit_of_measure}{Unit of measure for the quantity listed}
+\item{price_in_p}{Price on which payment will be calculated for the dispensing
+of that appliance, in pennies. This is converted to GBP in the COSTmos dashboard.}
+\item{colour}{Colour}
+\item{size_or_weight}{Size or weight}
+\item{product_order_number}{Product order number for the manufacturer/supplier}
+\item{pack_order_number}{Pack order number for the manufacturer/supplier}
+\item{add_dispensing_indicator}{"Bulky Item", "Normal Item" or NA}
+\item{product_snomed_code}{SNOMED code for the product}
+\item{pack_snomed_code}{SNOMED code for the pack}
+\item{gtin}{Global Trade Item Number (barcode)}
+\item{supplier_snomed_code}{Supplier SNOMED code}
+\item{bnf_code}{BNF code}
 }
 }
 \source{
@@ -33,7 +34,8 @@ A data frame with 17 columns:
 drug_tariff_ix
 }
 \description{
-Part IX of the Drug Tariff, lists the basic prices of appliances.
+Part IX of the Drug Tariff, lists the basic prices of appliances and chemical
+reagents which can be prescribed by prescribing practitioners at NHS expense.
 }
 \details{
 The \href{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}{Drug Tariff}
@@ -51,9 +53,9 @@ The following sections come under Part IX:
 \item Part IXR - Chemical reagents
 }
 
-See
+See the \href{https://www.nhsbsa.nhs.uk/manufacturers-and-suppliers/drug-tariff-part-ix-information}{Part IX guidance} from the NHSBSA and the
 \href{https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/}{Guided Tour of the Drug Tariff}
-for more information.
+for more information on Part IX.
 }
 \seealso{
 \link{drug_tariff_viii_a}, \link{drug_tariff_viii_b} and \link{drug_tariff_viii_d} for

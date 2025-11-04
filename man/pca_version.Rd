@@ -7,8 +7,8 @@
 \format{
 A data frame with 2 columns:
 \describe{
-\item{df}{Name of the PCA table R object.}
-\item{year}{The year the data is for.}
+\item{df}{Name of the PCA table R object}
+\item{year}{The year the data is for}
 }
 }
 \source{
