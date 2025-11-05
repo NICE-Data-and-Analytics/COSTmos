@@ -22,6 +22,8 @@ costmos_app <- function(...) {
   uchsc_year_choice <- unique(unit_costs_hsc_gp$year) |>
     stringr::str_sort(decreasing = T, numeric = T)
   
+  drug_tariff_viii_a_categories <- c("All" = "_ALL_", sort(unique(drug_tariff_viii_a$drug_tariff_category)))
+  
   pca_bnf_chapter_choice <- c("All" = "_ALL_", sort(unique(pca_calendar_year$bnf_chapter_name)))
   
   csvDownloadButton <- function(id, filename = "data.csv", label = "Download table as CSV") {
@@ -47,6 +49,20 @@ costmos_app <- function(...) {
                 shiny::selectInput("drug_tariff_section",
                   label = "Section",
                   choices = drug_tariff_sections
+                ),
+                shiny::conditionalPanel(
+                  condition = "input.drug_tariff_section == 'viii_a'",
+                  shiny::selectInput("drug_tariff_viii_a_category",
+                                      label = "Category",
+                                      choices = drug_tariff_viii_a_categories
+                  ),
+                ),
+                shiny::conditionalPanel(
+                  condition = "input.drug_tariff_section == 'ix'",
+                  shiny::selectInput("drug_tariff_ix_part",
+                                     label = "Subsection (e.g. Part IXA)",
+                                     choices = drug_tariff_ix_part_choice
+                  ),
                 ),
               ),
               htmltools::h3(shiny::textOutput("drug_tariff_title")),
@@ -327,7 +343,25 @@ costmos_app <- function(...) {
     # DRUG TARIFF SERVER LOGIC ---------------------------------------------
 
     # Filtered data
-    drug_tariff_df <- shiny::reactive(get(paste0("drug_tariff_", input$drug_tariff_section)))
+    drug_tariff_df <- shiny::reactive({
+      df <- get(paste0("drug_tariff_", input$drug_tariff_section))
+      
+      if (input$drug_tariff_section == "viii_a") {
+        if (input$drug_tariff_viii_a_category != "_ALL_") {
+          df <- df |> 
+            dplyr::filter(.data$drug_tariff_category == input$drug_tariff_viii_a_category)
+        }
+      }
+      
+      if (input$drug_tariff_section == "ix") {
+        if (input$drug_tariff_ix_part != "_ALL_") {
+          df <- df |> 
+            dplyr::filter(stringr::str_detect(.data$drug_tariff_part, input$drug_tariff_ix_part))
+        }
+      }
+      
+      df
+    })
 
     # Table
     drug_tariff_df_colspec <- shiny::reactive(drug_tariff_col_spec[[input$drug_tariff_section]])

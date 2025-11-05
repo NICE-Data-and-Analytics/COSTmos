@@ -1,5 +1,8 @@
 # Drug Tariff section selectInput choices
-drug_tariff_sections <- list("Part VIIIA" = "viii_a", "Part VIIIB" = "viii_b", "Part VIIID" = "viii_d", "Category M" = "cat_m", "Part IX" = "ix")
+
+drug_tariff_sections <- list("Part VIIIA" = "viii_a", "Part VIIIB" = "viii_b", "Part VIIID" = "viii_d", "Part IX" = "ix")
+
+drug_tariff_ix_part_choice <- c("All" = "_ALL_", "IXA", "IXB", "IXC", "IXR")
 
 # Define reactable column specification
 drug_tariff_col_spec <- list(
@@ -36,21 +39,6 @@ drug_tariff_col_spec <- list(
     formulations = reactable::colDef(name = "Formulations"),
     special_container_indicator = reactable::colDef(name = "Special container indicator"),
     vmp_snomed_code = reactable::colDef(name = "VMP SNOMED code"),
-    vmpp_snomed_code = reactable::colDef(name = "VMPP SNOMED code")
-  ),
-  cat_m = list(
-    drug_name = reactable::colDef(name = "Drug name"),
-    pack_size = reactable::colDef(
-      name = "Pack size",
-      format = reactable::colFormat(separators = T)
-    ),
-    unit_of_measure = reactable::colDef(name = "Unit of measure"),
-    basic_price_in_p = reactable::colDef(
-      name = "Basic price (\u00a3)",
-      cell = function(value) {
-        format(round(value / 100, 2), nsmall = 2, big.mark = ",")
-      }
-    ),
     vmpp_snomed_code = reactable::colDef(name = "VMPP SNOMED code")
   ),
   ix = list(
