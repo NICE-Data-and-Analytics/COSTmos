@@ -1,4 +1,4 @@
-# Script to download latest CSV's from NHSBSA Drug Tariff
+# Script to manually save latest CSV's from NHSBSA Drug Tariff
 # Load packages
 library(dplyr)
 library(purrr)
@@ -7,66 +7,34 @@ library(tibble)
 library(stringr)
 library(lubridate)
 library(tidyr)
-library(rvest)
 library(usethis)
 library(withr)
 library(utils)
 
-# Drug Tariff Part VIII
+# Manual parameters - Populate! ------------------------------------------------
 
-# URL for webpage with all the download links for part VIII of the drug tariff
-url_viii <- "https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii"
-
-# Extract href attribute values
-# Read HTML of webpage into R
-viii_href <- url_viii |>
-  rvest::read_html() |>
-  # Get all <div> elements with the class "expander-content" for all the sections (Cat A, Cat M, VIIIA, VIIIB and VIIID)
-  rvest::html_elements("div.expander-content") |>
-  # Get the first <a> element in each of the <div> above with the class "ckfile file" - URL for latest data CSV
-  rvest::html_element("a.ckfile.file") |>
-  # Get value for href attribute
-  rvest::html_attr("href")
-
-# Identify which link is for which section of the drug tariff
+# Paste links to download CSVs from website
+# https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii
 viii_links <- list(
-  cat_m = stringr::str_subset(viii_href, "Cat%20M"),
-  viii_a = stringr::str_subset(viii_href, "VIIIA"),
-  viii_b = stringr::str_subset(viii_href, "VIIIB"),
-  viii_d = stringr::str_subset(viii_href, "VIIID")
+  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2025-10/Part%20VIIIA%20Nov%2025.xls.csv",
+  viii_b = "https://cms.nhsbsa.nhs.uk/sites/default/files/2025-11/Part%20VIIIB%20Nov%2025.xls.csv",
+  viii_d = "https://www.nhsbsa.nhs.uk/sites/default/files/2025-10/Part%20VIIID%20Nov%2025%20%281%29.csv"
 )
 
-# Extract dates from file names
-viii_dates <- list(
-  cat_m = list(
-    month = stringr::str_extract(viii_links$cat_m, "[:alpha:]+(?=%\\d+\\.xls)"),
-    year = paste0("20", stringr::str_extract(viii_links$cat_m, "\\d{2}(?=\\.xls)"))
-  ),
-  viii_a = list(
-    month = stringr::str_extract(viii_links$viii_a, "(?<=VIIIA%20)[:alpha:]+"),
-    year = paste0("20", stringr::str_extract(viii_links$viii_a, "\\d{2}(?=\\.xls)"))
-  ),
-  viii_b = list(
-    month = stringr::str_extract(viii_links$viii_b, "(?<=VIIIB%20)[:alpha:]+"),
-    year = paste0("20", stringr::str_extract(viii_links$viii_b, "\\d{2}(?=\\.xls)"))
-  ),
-  viii_d = list(
-    month = stringr::str_extract(viii_links$viii_d, "(?<=VIIID%20)[:alpha:]+"),
-    year = paste0("20", stringr::str_extract(viii_links$viii_d, "\\d{2}(?=\\.xls)"))
-  )
-)
+# Paste link to download CSV of Part IX 
+# https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix
+ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2025-10/Drug%20Tariff%20November%202025%20Part%20IX.csv"
 
-# Create YYYYMM string
-viii_dates <- purrr::map(viii_dates, \(x) {
-  x$ym <- stringr::str_remove_all(
-    lubridate::my(
-      paste(stringr::str_sub(x$month, 1, 3), x$year)
-    ),
-    "-|(01)"
+# Input version for each section, in YYYYMM
+drug_tariff_version <- tibble::tribble(
+  ~section, ~version_ym,
+  "viii_a", "202511",
+  "viii_b", "202511",
+  "viii_d", "202511",
+  "ix", "202511"
   )
 
-  x
-})
+# Drug Tariff Part VIII ---------------------------------------------
 
 # Function to download file, using the list names
 download_csv <- function(name) {
@@ -92,7 +60,7 @@ download_csv <- function(name) {
   viii_read$viii_d <- viii_read$viii_b
 
   # Generate full link for the file that needs downloading
-  full_link <- paste0("https://www.nhsbsa.nhs.uk", viii_links[[name]])
+  full_link <- viii_links[[name]]
 
   # Download file to temporary file, read in and save as R object
   withr::with_tempfile("dl_file",
@@ -127,35 +95,7 @@ download_csv <- function(name) {
 # Loop through and download all files
 purrr::walk(names(viii_links), download_csv)
 
-# Save Part VIII release dates to table
-drug_tariff_version <- tibble::enframe(purrr::map_chr(viii_dates, "ym"), name = "section", value = "version_ym")
-
 # Drug Tariff Part IX ---------------------------------------------------------
-# URL for webpage with all the download links for part VIII of the drug tariff
-url_ix <- "https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix"
-
-# Read HTML of webpage into R
-ix_link <- url_ix |>
-  rvest::read_html() |>
-  # Get first <div> element with the class "expander-content" for the section on the latest year
-  rvest::html_element("div.expander-content") |>
-  # Get table
-  rvest::html_element("table table") |>
-  # Get <a> element in the second cell of the first row
-  rvest::html_element("tr:first-of-type > td:nth-of-type(2) > a") |>
-  # Get value for href attribute
-  rvest::html_attr("href")
-
-# Generate ix file year month
-ix_file_ym <- stringr::str_remove_all(
-  lubridate::my(
-    paste(
-      stringr::str_sub(stringr::str_extract(ix_link, "(?<=IX%20)[:alpha:]+"), 1, 3),
-      stringr::str_extract(ix_link, "\\d{4}(?=\\.csv)")
-    )
-  ),
-  "-|(01)"
-)
 
 # Download IX file to temporary file, read in and save as R object
 withr::with_tempfile("ix_dl_file",
@@ -164,7 +104,7 @@ withr::with_tempfile("ix_dl_file",
     print(ix_dl_file)
 
     # Download file to temporary file
-    utils::download.file(paste0("https://www.nhsbsa.nhs.uk", ix_link), ix_dl_file, mode = "wb")
+    utils::download.file(ix_link, ix_dl_file, mode = "wb")
 
     # Read data and clean - Removes header and empty rows, renames columns sensibly
     drug_tariff_ix <- readr::read_csv(ix_dl_file,
@@ -191,10 +131,6 @@ withr::with_tempfile("ix_dl_file",
   },
   fileext = ".csv"
 )
-
-# Add ix date to version table
-drug_tariff_version <- drug_tariff_version |>
-  tibble::add_row(section = "ix", version_ym = ix_file_ym)
 
 # Save version table
 usethis::use_data(drug_tariff_version, overwrite = T)
