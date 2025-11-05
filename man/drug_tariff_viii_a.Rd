@@ -3,7 +3,7 @@
 \docType{data}
 \name{drug_tariff_viii_a}
 \alias{drug_tariff_viii_a}
-\title{Drug Tariff Part VIIIA - Basic Prices of Drugs}
+\title{Drug Tariff Part VIIIA - Basic Prices of Drugs (October 2025)}
 \format{
 A data frame with 7 columns:
 \describe{
@@ -18,13 +18,14 @@ the dispensing of that drug, in pennies. This is converted to GBP in the COSTmos
 }
 }
 \source{
-\url{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii}
+NHSBSA, Drug Tariff Part VIII \url{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii}
 }
 \usage{
 drug_tariff_viii_a
 }
 \description{
-Part VIIIA of the Drug Tariff, lists the basic prices of drugs.
+Part VIIIA of the Drug Tariff, lists the basic prices of drugs. This is the
+October 2025 version.
 }
 \details{
 The \href{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}{Drug Tariff}
@@ -32,9 +33,9 @@ is produced monthly by NHS Business Services Authority (NHSBSA) on behalf of
 the Department of Health and Social Care (DHSC) and outlines "what will be
 paid to pharmacy contractors for NHS services provided either for reimbursement
 or for remuneration, rules to follow when dispensing, value of the fees and
-allowances they will be paid and drug and appliance prices they will be paid".
+allowances they will be paid and drug and appliance prices they will be paid" [\href{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}{1}].
 
-Drugs in Part VIIIA fall into three categories:
+Drugs in Part VIIIA fall into three categories [\href{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}{1}, \href{https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/}{2}]:
 \itemize{
 \item Category A, readily available generics. The DHSC
 calculates the reimbursement price based on information submitted by
@@ -54,6 +55,12 @@ See the full \href{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-applian
 for the official definitions of each category and the
 \href{https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/}{Guided Tour of the Drug Tariff}
 by Community Pharmacy England for a simplified explanation.
+}
+\references{
+\enumerate{
+\item NHSBSA, Drug Tariff (2025). \url{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}
+\item Community Pharmacy England, Virtual Drug Tariff (2025). \url{https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/}
+}
 }
 \seealso{
 \link{drug_tariff_viii_b}, \link{drug_tariff_viii_d} and \link{drug_tariff_ix} for

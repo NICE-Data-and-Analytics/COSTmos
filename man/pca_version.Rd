@@ -12,7 +12,7 @@ A data frame with 2 columns:
 }
 }
 \source{
-\url{https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england}
+NHSBSA, Prescription Cost Analysis \url{https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england}
 }
 \usage{
 pca_version

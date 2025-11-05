@@ -3,29 +3,41 @@
 \docType{data}
 \name{ncc}
 \alias{ncc}
-\title{National Cost Collection (NCC) for the NHS: National Schedule}
+\title{National Cost Collection (NCC) for the NHS: National Schedule 2023/24}
 \format{
 A data frame with 6 columns:
 \describe{
-\item{Service Code}{...}
-\item{Dept or Currency Code}{...}
-\item{Dept or Currency Desc}{...}
-\item{Activity}{...}
-\item{Unit cost}{...}
-\item{Cost}{...}
+\item{service_code}{Service or area, e.g. \code{"Elective Inpatients"}, \code{"Nuclear Medicine"}}
+\item{dept_or_currency_code}{Activity code or HRG for the activity}
+\item{dept_or_currency_desc}{Description of the activity}
+\item{activity}{Annual number of these activities recorded}
+\item{unit_cost}{Average cost per activity}
+\item{cost}{Total cost per activity}
 }
 }
 \source{
-\url{https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/}
+NHS England, National Cost Collection \url{https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/}
 }
 \usage{
 ncc
 }
 \description{
-...
+A dataset containing aggregated and organisation-level cost data for NHS services in England,
+based on the \href{https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/}{NCC} published by NHS England. The collection includes:
+National schedule of unit costs for defined services (e.g. inpatient, outpatient, mental health, community).
+Note this data frame contains data for 2023/24 only.
 }
 \details{
-The calendar year this data is for is stored in \code{ncc_version}.
+\itemize{
+\item NHS providers submit these costs annually for inclusion in national benchmarking,
+tariff-setting, and productivity programmes (e.g. PLICS, GIRFT). [\href{https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/}{1}]
+\item The 2023/24 dataset excludes detailed high-cost drug costs at present due to remapping of codes [\href{https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/}{1}]
+}
+}
+\references{
+\enumerate{
+\item NHS England, National Cost Collection for the NHS (2025). \url{https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/}
+}
 }
 \seealso{
 \link{ncc_version} for the financial year this data is for.

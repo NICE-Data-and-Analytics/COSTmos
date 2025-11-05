@@ -468,7 +468,7 @@ costmos_app <- function(...) {
       {
         df <- ncc_df()
         # Assumes CSV has clean "Service Code" column with alphabetic values
-        levels <- sort(unique(df[["Service Code"]]))
+        levels <- sort(unique(df[["service_code"]]))
         shiny::updateSelectInput(
           session, "ncc_service_code",
           choices = c("All" = "_ALL_", levels),
@@ -478,7 +478,6 @@ costmos_app <- function(...) {
       ignoreInit = FALSE
     )
 
-
     # Filtered data
     ncc_filtered <- shiny::reactive({
       sc <- input$ncc_service_code
@@ -487,7 +486,7 @@ costmos_app <- function(...) {
 
       if (identical(sc, "_ALL_")) return(df)
 
-      df[df[["Service Code"]] == sc, , drop = FALSE]
+      df[df[["service_code"]] == sc, , drop = FALSE]
     })
 
     # Title
@@ -504,19 +503,19 @@ costmos_app <- function(...) {
         searchable = TRUE,
         defaultPageSize = 10,
         columns = list(
-          Activity = reactable::colDef(format = reactable::colFormat(separators = T)),
-          `Unit cost` = reactable::colDef(
-            name = "Unit cost (\u00a3)",
-            cell = function(value) {
-              format(round(value, 2), nsmall = 2, big.mark = ",")
-            }
-          ),
-          `Cost` = reactable::colDef(
-            name = "Cost (\u00a3)",
-            cell = function(value) {
-              format(round(value, 2), nsmall = 2, big.mark = ",")
-            }
-          )
+          service_code = reactable::colDef(name = "Service Code"),
+          dept_or_currency_code = reactable::colDef(name = "Dept or Currency Code"),
+          dept_or_currency_desc = reactable::colDef(name = "Dept or Currency Desc"),
+          activity = reactable::colDef(name = "Activity",
+                            format = reactable::colFormat(separators = T)),
+          unit_cost = reactable::colDef(name = "Unit cost (£)",
+                               cell = function(value) {
+                                 format(round(value, 2), nsmall = 2, big.mark = ",")
+                               }),
+          cost = reactable::colDef(name = "Cost (£)",
+                          cell = function(value) {
+                            format(round(value, 2), nsmall = 2, big.mark = ",")
+                          })
         )
       )
     })

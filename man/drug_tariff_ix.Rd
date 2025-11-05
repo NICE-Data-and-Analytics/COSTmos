@@ -3,7 +3,7 @@
 \docType{data}
 \name{drug_tariff_ix}
 \alias{drug_tariff_ix}
-\title{Drug Tariff Part IX - Appliances}
+\title{Drug Tariff Part IX - Appliances (NA)}
 \format{
 A data frame with 17 columns:
 \describe{
@@ -28,7 +28,7 @@ of that appliance, in pennies. This is converted to GBP in the COSTmos dashboard
 }
 }
 \source{
-\url{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix}
+NHSBSA, Drug Tariff Part IX \url{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix}
 }
 \usage{
 drug_tariff_ix
@@ -36,6 +36,8 @@ drug_tariff_ix
 \description{
 Part IX of the Drug Tariff, lists the basic prices of appliances and chemical
 reagents which can be prescribed by prescribing practitioners at NHS expense.
+This is the
+NA version.
 }
 \details{
 The \href{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}{Drug Tariff}
@@ -43,7 +45,8 @@ is produced monthly by NHS Business Services Authority (NHSBSA) on behalf of
 the Department of Health and Social Care (DHSC) and outlines "what will be
 paid to pharmacy contractors for NHS services provided either for reimbursement
 or for remuneration, rules to follow when dispensing, value of the fees and
-allowances they will be paid and drug and appliance prices they will be paid".
+allowances they will be paid and drug and appliance prices they will be paid"
+[\href{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}{1}].
 
 The following sections come under Part IX:
 \itemize{
@@ -56,6 +59,12 @@ The following sections come under Part IX:
 See the \href{https://www.nhsbsa.nhs.uk/manufacturers-and-suppliers/drug-tariff-part-ix-information}{Part IX guidance} from the NHSBSA and the
 \href{https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/}{Guided Tour of the Drug Tariff}
 for more information on Part IX.
+}
+\references{
+\enumerate{
+\item NHSBSA, Drug Tariff (2025). \url{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}
+\item NHSBSA, Drug Tariff Part IX information (2025). \url{https://www.nhsbsa.nhs.uk/manufacturers-and-suppliers/drug-tariff-part-ix-information}
+}
 }
 \seealso{
 \link{drug_tariff_viii_a}, \link{drug_tariff_viii_b} and \link{drug_tariff_viii_d} for

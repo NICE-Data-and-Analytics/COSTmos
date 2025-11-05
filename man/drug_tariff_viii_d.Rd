@@ -4,7 +4,8 @@
 \name{drug_tariff_viii_d}
 \alias{drug_tariff_viii_d}
 \title{Drug Tariff Part VIIID - Arrangements for payment for Specials & Imported
-Unlicensed Medicines with Prices Determined Relative to a Commonly Identified Pack Size}
+Unlicensed Medicines with Prices Determined Relative to a Commonly Identified Pack Size
+(August 2025)}
 \format{
 A data frame with 8 columns:
 \describe{
@@ -32,7 +33,7 @@ special container. NA if not.}
 }
 }
 \source{
-\url{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii}
+NHSBSA, Drug Tariff Part VIII \url{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii}
 }
 \usage{
 drug_tariff_viii_d
@@ -40,6 +41,8 @@ drug_tariff_viii_d
 \description{
 Part VIIID of the Drug Tariff, lists the basic prices of certain specials and
 imported unlicensed medicines to be paid relative to a commonly identified pack size.
+This is the
+August 2025 version.
 }
 \details{
 The \href{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}{Drug Tariff}
@@ -47,9 +50,10 @@ is produced monthly by NHS Business Services Authority (NHSBSA) on behalf of
 the Department of Health and Social Care (DHSC) and outlines "what will be
 paid to pharmacy contractors for NHS services provided either for reimbursement
 or for remuneration, rules to follow when dispensing, value of the fees and
-allowances they will be paid and drug and appliance prices they will be paid".
+allowances they will be paid and drug and appliance prices they will be paid"
+[\href{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}{1}].
 
-The Drug Tariff uses the following definitions:
+The Drug Tariff uses the following definitions [\href{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}{1}]:
 \itemize{
 \item "Specials are unlicensed medicinal products manufactured in the UK for human
 use which have been specially prepared to meet a prescription ordered for
@@ -66,6 +70,13 @@ See
 \href{https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/}{Guided Tour of the Drug Tariff}
 and \href{https://cpe.org.uk/dispensing-and-supply/dispensing-process/dispensing-a-prescription/unlicensed-specials-and-imports/}{Unlicensed specials and imports}
 from Community Pharmacy England for more information.
+}
+\references{
+\enumerate{
+\item NHSBSA, Drug Tariff (2025). \url{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}
+\item Community Pharmacy England, Virtual Drug Tariff (2025). \url{https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/}
+\item Community Pharmacy England, Unlicensed specials and imports (2024). \url{https://cpe.org.uk/dispensing-and-supply/dispensing-process/dispensing-a-prescription/unlicensed-specials-and-imports/}
+}
 }
 \seealso{
 \link{drug_tariff_viii_a}, \link{drug_tariff_viii_b} and \link{drug_tariff_ix} for

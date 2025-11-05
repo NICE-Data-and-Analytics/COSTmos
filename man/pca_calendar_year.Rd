@@ -3,9 +3,9 @@
 \docType{data}
 \name{pca_calendar_year}
 \alias{pca_calendar_year}
-\title{Prescription Cost Analysis (PCA), England: National Summary Table, Calendar Year}
+\title{Prescription Cost Analysis (PCA), England: National Summary Table, 2024 Calendar Year}
 \format{
-A data frame with 8 columns:
+A data frame with 8 columns [\href{https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england/prescription-cost-analysis-england-202425}{2}]:
 \describe{
 \item{generic_bnf_presentation_name}{The name of the BNF presentation - the
 specific type, strength and formulation of a drug; or, the specific type of an appliance. For example, Paracetamol 500mg tablets. For proprietary drugs, their generic equivalent is used here.}
@@ -35,27 +35,33 @@ given in GBP.}
 }
 }
 \source{
-\url{https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england}
+NHSBSA, Prescription Cost Analysis \url{https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england}
 }
 \usage{
 pca_calendar_year
 }
 \description{
-The PCA is a statistical release from the NHS Business Services Authority (NHSBSA) on "the total volume and cost
+The \href{https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england}{PCA} is a statistical release from the NHS Business Services Authority (NHSBSA) on "the total volume and cost
 for drugs, dressings, appliances, and medical devices that have been dispensed
 in the community in England. These statistics are designed to provide the total
 number of prescription items and spend for any individual product, at any level
 of the British National Formulary (BNF) hierarchy of all
-prescriptions dispensed in the community in England". This dataset here is the
-national level summary table for a calendar year with the SNOMED codes of
+prescriptions dispensed in the community in England" [\href{https://nhsbsa-opendata.s3.eu-west-2.amazonaws.com/pca/pca_background_info_methodology_june2025_v001.html}{1}]. This data frame is the
+national level summary table for 2024 with the SNOMED codes of
 medicinal products provided.
 }
 \details{
 Read the official
 \href{https://nhsbsa-opendata.s3.eu-west-2.amazonaws.com/pca/pca_summary_narrative_2024_25_v001.html}{background information and methodology}
 from the NHSBSA.
-
-The calendar year this data is for is stored in \code{pca_version}.
+}
+\references{
+\enumerate{
+\item NHSBSA, Prescription Cost Analysis: Background Information and Methodology (2025).
+\url{https://nhsbsa-opendata.s3.eu-west-2.amazonaws.com/pca/pca_background_info_methodology_june2025_v001.html}
+\item NHSBSA, Prescription Cost Analysis – England 2024/25: National summary tables - calendar year (2025).
+\url{https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england/prescription-cost-analysis-england-202425}
+}
 }
 \seealso{
 \link{pca_version} for the calendar year this data is for.

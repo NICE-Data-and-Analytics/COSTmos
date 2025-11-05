@@ -1,21 +1,19 @@
-#' Prescription Cost Analysis (PCA), England: National Summary Table, Calendar Year
+#' Prescription Cost Analysis (PCA), England: National Summary Table, `r pca_version$year[pca_version$df == "pca_calendar_year"]` Calendar Year
 #'
-#' The PCA is a statistical release from the NHS Business Services Authority (NHSBSA) on "the total volume and cost 
+#' The [PCA](https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england) is a statistical release from the NHS Business Services Authority (NHSBSA) on "the total volume and cost 
 #' for drugs, dressings, appliances, and medical devices that have been dispensed 
 #' in the community in England. These statistics are designed to provide the total 
 #' number of prescription items and spend for any individual product, at any level 
 #' of the British National Formulary (BNF) hierarchy of all
-#' prescriptions dispensed in the community in England". This dataset here is the 
-#' national level summary table for a calendar year with the SNOMED codes of 
-#' medicinal products provided. 
+#' prescriptions dispensed in the community in England" \[[1](https://nhsbsa-opendata.s3.eu-west-2.amazonaws.com/pca/pca_background_info_methodology_june2025_v001.html)\]. This data frame is the 
+#' national level summary table for `r pca_version$year[pca_version$df == "pca_calendar_year"]` with the SNOMED codes of 
+#' medicinal products provided.
 #' 
 #' Read the official 
 #' [background information and methodology](https://nhsbsa-opendata.s3.eu-west-2.amazonaws.com/pca/pca_summary_narrative_2024_25_v001.html) 
 #' from the NHSBSA. 
-#' 
-#' The calendar year this data is for is stored in `pca_version`.
 #'
-#' @format A data frame with 8 columns:
+#' @format A data frame with 8 columns \[[2](https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england/prescription-cost-analysis-england-202425)\]:
 #' \describe{
 #'   \item{generic_bnf_presentation_name}{The name of the BNF presentation - the 
 #'   specific type, strength and formulation of a drug; or, the specific type of an appliance. For example, Paracetamol 500mg tablets. For proprietary drugs, their generic equivalent is used here.}
@@ -44,9 +42,16 @@
 #'   'Total Cost (GBP)' by the 'Total Quantity'.}
 #' }
 #' 
-#' @source <https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england>
+#' @source NHSBSA, Prescription Cost Analysis <https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england>
 #' 
 #' @seealso [pca_version] for the calendar year this data is for.
+#' 
+#' @references 
+#' 1. NHSBSA, Prescription Cost Analysis: Background Information and Methodology (2025).
+#' <https://nhsbsa-opendata.s3.eu-west-2.amazonaws.com/pca/pca_background_info_methodology_june2025_v001.html>
+#' 
+#' 2. NHSBSA, Prescription Cost Analysis – England 2024/25: National summary tables - calendar year (2025).
+#' <https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england/prescription-cost-analysis-england-202425>
 
 "pca_calendar_year"
 
@@ -60,30 +65,38 @@
 #'   \item{year}{The year the data is for}
 #' }
 #' 
-#' @source <https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england>
+#' @source NHSBSA, Prescription Cost Analysis <https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england>
 #' 
 #' @seealso [pca_calendar_year] for the dataset.
 
 "pca_version"
 
-#' National Cost Collection (NCC) for the NHS: National Schedule
+#' National Cost Collection (NCC) for the NHS: National Schedule `r ncc_version$year[ncc_version$df == "ncc"]`
 #'
-#' ...
+#' A dataset containing aggregated and organisation-level cost data for NHS services in England,
+#' based on the [NCC](https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/) published by NHS England. The collection includes:
+#' National schedule of unit costs for defined services (e.g. inpatient, outpatient, mental health, community).  
+#' Note this data frame contains data for `r ncc_version$year[ncc_version$df == "ncc"]` only.
 #' 
-#' The calendar year this data is for is stored in `ncc_version`.
+#'  - NHS providers submit these costs annually for inclusion in national benchmarking,
+#'    tariff-setting, and productivity programmes (e.g. PLICS, GIRFT). \[[1](https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/)\] 
+#'  - The 2023/24 dataset excludes detailed high-cost drug costs at present due to remapping of codes \[[1](https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/)\]
 #'
 #' @format A data frame with 6 columns:
 #' \describe{
-#'   \item{Service Code}{...}
-#'   \item{Dept or Currency Code}{...}
-#'   \item{Dept or Currency Desc}{...}
-#'   \item{Activity}{...}
-#'   \item{Unit cost}{...}
-#'   \item{Cost}{...}
+#'   \item{service_code}{Service or area, e.g. `"Elective Inpatients"`, `"Nuclear Medicine"`}
+#'   \item{dept_or_currency_code}{Activity code or HRG for the activity}
+#'   \item{dept_or_currency_desc}{Description of the activity}
+#'   \item{activity}{Annual number of these activities recorded}
+#'   \item{unit_cost}{Average cost per activity}
+#'   \item{cost}{Total cost per activity}
 #' }
-#' @source <https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/>
+#' @source NHS England, National Cost Collection <https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/>
 #' 
 #' @seealso [ncc_version] for the financial year this data is for.
+#' 
+#' @references
+#' 1. NHS England, National Cost Collection for the NHS (2025). <https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/>
 
 "ncc"
 
@@ -103,18 +116,19 @@
 
 "ncc_version"
 
-#' Drug Tariff Part VIIIA - Basic Prices of Drugs
+#' Drug Tariff Part VIIIA - Basic Prices of Drugs (`r format(lubridate::ym(drug_tariff_version$version_ym[drug_tariff_version$section == "viii_a"]), "%B %Y")`)
 #'
-#' Part VIIIA of the Drug Tariff, lists the basic prices of drugs.
+#' Part VIIIA of the Drug Tariff, lists the basic prices of drugs. This is the 
+#' `r format(lubridate::ym(drug_tariff_version$version_ym[drug_tariff_version$section == "viii_a"]), "%B %Y")` version.
 #' 
 #' The [Drug Tariff](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff) 
 #' is produced monthly by NHS Business Services Authority (NHSBSA) on behalf of 
 #' the Department of Health and Social Care (DHSC) and outlines "what will be 
 #' paid to pharmacy contractors for NHS services provided either for reimbursement 
 #' or for remuneration, rules to follow when dispensing, value of the fees and 
-#' allowances they will be paid and drug and appliance prices they will be paid".
+#' allowances they will be paid and drug and appliance prices they will be paid" \[[1](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff)\].
 #' 
-#' Drugs in Part VIIIA fall into three categories:
+#' Drugs in Part VIIIA fall into three categories \[[1](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff), [2](https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/)\]:
 #'  - Category A, readily available generics. The DHSC 
 #'    calculates the reimbursement price based on information submitted by 
 #'    manufacturers. All available pack sizes are considered.
@@ -144,27 +158,34 @@
 #'   \item{vmp_snomed_code}{SNOMED code for the virtual medicinal product (VMP)}
 #'   \item{vmpp_snomed_code}{SNOMED code for the virtual medicinal product pack (VMPP)}
 #' }
-#' @source <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii>
+#' @source NHSBSA, Drug Tariff Part VIII <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii>
 #' 
 #' @seealso [drug_tariff_viii_b], [drug_tariff_viii_d] and [drug_tariff_ix] for 
 #' other parts of the Drug Tariff.
+#' 
+#' @references
+#' 1. NHSBSA, Drug Tariff (2025). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
+#' 2. Community Pharmacy England, Virtual Drug Tariff (2025). <https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/>
 
 "drug_tariff_viii_a"
 
 #' Drug Tariff Part VIIIB - Arrangements for payment for Specials and Imported 
-#' Unlicensed Medicines with a Price Per Unit Above a Minimum Quantity
+#' Unlicensed Medicines with a Price Per Unit Above a Minimum Quantity 
+#' (`r format(lubridate::ym(drug_tariff_version$version_ym[drug_tariff_version$section == "viii_b"]), "%B %Y")`)
 #'
 #' Part VIIIB of the Drug Tariff, lists the basic prices of certain specials and
-#' imported unlicensed medicines to be paid per unit above a minimum quantity.
+#' imported unlicensed medicines to be paid per unit above a minimum quantity. This is the 
+#' `r format(lubridate::ym(drug_tariff_version$version_ym[drug_tariff_version$section == "viii_b"]), "%B %Y")` version.
 #' 
 #' The [Drug Tariff](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff) 
 #' is produced monthly by NHS Business Services Authority (NHSBSA) on behalf of 
 #' the Department of Health and Social Care (DHSC) and outlines "what will be 
 #' paid to pharmacy contractors for NHS services provided either for reimbursement 
 #' or for remuneration, rules to follow when dispensing, value of the fees and 
-#' allowances they will be paid and drug and appliance prices they will be paid".
+#' allowances they will be paid and drug and appliance prices they will be paid" 
+#' \[[1](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff)\].
 #' 
-#' The Drug Tariff uses the following definitions:
+#' The Drug Tariff uses the following definitions \[[1](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff)\]:
 #'  - "Specials are unlicensed medicinal products manufactured in the UK for human 
 #'    use which have been specially prepared to meet a prescription ordered for 
 #'    individual patients without the need for the manufacturer to hold a 
@@ -179,7 +200,7 @@
 #' and corresponding price, which is payable for any amount prescribed up to the 
 #' minimum quantity. Unless in a special container, subsequent quantities will 
 #' be payable at the additional price per ml/g/tab/cap up to the total quantity 
-#' prescribed."
+#' prescribed." \[[1](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff)\]
 #' 
 #' See
 #' [Guided Tour of the Drug Tariff](https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/) 
@@ -210,27 +231,37 @@
 #'   \item{vmp_snomed_code}{SNOMED code for the virtual medicinal product (VMP)}
 #'   \item{vmpp_snomed_code}{SNOMED code for the virtual medicinal product pack (VMPP)}
 #' }
-#' @source <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii>
+#' @source NHSBSA, Drug Tariff Part VIII <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii>
 #' 
 #' @seealso [drug_tariff_viii_a], [drug_tariff_viii_d] and [drug_tariff_ix] for 
 #' other parts of the Drug Tariff.
+#' 
+#' @references
+#' 1. NHSBSA, Drug Tariff (2025). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
+#' 2. Community Pharmacy England, Virtual Drug Tariff (2025). <https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/>
+#' 3. Community Pharmacy England, Unlicensed specials and imports (2024). <https://cpe.org.uk/dispensing-and-supply/dispensing-process/dispensing-a-prescription/unlicensed-specials-and-imports/>
 
 "drug_tariff_viii_b"
 
 #' Drug Tariff Part VIIID - Arrangements for payment for Specials & Imported 
-#' Unlicensed Medicines with Prices Determined Relative to a Commonly Identified Pack Size
+#' Unlicensed Medicines with Prices Determined Relative to a Commonly Identified Pack Size 
+#' (`r format(lubridate::ym(drug_tariff_version$version_ym[drug_tariff_version$section == "viii_d"]), "%B %Y")`)
 #'
 #' Part VIIID of the Drug Tariff, lists the basic prices of certain specials and
-#' imported unlicensed medicines to be paid relative to a commonly identified pack size.
+#' imported unlicensed medicines to be paid relative to a commonly identified pack size. 
+#' This is the 
+#' `r format(lubridate::ym(drug_tariff_version$version_ym[drug_tariff_version$section == "viii_d"]), "%B %Y")` version.
+#' 
 #' 
 #' The [Drug Tariff](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff) 
 #' is produced monthly by NHS Business Services Authority (NHSBSA) on behalf of 
 #' the Department of Health and Social Care (DHSC) and outlines "what will be 
 #' paid to pharmacy contractors for NHS services provided either for reimbursement 
 #' or for remuneration, rules to follow when dispensing, value of the fees and 
-#' allowances they will be paid and drug and appliance prices they will be paid".
+#' allowances they will be paid and drug and appliance prices they will be paid"
+#' \[[1](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff)\].
 #' 
-#' The Drug Tariff uses the following definitions:
+#' The Drug Tariff uses the following definitions \[[1](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff)\]:
 #'  - "Specials are unlicensed medicinal products manufactured in the UK for human 
 #'    use which have been specially prepared to meet a prescription ordered for 
 #'    individual patients without the need for the manufacturer to hold a 
@@ -270,25 +301,32 @@
 #'   \item{vmp_snomed_code}{SNOMED code for the virtual medicinal product (VMP)}
 #'   \item{vmpp_snomed_code}{SNOMED code for the virtual medicinal product pack (VMPP)}
 #' }
-#' @source <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii>
+#' @source NHSBSA, Drug Tariff Part VIII <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii>
 #' 
 #' @seealso [drug_tariff_viii_a], [drug_tariff_viii_b] and [drug_tariff_ix] for 
 #' other parts of the Drug Tariff.
+#' 
+#' @references
+#' 1. NHSBSA, Drug Tariff (2025). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
+#' 2. Community Pharmacy England, Virtual Drug Tariff (2025). <https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/>
+#' 3. Community Pharmacy England, Unlicensed specials and imports (2024). <https://cpe.org.uk/dispensing-and-supply/dispensing-process/dispensing-a-prescription/unlicensed-specials-and-imports/>
 
 "drug_tariff_viii_d"
 
-
-#' Drug Tariff Part IX - Appliances
+#' Drug Tariff Part IX - Appliances (`r format(lubridate::ym(drug_tariff_version$version_ym[drug_tariff_version$section == "ix"]), "%B %Y")`)
 #'
 #' Part IX of the Drug Tariff, lists the basic prices of appliances and chemical 
-#' reagents which can be prescribed by prescribing practitioners at NHS expense.
+#' reagents which can be prescribed by prescribing practitioners at NHS expense. 
+#' This is the 
+#' `r format(lubridate::ym(drug_tariff_version$version_ym[drug_tariff_version$section == "ix"]), "%B %Y")` version.
 #' 
 #' The [Drug Tariff](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff) 
 #' is produced monthly by NHS Business Services Authority (NHSBSA) on behalf of 
 #' the Department of Health and Social Care (DHSC) and outlines "what will be 
 #' paid to pharmacy contractors for NHS services provided either for reimbursement 
 #' or for remuneration, rules to follow when dispensing, value of the fees and 
-#' allowances they will be paid and drug and appliance prices they will be paid".
+#' allowances they will be paid and drug and appliance prices they will be paid"
+#' \[[1](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff)\].
 #' 
 #' The following sections come under Part IX:
 #' - Part IXA - Permitted appliances and dressings
@@ -321,9 +359,13 @@
 #'   \item{supplier_snomed_code}{Supplier SNOMED code}
 #'   \item{bnf_code}{BNF code}
 #' }
-#' @source <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix>
+#' @source NHSBSA, Drug Tariff Part IX <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix>
 #' 
 #' @seealso [drug_tariff_viii_a], [drug_tariff_viii_b] and [drug_tariff_viii_d] for 
 #' other parts of the Drug Tariff.
+#' 
+#' @references
+#' 1. NHSBSA, Drug Tariff (2025). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
+#' 2. NHSBSA, Drug Tariff Part IX information (2025). <https://www.nhsbsa.nhs.uk/manufacturers-and-suppliers/drug-tariff-part-ix-information>
 
 "drug_tariff_ix"
