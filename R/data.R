@@ -44,7 +44,7 @@
 #' 
 #' @source NHSBSA, Prescription Cost Analysis <https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england>
 #' 
-#' @seealso [pca_version] for the calendar year this data is for.
+#' @family {pca_tables}
 #' 
 #' @references 
 #' 1. NHSBSA, Prescription Cost Analysis: Background Information and Methodology (2025).
@@ -67,7 +67,7 @@
 #' 
 #' @source NHSBSA, Prescription Cost Analysis <https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england>
 #' 
-#' @seealso [pca_calendar_year] for the dataset.
+#' @family {pca_tables}
 
 "pca_version"
 
@@ -93,7 +93,7 @@
 #' }
 #' @source NHS England, National Cost Collection <https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/>
 #' 
-#' @seealso [ncc_version] for the financial year this data is for.
+#' @family {ncc_tables}
 #' 
 #' @references
 #' 1. NHS England, National Cost Collection for the NHS (2025). <https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/>
@@ -112,7 +112,7 @@
 #' 
 #' @source <https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/>
 #' 
-#' @seealso [ncc] for the dataset.
+#' @family {ncc_tables}
 
 "ncc_version"
 
@@ -160,8 +160,7 @@
 #' }
 #' @source NHSBSA, Drug Tariff Part VIII <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii>
 #' 
-#' @seealso [drug_tariff_viii_b], [drug_tariff_viii_d] and [drug_tariff_ix] for 
-#' other parts of the Drug Tariff.
+#' @family {drug_tariff_tables}
 #' 
 #' @references
 #' 1. NHSBSA, Drug Tariff (2025). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
@@ -233,8 +232,7 @@
 #' }
 #' @source NHSBSA, Drug Tariff Part VIII <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii>
 #' 
-#' @seealso [drug_tariff_viii_a], [drug_tariff_viii_d] and [drug_tariff_ix] for 
-#' other parts of the Drug Tariff.
+#' @family {drug_tariff_tables}
 #' 
 #' @references
 #' 1. NHSBSA, Drug Tariff (2025). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
@@ -301,10 +299,10 @@
 #'   \item{vmp_snomed_code}{SNOMED code for the virtual medicinal product (VMP)}
 #'   \item{vmpp_snomed_code}{SNOMED code for the virtual medicinal product pack (VMPP)}
 #' }
+#' 
 #' @source NHSBSA, Drug Tariff Part VIII <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii>
 #' 
-#' @seealso [drug_tariff_viii_a], [drug_tariff_viii_b] and [drug_tariff_ix] for 
-#' other parts of the Drug Tariff.
+#' @family {drug_tariff_tables}
 #' 
 #' @references
 #' 1. NHSBSA, Drug Tariff (2025). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
@@ -359,10 +357,10 @@
 #'   \item{supplier_snomed_code}{Supplier SNOMED code}
 #'   \item{bnf_code}{BNF code}
 #' }
+#' 
 #' @source NHSBSA, Drug Tariff Part IX <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix>
 #' 
-#' @seealso [drug_tariff_viii_a], [drug_tariff_viii_b] and [drug_tariff_viii_d] for 
-#' other parts of the Drug Tariff.
+#' @family {drug_tariff_tables}
 #' 
 #' @references
 #' 1. NHSBSA, Drug Tariff (2025). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
@@ -390,6 +388,177 @@
 #' @source NHSBSA, Drug Tariff Part VIII <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii>
 #' and NHSBSA, Drug Tariff Part IX <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix>
 #' 
-#' @seealso [drug_tariff_viii_a], [drug_tariff_viii_b], [drug_tariff_viii_d] and [drug_tariff_ix] for the datasets.
+#' @family {drug_tariff_tables}
 
 "drug_tariff_version"
+
+#' Title for unit_costs_hsc_community_hcp...
+#'
+#' Description (1st paragraph)...
+#' 
+#' Details (subsequent paragraphs)...
+#'
+#' @format A data frame with 4 columns:
+#' \describe{
+#'   \item{year}{...}
+#'   \item{band}{...}
+#'   \item{cost_per_working_hour}{...}
+#'   \item{job_title}{...}
+#' }
+#' 
+#' @source Care and Outcomes Research Centre (COReC) at the University of Kent 
+#' and Centre for Health Economics (CHE) at the University of York, Unit Costs 
+#' of Health and Social Care Manual
+#' <https://research.kent.ac.uk/corec/unit-costs-2022-2027/>
+#' 
+#' @family {unit_costs_hsc_tables}
+
+"unit_costs_hsc_community_hcp"
+
+#' Title for unit_costs_hsc_gp ...
+#'
+#' Description (1st paragraph)...
+#' 
+#' Details (subsequent paragraphs)...
+#'
+#' @format A data frame with 5 columns:
+#' \describe{
+#'   \item{year}{...}
+#'   \item{variable}{...}
+#'   \item{qualification_cost}{...}
+#'   \item{direct_care_staff_cost}{...}
+#'   \item{cost}{...}
+#' }
+#' 
+#' @source Care and Outcomes Research Centre (COReC) at the University of Kent 
+#' and Centre for Health Economics (CHE) at the University of York, Unit Costs 
+#' of Health and Social Care Manual
+#' <https://research.kent.ac.uk/corec/unit-costs-2022-2027/>
+#' 
+#' @family {unit_costs_hsc_tables}
+
+"unit_costs_hsc_gp"
+
+#' Title for unit_costs_hsc_gp_nurse ...
+#'
+#' Description (1st paragraph)...
+#' 
+#' Details (subsequent paragraphs)...
+#'
+#' @format A data frame with 5 columns:
+#' \describe{
+#'   \item{year}{...}
+#'   \item{variable}{...}
+#'   \item{qualification_cost}{...}
+#'   \item{ratio_direct_to_indirect_time}{...}
+#'   \item{cost}{...}
+#' }
+#' 
+#' @source Care and Outcomes Research Centre (COReC) at the University of Kent 
+#' and Centre for Health Economics (CHE) at the University of York, Unit Costs 
+#' of Health and Social Care Manual
+#' <https://research.kent.ac.uk/corec/unit-costs-2022-2027/>
+#' 
+#' @family {unit_costs_hsc_tables}
+
+"unit_costs_hsc_gp_nurse"
+
+#' Title for unit_costs_hsc_hospital_doctor ...
+#'
+#' Description (1st paragraph)...
+#' 
+#' Details (subsequent paragraphs)...
+#'
+#' @format A data frame with 4 columns:
+#' \describe{
+#'   \item{year}{...}
+#'   \item{job_title}{...}
+#'   \item{qualification_cost}{...}
+#'   \item{cost_per_working_hour}{...}
+#' }
+#' 
+#' @source Care and Outcomes Research Centre (COReC) at the University of Kent 
+#' and Centre for Health Economics (CHE) at the University of York, Unit Costs 
+#' of Health and Social Care Manual
+#' <https://research.kent.ac.uk/corec/unit-costs-2022-2027/>
+#' 
+#' @family {unit_costs_hsc_tables}
+
+"unit_costs_hsc_hospital_doctor"
+
+#' Title for unit_costs_hsc_nurse ...
+#'
+#' Description (1st paragraph)...
+#' 
+#' Details (subsequent paragraphs)...
+#'
+#' @format A data frame with 4 columns:
+#' \describe{
+#'   \item{year}{...}
+#'   \item{band}{...}
+#'   \item{qualification_cost}{...}
+#'   \item{cost_per_working_hour}{...}
+#' }
+#' 
+#' @source Care and Outcomes Research Centre (COReC) at the University of Kent 
+#' and Centre for Health Economics (CHE) at the University of York, Unit Costs 
+#' of Health and Social Care Manual
+#' <https://research.kent.ac.uk/corec/unit-costs-2022-2027/>
+#' 
+#' @family {unit_costs_hsc_tables}
+
+"unit_costs_hsc_nurse"
+
+#' Title for unit_costs_hsc_training_costs_doctor ...
+#'
+#' Description (1st paragraph)...
+#' 
+#' Details (subsequent paragraphs)...
+#'
+#' @format A data frame with 9 columns:
+#' \describe{
+#'   \item{year}{...}
+#'   \item{job_title}{...}
+#'   \item{tuition}{...}
+#'   \item{living_expenses_or_lost_production_costs}{...}
+#'   \item{clinical_placement}{...}
+#'   \item{placement_fee_plus_market_forces_factor}{...}
+#'   \item{salary_inc_overheads_and_postgraduate_centre_costs}{...}
+#'   \item{total_investment}{...}
+#'   \item{expected_annual_cost_discounted_at_3pt5perc}{...}
+#' }
+#' 
+#' @source Care and Outcomes Research Centre (COReC) at the University of Kent 
+#' and Centre for Health Economics (CHE) at the University of York, Unit Costs 
+#' of Health and Social Care Manual
+#' <https://research.kent.ac.uk/corec/unit-costs-2022-2027/>
+#' 
+#' @family {unit_costs_hsc_tables}
+
+"unit_costs_hsc_training_costs_doctor"
+
+#' Title for unit_costs_hsc_training_costs_hcp ...
+#'
+#' Description (1st paragraph)...
+#' 
+#' Details (subsequent paragraphs)...
+#'
+#' @format A data frame with 7 columns:
+#' \describe{
+#'   \item{year}{...}
+#'   \item{job_title}{...}
+#'   \item{tuition}{...}
+#'   \item{living_expenses_or_lost_production_costs}{...}
+#'   \item{clinical_placement}{...}
+#'   \item{total_investment}{...}
+#'   \item{expected_annual_cost_discounted_at_3pt5perc}{...}
+#' }
+#' 
+#' @source Care and Outcomes Research Centre (COReC) at the University of Kent 
+#' and Centre for Health Economics (CHE) at the University of York, Unit Costs 
+#' of Health and Social Care Manual
+#' <https://research.kent.ac.uk/corec/unit-costs-2022-2027/>
+#' 
+#' @family {unit_costs_hsc_tables}
+
+"unit_costs_hsc_training_costs_hcp"

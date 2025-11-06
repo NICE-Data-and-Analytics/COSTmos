@@ -40,6 +40,8 @@ tariff-setting, and productivity programmes (e.g. PLICS, GIRFT). [\href{https://
 }
 }
 \seealso{
-\link{ncc_version} for the financial year this data is for.
+Other {ncc_tables}: 
+\code{\link{ncc_version}}
 }
+\concept{{ncc_tables}}
 \keyword{datasets}

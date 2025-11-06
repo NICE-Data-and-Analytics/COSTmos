@@ -67,7 +67,11 @@ for more information on Part IX.
 }
 }
 \seealso{
-\link{drug_tariff_viii_a}, \link{drug_tariff_viii_b} and \link{drug_tariff_viii_d} for
-other parts of the Drug Tariff.
+Other {drug_tariff_tables}: 
+\code{\link{drug_tariff_version}},
+\code{\link{drug_tariff_viii_a}},
+\code{\link{drug_tariff_viii_b}},
+\code{\link{drug_tariff_viii_d}}
 }
+\concept{{drug_tariff_tables}}
 \keyword{datasets}

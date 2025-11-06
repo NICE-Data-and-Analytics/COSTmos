@@ -64,6 +64,8 @@ from the NHSBSA.
 }
 }
 \seealso{
-\link{pca_version} for the calendar year this data is for.
+Other {pca_tables}: 
+\code{\link{pca_version}}
 }
+\concept{{pca_tables}}
 \keyword{datasets}
