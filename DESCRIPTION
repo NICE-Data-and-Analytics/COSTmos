@@ -29,6 +29,7 @@ Imports:
     purrr,
     reactable,
     rlang,
+    rmarkdown,
     shiny,
     stringr,
     utils
