@@ -400,7 +400,7 @@
 #'
 #' @format A data frame with 4 columns:
 #' \describe{
-#'   \item{year}{...}
+#'   \item{year}{Unit Costs Manual year}
 #'   \item{band}{...}
 #'   \item{cost_per_working_hour}{...}
 #'   \item{job_title}{...}
@@ -423,7 +423,7 @@
 #'
 #' @format A data frame with 5 columns:
 #' \describe{
-#'   \item{year}{...}
+#'   \item{year}{Unit Costs Manual year}
 #'   \item{variable}{...}
 #'   \item{qualification_cost}{...}
 #'   \item{direct_care_staff_cost}{...}
@@ -447,7 +447,7 @@
 #'
 #' @format A data frame with 5 columns:
 #' \describe{
-#'   \item{year}{...}
+#'   \item{year}{Unit Costs Manual year}
 #'   \item{variable}{...}
 #'   \item{qualification_cost}{...}
 #'   \item{ratio_direct_to_indirect_time}{...}
@@ -471,7 +471,7 @@
 #'
 #' @format A data frame with 4 columns:
 #' \describe{
-#'   \item{year}{...}
+#'   \item{year}{Unit Costs Manual year}
 #'   \item{job_title}{...}
 #'   \item{qualification_cost}{...}
 #'   \item{cost_per_working_hour}{...}
@@ -494,7 +494,7 @@
 #'
 #' @format A data frame with 4 columns:
 #' \describe{
-#'   \item{year}{...}
+#'   \item{year}{Unit Costs Manual year}
 #'   \item{band}{...}
 #'   \item{qualification_cost}{...}
 #'   \item{cost_per_working_hour}{...}
@@ -517,7 +517,7 @@
 #'
 #' @format A data frame with 9 columns:
 #' \describe{
-#'   \item{year}{...}
+#'   \item{year}{Unit Costs Manual year}
 #'   \item{job_title}{...}
 #'   \item{tuition}{...}
 #'   \item{living_expenses_or_lost_production_costs}{...}
@@ -545,7 +545,7 @@
 #'
 #' @format A data frame with 7 columns:
 #' \describe{
-#'   \item{year}{...}
+#'   \item{year}{Unit Costs Manual year}
 #'   \item{job_title}{...}
 #'   \item{tuition}{...}
 #'   \item{living_expenses_or_lost_production_costs}{...}

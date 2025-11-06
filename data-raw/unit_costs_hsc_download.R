@@ -212,7 +212,7 @@ generate_unit_costs_hsc_tables <- function(report_year) {
   # But newer reports don't report on ratio of direct to indirect time and duration of contact
 
   # Calculate using numbers in 2015 report, section 10.6 Nurse (GP practice), page 174
-  # https://www.pssru.ac.uk/pub/uc/uc2015/community-based-health-care-staff.pdf
+  # https://kar.kent.ac.uk/60240/
   # Ratio of direct to indirect time on face-to-face contacts: 1:0.30 (cites 2006/07 UK GP workload survey)
   # Duration of contact: 15.5 minutes (per surgery consultation; cites 2006/07 UK GP workload survey)
 

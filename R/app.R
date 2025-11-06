@@ -24,6 +24,7 @@ ignore_unused_imports <- function() {
 }
 
 costmos_app <- function(...) {
+  
   # Set some variables
   uchsc_year_choice <- unique(unit_costs_hsc_gp$year) |>
     stringr::str_sort(decreasing = T, numeric = T)
@@ -184,7 +185,7 @@ costmos_app <- function(...) {
                         htmltools::tags$small(
                           "The duration of contact per surgery consultation (15.5 mins) from the ",
                           htmltools::tags$a(
-                            href = "https://www.pssru.ac.uk/project-pages/unit-costs/unit-costs-2015/",
+                            href = "https://kar.kent.ac.uk/60240/",
                             "2015 Unit Costs report",
                             target = "_blank",
                             .noWS = "outside"
@@ -206,7 +207,7 @@ costmos_app <- function(...) {
                     htmltools::tags$small(
                       "Including the ratio of direct to indirect time on face-to-face contacts factors in the 1:0.30 value for practice nurses from the ",
                       htmltools::tags$a(
-                        href = "https://www.pssru.ac.uk/project-pages/unit-costs/unit-costs-2015/",
+                        href = "https://kar.kent.ac.uk/60240/",
                         "2015 Unit Costs report",
                         target = "_blank",
                         .noWS = "outside"
@@ -313,8 +314,8 @@ costmos_app <- function(...) {
         htmltools::tags$p(
           "Access the latest version of the Unit Costs of Health and Social Care manual from the ",
           htmltools::tags$a(
-            href = "https://www.pssru.ac.uk/unitcostsreport/",
-            "PSSRU website",
+            href = "https://research.kent.ac.uk/corec/unit-costs-2022-2027/",
+            "COReC website",
             target = "_blank",
             .noWS = "outside"
           ),
@@ -594,7 +595,8 @@ costmos_app <- function(...) {
         filename = glue::glue("ncc_extract_{label}{stringr::str_replace_all(ncc_year(), '_', '/')}.csv", .na = "")
       )
     })
-  }
+    
+  } # end of server
 
   # Run the application
   shiny::shinyApp(ui = ui, server = server)

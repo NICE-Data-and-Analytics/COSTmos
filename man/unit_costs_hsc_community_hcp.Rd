@@ -7,7 +7,7 @@
 \format{
 A data frame with 4 columns:
 \describe{
-\item{year}{...}
+\item{year}{Unit Costs Manual year}
 \item{band}{...}
 \item{cost_per_working_hour}{...}
 \item{job_title}{...}

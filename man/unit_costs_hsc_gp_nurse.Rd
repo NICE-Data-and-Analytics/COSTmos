@@ -7,7 +7,7 @@
 \format{
 A data frame with 5 columns:
 \describe{
-\item{year}{...}
+\item{year}{Unit Costs Manual year}
 \item{variable}{...}
 \item{qualification_cost}{...}
 \item{ratio_direct_to_indirect_time}{...}
