@@ -10,7 +10,13 @@
 #' @importFrom rlang .data
 
 # Overcome check() note about undefined global variables
-utils::globalVariables(c("drug_tariff_version", "ncc", "ncc_version", "pca_calendar_year", "pca_version", "unit_costs_hsc_gp"))
+utils::globalVariables(c("drug_tariff_version", 
+                         "ncc", 
+                         "ncc_version", 
+                         "pca_calendar_year", 
+                         "pca_version", 
+                         "unit_costs_hsc_gp", 
+                         "drug_tariff_viii_a"))
 
 # Overcome check() note about utils not being used
 ignore_unused_imports <- function() {
@@ -542,11 +548,11 @@ costmos_app <- function(...) {
           dept_or_currency_desc = reactable::colDef(name = "Dept or Currency Desc"),
           activity = reactable::colDef(name = "Activity",
                             format = reactable::colFormat(separators = T)),
-          unit_cost = reactable::colDef(name = "Unit cost (£)",
+          unit_cost = reactable::colDef(name = "Unit cost (\u00a3)",
                                cell = function(value) {
                                  format(round(value, 2), nsmall = 2, big.mark = ",")
                                }),
-          cost = reactable::colDef(name = "Cost (£)",
+          cost = reactable::colDef(name = "Cost (\u00a3)",
                           cell = function(value) {
                             format(round(value, 2), nsmall = 2, big.mark = ",")
                           })
