@@ -25,7 +25,6 @@ COSTmos sources the following sections of the Drug Tariff from the web pages bel
 | [Part VIIIA](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii) | Basic Prices of Drugs |
 | [Part VIIIB](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii) | Arrangements for payment for Specials and Imported Unlicensed Medicines with a Price Per Unit Above a Minimum Quantity |
 | [Part VIIID](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii) | Arrangements for payment for Specials & Imported Unlicensed Medicines with Prices Determined Relative to a Commonly Identified Pack Size |
-| [Part VIII Category M](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii) | Drugs which are readily available as licensed generic medicines. Only certain pack sizes considered (versus all pack sizes for Category A) |
 | [Part IX](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix) | Appliances |
 
 ### Prescription Cost Analysis {#prescription-cost-analysis}

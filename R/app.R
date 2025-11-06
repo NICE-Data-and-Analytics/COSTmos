@@ -246,7 +246,7 @@ costmos_app <- function(...) {
     bslib::nav_panel(
       "About",
       bslib::card(
-        htmltools::includeMarkdown(rprojroot::find_package_root_file("R", "about.md"))
+        htmltools::includeMarkdown(fs::path_package("COSTmos", "about_dashboard.md"))
       )
     )
   )
