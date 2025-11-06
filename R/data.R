@@ -369,3 +369,27 @@
 #' 2. NHSBSA, Drug Tariff Part IX information (2025). <https://www.nhsbsa.nhs.uk/manufacturers-and-suppliers/drug-tariff-part-ix-information>
 
 "drug_tariff_ix"
+
+#' Metadata for the Drug Tariff Data
+#'
+#' Contains version information for the Drug Tariff data sets.
+#'
+#' @format A data frame with 2 columns:
+#' \describe{
+#'   \item{section}{Drug Tariff part:
+#'    \describe{
+#'      \item{"viii_a"}{Part VIIIA}
+#'      \item{"viii_b"}{Part VIIIB}
+#'      \item{"viii_d"}{Part VIIID}
+#'      \item{"ix"}{Part IX}
+#'    }
+#'   }
+#'   \item{version_ym}{Version, in year month (YYYYMM, e.g. "202511" for November 2025)}
+#' }
+#' 
+#' @source NHSBSA, Drug Tariff Part VIII <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii>
+#' and NHSBSA, Drug Tariff Part IX <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix>
+#' 
+#' @seealso [drug_tariff_viii_a], [drug_tariff_viii_b], [drug_tariff_viii_d] and [drug_tariff_ix] for the datasets.
+
+"drug_tariff_version"

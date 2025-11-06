@@ -5,7 +5,7 @@
 \alias{drug_tariff_viii_d}
 \title{Drug Tariff Part VIIID - Arrangements for payment for Specials & Imported
 Unlicensed Medicines with Prices Determined Relative to a Commonly Identified Pack Size
-(August 2025)}
+(November 2025)}
 \format{
 A data frame with 8 columns:
 \describe{
@@ -42,7 +42,7 @@ drug_tariff_viii_d
 Part VIIID of the Drug Tariff, lists the basic prices of certain specials and
 imported unlicensed medicines to be paid relative to a commonly identified pack size.
 This is the
-August 2025 version.
+November 2025 version.
 }
 \details{
 The \href{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}{Drug Tariff}

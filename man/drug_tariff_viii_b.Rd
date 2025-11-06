@@ -5,7 +5,7 @@
 \alias{drug_tariff_viii_b}
 \title{Drug Tariff Part VIIIB - Arrangements for payment for Specials and Imported
 Unlicensed Medicines with a Price Per Unit Above a Minimum Quantity
-(October 2025)}
+(November 2025)}
 \format{
 A data frame with 8 columns:
 \describe{
@@ -41,7 +41,7 @@ drug_tariff_viii_b
 \description{
 Part VIIIB of the Drug Tariff, lists the basic prices of certain specials and
 imported unlicensed medicines to be paid per unit above a minimum quantity. This is the
-October 2025 version.
+November 2025 version.
 }
 \details{
 The \href{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}{Drug Tariff}
