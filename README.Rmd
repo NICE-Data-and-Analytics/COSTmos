@@ -1,0 +1,77 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# COSTmos
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+COSTmos collates and displays reference data sets on healthcare costs in England. These are displayed in a Shiny dashboard and available as data frames within the package.
+
+Data sets included are:  
+- [Drug Tariff](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff)  
+- [Prescription Cost Analysis](https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england)  
+- [National Cost Collection](https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/)  
+- [Unit Costs of Health and Social Care](https://research.kent.ac.uk/corec/unit-costs-2022-2027/)  
+
+COSTmos tries to display the latest version of the data sets. However, we recommend that you go to the original source to verify that this is the case.
+
+## Installation
+
+You can install the development version of COSTmos from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("NICE-Data-and-Analytics/COSTmos")
+```
+
+## Running the COSTmos dashboard locally  
+
+To run the COSTmos dashboard locally:  
+
+```{r example, eval = FALSE}
+library(COSTmos)
+
+costmos_app()
+```
+
+## Using the datasets in COSTmos
+
+The following datasets can be accessed after attaching COSTmos:
+
+```{r, echo = FALSE}
+list.files(rprojroot::find_package_root_file("data"), ".rda") |> 
+  stringr::str_subset("version", negate = TRUE) |> 
+  stringr::str_remove("\\.rda$")
+```
+View them using:
+
+```{r, eval = FALSE}
+library(COSTmos)
+
+drug_tariff_ix
+
+# View the help file
+?drug_tariff_ix 
+```
+
+## References  
+
+```{r, echo = FALSE}
+data("drug_tariff_version")
+```
+
+```{r, child=c(rprojroot::find_package_root_file("inst", "references.Rmd"))}
+```

@@ -101,7 +101,7 @@ Centre (COReC; formerly known as the Personal Social Services Research
 Unit, PSSRU) at the University of Kent and the Centre for Health
 Economics (CHE) at the University of York.
 
-## Citations
+## References
 
 1.  **NHS Business Services Authority**, *Drug Tariff*.  
     <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>  
