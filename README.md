@@ -8,8 +8,8 @@
 <!-- badges: end -->
 
 COSTmos collates and displays reference data sets on healthcare costs in
-England. These are displayed in a Shiny dashboard and available as data
-frames within the package.
+England. These are displayed in a Shiny dashboard and available as R
+objects within the package.
 
 Data sets included are:  
 - [Drug
@@ -63,12 +63,15 @@ The following datasets can be accessed after attaching COSTmos:
     #> [12] "unit_costs_hsc_training_costs_doctor"
     #> [13] "unit_costs_hsc_training_costs_hcp"
 
-View them using:
+View and use them using:
 
 ``` r
 library(COSTmos)
 
 drug_tariff_ix
+
+# Display structure
+str(drug_tariff_ix)
 
 # View the help file
 ?drug_tariff_ix 
