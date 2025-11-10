@@ -13,7 +13,7 @@
 #' [background information and methodology](https://nhsbsa-opendata.s3.eu-west-2.amazonaws.com/pca/pca_summary_narrative_2024_25_v001.html) 
 #' from the NHSBSA. 
 #'
-#' @format A data frame with 8 columns \[[2](https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england/prescription-cost-analysis-england-202425)\]:
+#' @format A data frame with `r length(colnames(pca_calendar_year))` columns \[[2](https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england/prescription-cost-analysis-england-202425)\]:
 #' \describe{
 #'   \item{generic_bnf_presentation_name}{The name of the BNF presentation - the 
 #'   specific type, strength and formulation of a drug; or, the specific type of an appliance. For example, Paracetamol 500mg tablets. For proprietary drugs, their generic equivalent is used here.}
@@ -59,7 +59,7 @@
 #'
 #' Contains the calendar year the `pca_calendar_year` data is for.
 #'
-#' @format A data frame with 2 columns:
+#' @format A data frame with `r length(colnames(pca_version))` columns:
 #' \describe{
 #'   \item{df}{Name of the PCA table R object}
 #'   \item{year}{The year the data is for}
@@ -82,7 +82,7 @@
 #'    tariff-setting, and productivity programmes (e.g. PLICS, GIRFT). \[[1](https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/)\] 
 #'  - The 2023/24 dataset excludes detailed high-cost drug costs at present due to remapping of codes \[[1](https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/)\]
 #'
-#' @format A data frame with 6 columns:
+#' @format A data frame with `r length(colnames(ncc))` columns:
 #' \describe{
 #'   \item{service_code}{Service or area, e.g. `"Elective Inpatients"`, `"Nuclear Medicine"`}
 #'   \item{dept_or_currency_code}{Activity code or HRG for the activity}
@@ -104,7 +104,7 @@
 #'
 #' Contains the financial year the `ncc` data is for.
 #'
-#' @format A data frame with 2 columns:
+#' @format A data frame with `r length(colnames(ncc_version))` columns:
 #' \describe{
 #'   \item{df}{Name of the NCC table R object}
 #'   \item{year}{The year the data is for}
@@ -147,7 +147,7 @@
 #' [Guided Tour of the Drug Tariff](https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/) 
 #' by Community Pharmacy England for a simplified explanation.
 #'
-#' @format A data frame with 7 columns:
+#' @format A data frame with `r length(colnames(drug_tariff_viii_a))` columns:
 #' \describe{
 #'   \item{drug_tariff_category}{Whether the drug falls under category A, C or M}
 #'   \item{medicine}{Name of the medicinal product}
@@ -206,13 +206,18 @@
 #' and [Unlicensed specials and imports](https://cpe.org.uk/dispensing-and-supply/dispensing-process/dispensing-a-prescription/unlicensed-specials-and-imports/) 
 #' from Community Pharmacy England for more information.
 #'
-#' @format A data frame with 8 columns:
+#' @format A data frame with `r length(colnames(drug_tariff_viii_b))` columns:
 #' \describe{
 #'   \item{medicine}{Name of the medicinal product}
-#'   \item{pack_size}{Pack size}
 #'   \item{unit_of_measure}{Unit of measure}
-#'   \item{basic_price_in_p}{Basic price on which payment will be calculated for 
-#'   the dispensing of that drug, in pennies. This is converted to GBP in the COSTmos dashboard.}
+#'   \item{minimum_quantity_pack_size}{Pack size for the minimum quantity}
+#'   \item{minimum_quantity_basic_price_in_p}{Basic price on which payment will 
+#'   be calculated for the dispensing of the minimum quantity of that drug, in 
+#'   pennies. This is converted to GBP in the COSTmos dashboard.}
+#'   \item{additional_unit_pack_size}{Pack size for the additional unit}
+#'   \item{additional_unit_basic_price_in_p}{Basic price on which payment will 
+#'   be calculated for the dispensing of each additional unit of that drug above 
+#'   the minimum quantity, in pennies. This is converted to GBP in the COSTmos dashboard.}
 #'   \item{formulations}{The formulations covered by the Drug Tariff:
 #'    \describe{
 #'      \item{STD}{Standard formulation including standard flavours}
@@ -228,7 +233,10 @@
 #'   \item{special_container_indicator}{"Special container" if product is in a 
 #'   special container. NA if not.}
 #'   \item{vmp_snomed_code}{SNOMED code for the virtual medicinal product (VMP)}
-#'   \item{vmpp_snomed_code}{SNOMED code for the virtual medicinal product pack (VMPP)}
+#'   \item{minimum_quantity_vmpp_snomed_code}{SNOMED code for the virtual 
+#'   medicinal product pack (VMPP) of the minimum quantity}
+#'   \item{additional_unit_vmpp_snomed_code}{SNOMED code for the virtual 
+#'   medicinal product pack (VMPP) of the additional unit}
 #' }
 #' @source NHSBSA, Drug Tariff Part VIII <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii>
 #' 
@@ -275,7 +283,7 @@
 #' and [Unlicensed specials and imports](https://cpe.org.uk/dispensing-and-supply/dispensing-process/dispensing-a-prescription/unlicensed-specials-and-imports/) 
 #' from Community Pharmacy England for more information.
 #'
-#' @format A data frame with 8 columns:
+#' @format A data frame with `r length(colnames(drug_tariff_viii_d))` columns:
 #' \describe{
 #'   \item{medicine}{Name of the medicinal product}
 #'   \item{pack_size}{Pack size}
@@ -336,7 +344,7 @@
 #' [Guided Tour of the Drug Tariff](https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/)
 #' for more information on Part IX.
 #'
-#' @format A data frame with 17 columns:
+#' @format A data frame with `r length(colnames(drug_tariff_ix))` columns:
 #' \describe{
 #'   \item{drug_tariff_part}{Drug Tariff part the appliance is listed in (IXA, IXB, IXC or IXR)}
 #'   \item{vmp_name}{Name of the Virtual Medicinal Product (VMP)}
@@ -372,7 +380,7 @@
 #'
 #' Contains version information for the Drug Tariff data sets.
 #'
-#' @format A data frame with 2 columns:
+#' @format A data frame with `r length(colnames(drug_tariff_version))` columns:
 #' \describe{
 #'   \item{section}{Drug Tariff part:
 #'    \describe{
@@ -398,7 +406,7 @@
 #' 
 #' Details (subsequent paragraphs)...
 #'
-#' @format A data frame with 4 columns:
+#' @format A data frame with `r length(colnames(unit_costs_hsc_community_hcp))` columns:
 #' \describe{
 #'   \item{year}{Unit Costs Manual year}
 #'   \item{band}{...}
@@ -421,7 +429,7 @@
 #' 
 #' Details (subsequent paragraphs)...
 #'
-#' @format A data frame with 5 columns:
+#' @format A data frame with `r length(colnames(unit_costs_hsc_gp))` columns:
 #' \describe{
 #'   \item{year}{Unit Costs Manual year}
 #'   \item{variable}{...}
@@ -445,7 +453,7 @@
 #' 
 #' Details (subsequent paragraphs)...
 #'
-#' @format A data frame with 5 columns:
+#' @format A data frame with `r length(colnames(unit_costs_hsc_gp_nurse))` columns:
 #' \describe{
 #'   \item{year}{Unit Costs Manual year}
 #'   \item{variable}{...}
@@ -469,7 +477,7 @@
 #' 
 #' Details (subsequent paragraphs)...
 #'
-#' @format A data frame with 4 columns:
+#' @format A data frame with `r length(colnames(unit_costs_hsc_hospital_doctor))` columns:
 #' \describe{
 #'   \item{year}{Unit Costs Manual year}
 #'   \item{job_title}{...}
@@ -492,7 +500,7 @@
 #' 
 #' Details (subsequent paragraphs)...
 #'
-#' @format A data frame with 4 columns:
+#' @format A data frame with `r length(colnames(unit_costs_hsc_nurse))` columns:
 #' \describe{
 #'   \item{year}{Unit Costs Manual year}
 #'   \item{band}{...}
@@ -515,7 +523,7 @@
 #' 
 #' Details (subsequent paragraphs)...
 #'
-#' @format A data frame with 9 columns:
+#' @format A data frame with `r length(colnames(unit_costs_hsc_training_costs_doctor))` columns:
 #' \describe{
 #'   \item{year}{Unit Costs Manual year}
 #'   \item{job_title}{...}
@@ -543,7 +551,7 @@
 #' 
 #' Details (subsequent paragraphs)...
 #'
-#' @format A data frame with 7 columns:
+#' @format A data frame with `r length(colnames(unit_costs_hsc_training_costs_hcp))` columns:
 #' \describe{
 #'   \item{year}{Unit Costs Manual year}
 #'   \item{job_title}{...}

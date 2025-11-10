@@ -37,7 +37,7 @@ drug_tariff_version <- tibble::tribble(
 # Drug Tariff Part VIII ---------------------------------------------
 
 # Function to download file, using the list names
-download_csv <- function(name) {
+download_viii_manual <- function(name) {
   viii_read <- list(
     cat_m = list(
       col_types = "ccdcd",
@@ -78,6 +78,27 @@ download_csv <- function(name) {
         col_names = viii_read[[name]]$col_names
       ) |>
         dplyr::select(all_of(viii_read[[name]]$col_order))
+      
+      # Additional manipulations for Part VIIIB
+      if (name == "viii_b") {
+        df <- df |> 
+          dplyr::mutate(additional_unit = if_else(pack_size == 1 & (special_container_indicator != "Special container" | is.na(special_container_indicator)), 
+                                                  "additional_unit", "minimum_quantity")) |> 
+          tidyr::pivot_wider(names_from = additional_unit,
+                             names_glue = "{additional_unit}_{.value}",
+                             values_from = c(pack_size, basic_price_in_p, vmpp_snomed_code)) |> 
+          dplyr::select(medicine, 
+                        unit_of_measure, 
+                        minimum_quantity_pack_size, 
+                        minimum_quantity_basic_price_in_p, 
+                        additional_unit_pack_size, 
+                        additional_unit_basic_price_in_p, 
+                        formulations, 
+                        special_container_indicator, 
+                        vmp_snomed_code, 
+                        minimum_quantity_vmpp_snomed_code, 
+                        additional_unit_vmpp_snomed_code)
+      }
 
       # Create dataset name
       df_name <- paste0("drug_tariff_", name)
@@ -93,11 +114,12 @@ download_csv <- function(name) {
 }
 
 # Loop through and download all files
-purrr::walk(names(viii_links), download_csv)
+purrr::walk(names(viii_links), download_viii_manual)
 
 # Drug Tariff Part IX ---------------------------------------------------------
 
 # Download IX file to temporary file, read in and save as R object
+download_ix_manual <- function()
 withr::with_tempfile("ix_dl_file",
   {
     # Print temporary file name
@@ -134,3 +156,4 @@ withr::with_tempfile("ix_dl_file",
 
 # Save version table
 usethis::use_data(drug_tariff_version, overwrite = T)
+

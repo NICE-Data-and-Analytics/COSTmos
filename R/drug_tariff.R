@@ -24,22 +24,33 @@ drug_tariff_col_spec <- list(
     vmpp_snomed_code = reactable::colDef(name = "VMPP SNOMED code")
   ),
   viii_b = list(
-    medicine = reactable::colDef(name = "Medicine"),
-    pack_size = reactable::colDef(
-      name = "Pack size",
+    medicine = reactable::colDef(name = "Product"),
+    unit_of_measure = reactable::colDef(name = "Unit of measure"),
+    minimum_quantity_pack_size = reactable::colDef(
+      name = "Minimum quantity pack size",
       format = reactable::colFormat(separators = T)
     ),
-    unit_of_measure = reactable::colDef(name = "Unit of measure"),
-    basic_price_in_p = reactable::colDef(
-      name = "Basic price (\u00a3)",
+    minimum_quantity_basic_price_in_p = reactable::colDef(
+      name = "Minimum quantity basic price (\u00a3)",
+      cell = function(value) {
+        format(round(value / 100, 2), nsmall = 2, big.mark = ",")
+      }
+    ),
+    additional_unit_pack_size = reactable::colDef(
+      name = "Additional unit pack size",
+      format = reactable::colFormat(separators = T)
+    ),
+    additional_unit_basic_price_in_p = reactable::colDef(
+      name = "Additional unit basic price (\u00a3)",
       cell = function(value) {
         format(round(value / 100, 2), nsmall = 2, big.mark = ",")
       }
     ),
     formulations = reactable::colDef(name = "Formulations"),
     special_container_indicator = reactable::colDef(name = "Special container indicator"),
-    vmp_snomed_code = reactable::colDef(name = "VMP SNOMED code"),
-    vmpp_snomed_code = reactable::colDef(name = "VMPP SNOMED code")
+    vmp_snomed_code = reactable::colDef(name = "Product VMP SNOMED code"),
+    minimum_quantity_vmpp_snomed_code = reactable::colDef(name = "Minimum quantity VMPP SNOMED code"),
+    additional_unit_vmpp_snomed_code = reactable::colDef(name = "Additional unit VMPP SNOMED code")
   ),
   ix = list(
     drug_tariff_part = reactable::colDef(name = "Drug Tariff part"),

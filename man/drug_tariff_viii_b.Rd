@@ -7,13 +7,18 @@
 Unlicensed Medicines with a Price Per Unit Above a Minimum Quantity
 (November 2025)}
 \format{
-A data frame with 8 columns:
+A data frame with 11 columns:
 \describe{
 \item{medicine}{Name of the medicinal product}
-\item{pack_size}{Pack size}
 \item{unit_of_measure}{Unit of measure}
-\item{basic_price_in_p}{Basic price on which payment will be calculated for
-the dispensing of that drug, in pennies. This is converted to GBP in the COSTmos dashboard.}
+\item{minimum_quantity_pack_size}{Pack size for the minimum quantity}
+\item{minimum_quantity_basic_price_in_p}{Basic price on which payment will
+be calculated for the dispensing of the minimum quantity of that drug, in
+pennies. This is converted to GBP in the COSTmos dashboard.}
+\item{additional_unit_pack_size}{Pack size for the additional unit}
+\item{additional_unit_basic_price_in_p}{Basic price on which payment will
+be calculated for the dispensing of each additional unit of that drug above
+the minimum quantity, in pennies. This is converted to GBP in the COSTmos dashboard.}
 \item{formulations}{The formulations covered by the Drug Tariff:
 \describe{
 \item{STD}{Standard formulation including standard flavours}
@@ -29,7 +34,10 @@ the dispensing of that drug, in pennies. This is converted to GBP in the COSTmos
 \item{special_container_indicator}{"Special container" if product is in a
 special container. NA if not.}
 \item{vmp_snomed_code}{SNOMED code for the virtual medicinal product (VMP)}
-\item{vmpp_snomed_code}{SNOMED code for the virtual medicinal product pack (VMPP)}
+\item{minimum_quantity_vmpp_snomed_code}{SNOMED code for the virtual
+medicinal product pack (VMPP) of the minimum quantity}
+\item{additional_unit_vmpp_snomed_code}{SNOMED code for the virtual
+medicinal product pack (VMPP) of the additional unit}
 }
 }
 \source{
