@@ -52,6 +52,24 @@ drug_tariff_col_spec <- list(
     minimum_quantity_vmpp_snomed_code = reactable::colDef(name = "Minimum quantity VMPP SNOMED code"),
     additional_unit_vmpp_snomed_code = reactable::colDef(name = "Additional unit VMPP SNOMED code")
   ),
+  viii_d = list(
+    medicine = reactable::colDef(name = "Medicine"),
+    pack_size = reactable::colDef(
+      name = "Pack size",
+      format = reactable::colFormat(separators = T)
+    ),
+    unit_of_measure = reactable::colDef(name = "Unit of measure"),
+    basic_price_in_p = reactable::colDef(
+      name = "Basic price (\u00a3)",
+      cell = function(value) {
+        format(round(value / 100, 2), nsmall = 2, big.mark = ",")
+      }
+    ),
+    formulations = reactable::colDef(name = "Formulations"),
+    special_container_indicator = reactable::colDef(name = "Special container indicator"),
+    vmp_snomed_code = reactable::colDef(name = "VMP SNOMED code"),
+    vmpp_snomed_code = reactable::colDef(name = "VMPP SNOMED code")
+  ),
   ix = list(
     drug_tariff_part = reactable::colDef(name = "Drug Tariff part"),
     vmp_name = reactable::colDef(name = "VMP name"),
@@ -80,6 +98,3 @@ drug_tariff_col_spec <- list(
     bnf_code = reactable::colDef(name = "BNF code")
   )
 )
-
-# VIII D is the same as VIII B
-drug_tariff_col_spec$viii_d <- drug_tariff_col_spec$viii_b
