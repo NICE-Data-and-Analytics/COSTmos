@@ -117,10 +117,18 @@ costmos_app <- function(...) {
             bslib::layout_sidebar(
               fillable = TRUE,
               sidebar = bslib::sidebar(
-                shiny::selectInput(
+                width = "360px", #to avoid wrapping text
+                #small row of links above the checkboxes
+                htmltools::div(
+                  style="margin-bottom: 0.5rem;",
+                  shiny::actionLink("ncc_select_all","Select all"),
+                  " | ",
+                  shiny::actionLink("ncc_clear_all","Clear all")
+                ),
+                shiny::checkboxGroupInput(
                   "ncc_service_code",
-                  label = "Service Code",
-                  choices = c("All" = "_ALL_") # remaining choices defined on load
+                  label = "Department Code", #changedtodept
+                  choices = NULL # populated from server
                 )
               ),
               htmltools::h3(shiny::textOutput("ncc_title")),
@@ -503,38 +511,79 @@ costmos_app <- function(...) {
     ncc_df <- shiny::reactive({
       ncc
     })
-
-    # Populate Service Code choices (with "All")
-    shiny::observeEvent(ncc_df(),
-      {
-        df <- ncc_df()
-        # Assumes CSV has clean "Service Code" column with alphabetic values
-        levels <- sort(unique(df[["service_code"]]))
-        shiny::updateSelectInput(
-          session, "ncc_service_code",
-          choices = c("All" = "_ALL_", levels),
-          selected = "_ALL_"
-        )
-      },
-      ignoreInit = FALSE
-    )
-
-    # Filtered data
-    ncc_filtered <- shiny::reactive({
-      sc <- input$ncc_service_code
-      shiny::req(sc)
+    
+    # All distinct service codes
+    ncc_service_levels <- shiny::reactive({
       df <- ncc_df()
+      sort(unique(df[["department_code"]])) #changedtodept
+    })
 
-      if (identical(sc, "_ALL_")) return(df)
+    # Populate Service Code choices (select all by default)
+    shiny::observeEvent(ncc_df(),{
+      shiny::updateCheckboxGroupInput(
+        session, "ncc_service_code",
+        choices = ncc_service_levels(),
+        selected = ncc_service_levels()
+      )
+    }, ignoreInit = FALSE
+    )
+    
+    # NEW: Select all / Clear all buttons --
+    
+    # When "Select all" actionLink is clicked
+    observeEvent(input$ncc_select_all, {
+      shiny::updateCheckboxGroupInput(
+        session, "ncc_service_code",
+        selected = ncc_service_levels()
+      )
+    })
+    
+    # When "Clear all" actionLink is clicked
+    observeEvent(input$ncc_clear_all, {
+      shiny::updateCheckboxGroupInput(
+        session, "ncc_service_code",
+        selected = character(0)   # nothing selected
+      )
+    })
+    
+    # Filtered data (vector input now)
+    ncc_filtered <- shiny::reactive({
+      df <- ncc_df()
+      sc <- input$ncc_service_code
+      
+      # If nothing selected, return empty data frame
+      if (is.null(sc) || length(sc) == 0) {
+        return(df[0, , drop = FALSE])
+      }
+      
+      #If all selected, return full data
+      if (length(sc)==length(ncc_service_levels())){
+        return (df)
+      }
 
-      df[df[["service_code"]] == sc, , drop = FALSE]
+      df[df[["department_code"]] %in% sc, , drop = FALSE]
     })
 
     # Title
     output$ncc_title <- shiny::renderText({
       sc <- input$ncc_service_code
-      label <- if (is.null(sc) || identical(sc, "_ALL_")) "" else paste0(" \u2014 Service Code: ", sc)
-      paste0("National Cost Collection", label)
+      all_sc <- ncc_service_levels()
+      
+      if (is.null(sc) || length(sc) == 0) {
+        # Nothing selected
+        return("National Cost Collection — No department codes selected") #changedtodept
+      }
+      
+      if (length(sc) == length(all_sc)) {
+        # All selected
+        return("National Cost Collection — All department codes") #changedtodept
+      }
+      
+      # Some selected
+      paste0(
+        "National Cost Collection — Department Code: ", #changedtodept
+        paste(sc, collapse = ", ")
+      )
     })
 
     # Table
@@ -544,9 +593,9 @@ costmos_app <- function(...) {
         searchable = TRUE,
         defaultPageSize = 10,
         columns = list(
-          service_code = reactable::colDef(name = "Service Code"),
-          dept_or_currency_code = reactable::colDef(name = "Dept or Currency Code"),
-          dept_or_currency_desc = reactable::colDef(name = "Dept or Currency Desc"),
+          department_code = reactable::colDef(name = "Department Code"), #changedtodept
+          currency_code = reactable::colDef(name = "Currency Code"), #changedtodept
+          currency_desc = reactable::colDef(name = "Currency Description"), #changedtodept
           activity = reactable::colDef(name = "Activity",
                             format = reactable::colFormat(separators = T)),
           unit_cost = reactable::colDef(name = "Unit cost (\u00a3)",
@@ -586,10 +635,20 @@ costmos_app <- function(...) {
       )
     })
 
-    # Download button
+    # Download button - filename reflects selection
     output$ncc_download_button <- shiny::renderUI({
       sc <- input$ncc_service_code
-      label <- if (is.null(sc) || identical(sc, "_ALL_")) NA_character_ else paste0(stringr::str_to_lower(stringr::str_replace_all(sc, " ", "_")), "_")
+      all_sc <- ncc_service_levels()
+      
+      label <- if (is.null(sc) || length(sc) == 0 || 
+                   length(sc) == length (all_sc)) {
+        NA_character_ 
+      } else {
+        clean_sc <- stringr:: str_to_lower(
+          stringr::str_replace_all(sc, " ", "_")
+        )
+        paste0(paste(clean_sc, collapse = "_"), "_")
+      }
 
       csvDownloadButton("ncc_table",
         filename = glue::glue("ncc_extract_{label}{stringr::str_replace_all(ncc_year(), '_', '/')}.csv", .na = "")
