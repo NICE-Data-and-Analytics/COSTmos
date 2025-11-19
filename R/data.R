@@ -84,7 +84,7 @@
 #'
 #' @format A data frame with `r length(colnames(ncc))` columns:
 #' \describe{
-#'   \item{department_code}{Department or service area, e.g. `"Elective Inpatients"`, `"Nuclear Medicine"`}
+#'   \item{department_code}{Department, e.g. `"Elective Inpatients"`, `"Nuclear Medicine"`}
 #'   \item{currency_code}{Activity code or HRG for the activity}
 #'   \item{currency_description}{Description of the activity}
 #'   \item{activity}{Annual number of these activities recorded}
