@@ -7,9 +7,9 @@
 \format{
 A data frame with 6 columns:
 \describe{
-\item{service_code}{Service or area, e.g. \code{"Elective Inpatients"}, \code{"Nuclear Medicine"}}
-\item{dept_or_currency_code}{Activity code or HRG for the activity}
-\item{dept_or_currency_desc}{Description of the activity}
+\item{department_code}{Department, e.g. \code{"Elective Inpatients"}, \code{"Nuclear Medicine"}}
+\item{currency_code}{Activity code or HRG for the activity}
+\item{currency_desc}{Description of the activity}
 \item{activity}{Annual number of these activities recorded}
 \item{unit_cost}{Average cost per activity}
 \item{cost}{Total cost per activity}

@@ -127,7 +127,7 @@ costmos_app <- function(...) {
                 ),
                 shiny::checkboxGroupInput(
                   "ncc_service_code",
-                  label = "Department Code", #changedtodept
+                  label = "Department Code", 
                   choices = NULL # populated from server
                 )
               ),
@@ -515,7 +515,7 @@ costmos_app <- function(...) {
     # All distinct service codes
     ncc_service_levels <- shiny::reactive({
       df <- ncc_df()
-      sort(unique(df[["department_code"]])) #changedtodept
+      sort(unique(df[["department_code"]])) 
     })
 
     # Populate Service Code choices (select all by default)
@@ -531,7 +531,7 @@ costmos_app <- function(...) {
     # NEW: Select all / Clear all buttons --
     
     # When "Select all" actionLink is clicked
-    observeEvent(input$ncc_select_all, {
+    shiny::observeEvent(input$ncc_select_all, {
       shiny::updateCheckboxGroupInput(
         session, "ncc_service_code",
         selected = ncc_service_levels()
@@ -539,7 +539,7 @@ costmos_app <- function(...) {
     })
     
     # When "Clear all" actionLink is clicked
-    observeEvent(input$ncc_clear_all, {
+    shiny::observeEvent(input$ncc_clear_all, {
       shiny::updateCheckboxGroupInput(
         session, "ncc_service_code",
         selected = character(0)   # nothing selected
@@ -571,17 +571,17 @@ costmos_app <- function(...) {
       
       if (is.null(sc) || length(sc) == 0) {
         # Nothing selected
-        return("National Cost Collection — No department codes selected") #changedtodept
+        return("National Cost Collection \u2014 No department codes selected") 
       }
       
       if (length(sc) == length(all_sc)) {
         # All selected
-        return("National Cost Collection — All department codes") #changedtodept
+        return("National Cost Collection \u2014 All department codes") 
       }
       
       # Some selected
       paste0(
-        "National Cost Collection — Department Code: ", #changedtodept
+        "National Cost Collection \u2014 Department Code: ", 
         paste(sc, collapse = ", ")
       )
     })
@@ -593,9 +593,9 @@ costmos_app <- function(...) {
         searchable = TRUE,
         defaultPageSize = 10,
         columns = list(
-          department_code = reactable::colDef(name = "Department Code"), #changedtodept
-          currency_code = reactable::colDef(name = "Currency Code"), #changedtodept
-          currency_desc = reactable::colDef(name = "Currency Description"), #changedtodept
+          department_code = reactable::colDef(name = "Department Code"), 
+          currency_code = reactable::colDef(name = "Currency Code"), 
+          currency_desc = reactable::colDef(name = "Currency Description"), 
           activity = reactable::colDef(name = "Activity",
                             format = reactable::colFormat(separators = T)),
           unit_cost = reactable::colDef(name = "Unit cost (\u00a3)",

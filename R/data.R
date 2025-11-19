@@ -86,7 +86,7 @@
 #' \describe{
 #'   \item{department_code}{Department, e.g. `"Elective Inpatients"`, `"Nuclear Medicine"`}
 #'   \item{currency_code}{Activity code or HRG for the activity}
-#'   \item{currency_description}{Description of the activity}
+#'   \item{currency_desc}{Description of the activity}
 #'   \item{activity}{Annual number of these activities recorded}
 #'   \item{unit_cost}{Average cost per activity}
 #'   \item{cost}{Total cost per activity}
