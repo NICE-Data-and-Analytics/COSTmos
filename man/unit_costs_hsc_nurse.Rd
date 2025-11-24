@@ -3,14 +3,14 @@
 \docType{data}
 \name{unit_costs_hsc_nurse}
 \alias{unit_costs_hsc_nurse}
-\title{Title for unit_costs_hsc_nurse ...}
+\title{Unit costs for qualified nurses (Agenda for Change bands)}
 \format{
 A data frame with 4 columns:
 \describe{
-\item{year}{Unit Costs Manual year}
-\item{band}{...}
-\item{qualification_cost}{...}
-\item{cost_per_working_hour}{...}
+\item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
+\item{band}{NHS Agenda for Change band (Band 4–Band 9)}
+\item{qualification_cost}{Whether qualification costs are included or excluded}
+\item{cost_per_working_hour}{Cost per working hours (annual estimate expressed in £)}
 }
 }
 \source{
@@ -23,10 +23,16 @@ of Health and Social Care Manual
 unit_costs_hsc_nurse
 }
 \description{
-Description (1st paragraph)...
+This dataset provides the estimates of the cost per working hour
+for qualified nurses in the UK. These are informed by the
+\href{https://research.kent.ac.uk/corec/unit-costs-2022-2027/}{Unit Costs of Health and Social Care Manual}
+published by the Care and Outcomes Research Centre (COReC), which is designed
+to support economic evaluation in the UK.
 }
 \details{
-Details (subsequent paragraphs)...
+The table shows hourly costs for bands 4 through 9, inclusive or exclusive of
+qualification cost. Each row corresponds to a band and year and its corresponding
+unit cost per working hour.
 }
 \seealso{
 Other {unit_costs_hsc_tables}: 

@@ -3,15 +3,15 @@
 \docType{data}
 \name{unit_costs_hsc_gp}
 \alias{unit_costs_hsc_gp}
-\title{Title for unit_costs_hsc_gp ...}
+\title{Unit costs for general practitioners (GPs)}
 \format{
 A data frame with 5 columns:
 \describe{
-\item{year}{Unit Costs Manual year}
-\item{variable}{...}
-\item{qualification_cost}{...}
-\item{direct_care_staff_cost}{...}
-\item{cost}{...}
+\item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
+\item{variable}{Type of costs measure (e.g., per minute of patient contact)}
+\item{qualification_cost}{Whether qualification costs are included or excluded}
+\item{direct_care_staff_cost}{Whether direct care staff costs are included or excluded}
+\item{cost}{Value of the unit cost estimate (expressed in £)}
 }
 }
 \source{
@@ -24,10 +24,14 @@ of Health and Social Care Manual
 unit_costs_hsc_gp
 }
 \description{
-Description (1st paragraph)...
+This dataset provides unit costs for GPs in the UK. These are informed by
+the \href{https://research.kent.ac.uk/corec/unit-costs-2022-2027/}{Unit Costs of Health and Social Care Manual}
+published by the Care and Outcomes Research Centre (COReC), which is designed
+to support healthcare economic evaluations in the UK.
 }
 \details{
-Details (subsequent paragraphs)...
+The table includes GPs costs across years and different activity measures,
+inclusive or exclusive of qualification and direct care staff costs.
 }
 \seealso{
 Other {unit_costs_hsc_tables}: 

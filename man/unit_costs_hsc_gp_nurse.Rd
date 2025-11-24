@@ -3,15 +3,16 @@
 \docType{data}
 \name{unit_costs_hsc_gp_nurse}
 \alias{unit_costs_hsc_gp_nurse}
-\title{Title for unit_costs_hsc_gp_nurse ...}
+\title{Unit costs for general practice nurses}
 \format{
 A data frame with 5 columns:
 \describe{
-\item{year}{Unit Costs Manual year}
-\item{variable}{...}
-\item{qualification_cost}{...}
-\item{ratio_direct_to_indirect_time}{...}
-\item{cost}{...}
+\item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
+\item{variable}{Type of costs measure (e.g., per working hour)}
+\item{qualification_cost}{whether qualification costs are included or excluded}
+\item{ratio_direct_to_indirect_time}{whether the ratio of direct to indirect
+time is included or excluded. See 'Details'.}
+\item{cost}{value of the unit cost estimate (expressed in £)}
 }
 }
 \source{
@@ -24,10 +25,37 @@ of Health and Social Care Manual
 unit_costs_hsc_gp_nurse
 }
 \description{
-Description (1st paragraph)...
+This dataset provides unit costs for practice nurses in the UK. These are
+informed by the \href{https://research.kent.ac.uk/corec/unit-costs-2022-2027/}{Unit Costs of Health and Social Care Manual}
+published by the Care and Outcomes Research Centre (COReC), which is designed to
+support healthcare economic evaluations in the UK.
 }
 \details{
-Details (subsequent paragraphs)...
+The table includes general practice nurse costs across years and different activity measures,
+inclusive or exclusive of qualification costs and the ratio of direct to indirect time.
+
+Note, only the cost per working hour excluding the ratio of direct to indirect
+time is from the selected Unit Costs report. All other values are calculated
+using that figure and:
+\itemize{
+\item The duration of contact per surgery consultation (15.5 mins) from the 2015
+Unit Costs report [\href{https://kar.kent.ac.uk/60240/}{1}]
+\item The average duration of nurse face-to-face (10 mins) and telephone (6 mins)
+consultations from Stevens et al. (2017) [\href{https://doi.org/10.1136/bmjopen-2017-018261}{2}]
+}
+
+Including the ratio of direct to indirect time on face-to-face contacts
+factors in the 1:0.30 value for practice nurses from the 2015 Unit Costs report,
+which suggests that each hour spent with a patient requires 1.3 paid hours.
+[\href{https://kar.kent.ac.uk/60240/}{1}]
+}
+\references{
+\enumerate{
+\item PSSRU, Unit Costs of Health and Social Care 2015 (2015). \url{https://kar.kent.ac.uk/60240/}
+\item Stevens S, Bankhead C, Mukhtar T, et al. (2017) Patient-level and practice-level
+factors associated with consultation duration: a cross-sectional analysis of
+over one million consultations in English primary care. \url{https://doi.org/10.1136/bmjopen-2017-018261}
+}
 }
 \seealso{
 Other {unit_costs_hsc_tables}: 
