@@ -3,14 +3,14 @@
 \docType{data}
 \name{unit_costs_hsc_hospital_doctor}
 \alias{unit_costs_hsc_hospital_doctor}
-\title{Title for unit_costs_hsc_hospital_doctor ...}
+\title{Unit costs for hospital doctors.}
 \format{
 A data frame with 4 columns:
 \describe{
-\item{year}{Unit Costs Manual year}
-\item{job_title}{...}
-\item{qualification_cost}{...}
-\item{cost_per_working_hour}{...}
+\item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
+\item{job_title}{Hospital doctor role: e.g. "Registrar", Consultant}
+\item{qualification_cost}{Whether qualification costs are included or excluded}
+\item{cost_per_working_hour}{Cost per working hours (annual estimate expressed in £)}
 }
 }
 \source{
@@ -23,10 +23,15 @@ of Health and Social Care Manual
 unit_costs_hsc_hospital_doctor
 }
 \description{
-Description (1st paragraph)...
+This dataset provides the estimates of the cost per working hour for
+hospital-based doctors in the UK. These are informed by the
+\href{https://research.kent.ac.uk/corec/unit-costs-2022-2027/}{Unit Costs of Health and Social Care Manual}
+published by the Care and Outcomes Research Centre (COReC), which is designed
+to support economic evaluation in the UK.
 }
 \details{
-Details (subsequent paragraphs)...
+The table shows hourly costs across different grades of seniority, inclusive
+or exclusive of qualification costs.
 }
 \seealso{
 Other {unit_costs_hsc_tables}: 

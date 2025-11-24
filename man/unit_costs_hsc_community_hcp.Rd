@@ -3,14 +3,15 @@
 \docType{data}
 \name{unit_costs_hsc_community_hcp}
 \alias{unit_costs_hsc_community_hcp}
-\title{Title for unit_costs_hsc_community_hcp...}
+\title{Unit costs for community-based health care professionals}
 \format{
 A data frame with 4 columns:
 \describe{
-\item{year}{Unit Costs Manual year}
-\item{band}{...}
-\item{cost_per_working_hour}{...}
-\item{job_title}{...}
+\item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
+\item{band}{NHS Agenda for Change band (Band 4–Band 9)}
+\item{cost_per_working_hour}{Cost per working hours (annual estimate expressed in £)}
+\item{job_title}{Representative  professional roles included in the band (
+e.g. physiotherapists, clinical psychologists)}
 }
 }
 \source{
@@ -23,10 +24,16 @@ of Health and Social Care Manual
 unit_costs_hsc_community_hcp
 }
 \description{
-Description (1st paragraph)...
+This dataset provides the estimates of the cost per working hour associated
+with a variety of community-based health professionals in the UK. These are
+informed by the \href{https://research.kent.ac.uk/corec/unit-costs-2022-2027/}{Unit Costs of Health and Social Care Manual}
+published by the Care and Outcomes Research Centre (COReC), which is designed to support
+healthcare economic evaluations in the UK.
 }
 \details{
-Details (subsequent paragraphs)...
+The tables includes hourly costs for a variety of health professionals organised
+by NHS Agenda for Change bands. Each row corresponds to a specific band and
+year, with associated unit cost values and representative job titles.
 }
 \seealso{
 Other {unit_costs_hsc_tables}: 

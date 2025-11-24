@@ -404,20 +404,20 @@
 #'
 #' This dataset provides the estimates of the cost per working hour associated 
 #' with a variety of community-based health professionals in the UK. These are
-#' informed by the Unit Costs of Health and Social Care Manual published by the 
-#' Personal Social Services Research Units (PSSRU), which is designed to support 
+#' informed by the [Unit Costs of Health and Social Care Manual](https://research.kent.ac.uk/corec/unit-costs-2022-2027/) 
+#' published by the Care and Outcomes Research Centre (COReC), which is designed to support 
 #' healthcare economic evaluations in the UK. 
 #' 
 #' The tables includes hourly costs for a variety of health professionals organised
-#' by NHS Agenda for Change band. Each row corresponds to a specific band and 
+#' by NHS Agenda for Change bands. Each row corresponds to a specific band and 
 #' year, with associated unit cost values and representative job titles.
 #' 
-#' @format A data frame with `r length(colnames(unit_costs_hsc_gp))` columns:
+#' @format A data frame with `r length(colnames(unit_costs_hsc_community_hcp))` columns:
 #' \describe{
 #'   \item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
 #'   \item{band}{NHS Agenda for Change band (Band 4–Band 9)}
-#'   \item{cost}{Cost per working hours (annual estimate expressed in £)}
-#'   \item{job titles}{Representative  professional roles included in the band (
+#'   \item{cost_per_working_hour}{Cost per working hours (annual estimate expressed in £)}
+#'   \item{job_title}{Representative  professional roles included in the band (
 #'   e.g. physiotherapists, clinical psychologists)}
 #' }
 #' 
@@ -433,20 +433,20 @@
 #' Unit costs for general practitioners (GPs)
 #'
 #' This dataset provides unit costs for GPs in the UK. These are informed by 
-#' the Unit Costs of Health and Social Care Manual published by the 
-#' Personal Social Services Research Unit (PSSRU), which is designed to support 
-#' healthcare economic evaluations in the UK. 
+#' the [Unit Costs of Health and Social Care Manual](https://research.kent.ac.uk/corec/unit-costs-2022-2027/) 
+#' published by the Care and Outcomes Research Centre (COReC), which is designed 
+#' to support healthcare economic evaluations in the UK. 
 #' 
 #' The table includes GPs costs across years and different activity measures,
-#' inclusive or exclusive of qualification and direct care costs.
+#' inclusive or exclusive of qualification and direct care staff costs.
 #'
-#' @format A data frame with `r length(colnames(unit_costs_hsc_gp_nurse))` columns:
+#' @format A data frame with `r length(colnames(unit_costs_hsc_gp))` columns:
 #' \describe{
 #'   \item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
 #'   \item{variable}{Type of costs measure (e.g., per minute of patient contact)}
-#'   \item{qualification_cost}{whether qualification costs are included or excluded}
-#'   \item{direct_to_indirect_time}{whether direct care staff costs are included or excluded}
-#'   \item{cost}{value of the unit cost estimate (expressed in £)}
+#'   \item{qualification_cost}{Whether qualification costs are included or excluded}
+#'   \item{direct_care_staff_cost}{Whether direct care staff costs are included or excluded}
+#'   \item{cost}{Value of the unit cost estimate (expressed in £)}
 #' }
 #' 
 #' @source Care and Outcomes Research Centre (COReC) at the University of Kent 
@@ -458,22 +458,36 @@
 
 "unit_costs_hsc_gp"
 
-#' Unit costs for practice nurses.
+#' Unit costs for general practice nurses
 #'
 #' This dataset provides unit costs for practice nurses in the UK. These are 
-#' informed by the Unit Costs of Health and Social Care Manual published 
-#' by the Personal Social Services Research Unit (PSSRU), which is designed to 
-#' support healthvare economic evaluations in the UK. 
+#' informed by the [Unit Costs of Health and Social Care Manual](https://research.kent.ac.uk/corec/unit-costs-2022-2027/) 
+#' published by the Care and Outcomes Research Centre (COReC), which is designed to 
+#' support healthcare economic evaluations in the UK. 
 #' 
-#' The table includes GPs costs across years and different activity measures,
-#' inclusive or exclusive of qualification and direct care costs.
+#' The table includes general practice nurse costs across years and different activity measures,
+#' inclusive or exclusive of qualification costs and the ratio of direct to indirect time.
+#' 
+#' Note, only the cost per working hour excluding the ratio of direct to indirect 
+#' time is from the selected Unit Costs report. All other values are calculated 
+#' using that figure and:
+#' - The duration of contact per surgery consultation (15.5 mins) from the 2015 
+#'  Unit Costs report \[[1](https://kar.kent.ac.uk/60240/)\]
+#' - The average duration of nurse face-to-face (10 mins) and telephone (6 mins) 
+#'  consultations from Stevens et al. (2017) \[[2](https://doi.org/10.1136/bmjopen-2017-018261)\]
+#' 
+#' Including the ratio of direct to indirect time on face-to-face contacts 
+#' factors in the 1:0.30 value for practice nurses from the 2015 Unit Costs report, 
+#' which suggests that each hour spent with a patient requires 1.3 paid hours. 
+#' \[[1](https://kar.kent.ac.uk/60240/)\]
 #'
 #' @format A data frame with `r length(colnames(unit_costs_hsc_gp_nurse))` columns:
 #' \describe{
 #'   \item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
-#'   \item{variable}{Type of costs measure (e.g., per minute of patient contact)}
+#'   \item{variable}{Type of costs measure (e.g., per working hour)}
 #'   \item{qualification_cost}{whether qualification costs are included or excluded}
-#'   \item{direct_to_indirect_time}{whether direct care staff costs are included or excluded}
+#'   \item{ratio_direct_to_indirect_time}{whether the ratio of direct to indirect 
+#'   time is included or excluded. See 'Details'.}
 #'   \item{cost}{value of the unit cost estimate (expressed in £)}
 #' }
 #' 
@@ -483,15 +497,22 @@
 #' <https://research.kent.ac.uk/corec/unit-costs-2022-2027/>
 #' 
 #' @family {unit_costs_hsc_tables}
+#' 
+#' @references
+#' 1. PSSRU, Unit Costs of Health and Social Care 2015 (2015). <https://kar.kent.ac.uk/60240/>
+#' 2. Stevens S, Bankhead C, Mukhtar T, et al. (2017) Patient-level and practice-level 
+#'  factors associated with consultation duration: a cross-sectional analysis of 
+#'  over one million consultations in English primary care. <https://doi.org/10.1136/bmjopen-2017-018261>
 
 "unit_costs_hsc_gp_nurse"
 
 #' Unit costs for hospital doctors.
 #'
 #' This dataset provides the estimates of the cost per working hour for 
-#' hospital-based doctors in the UK. These are informed by the Unit Costs of 
-#' Health and Social Care Manual published by the Personal Social Services 
-#' Research Unit (PSSRU), which is designed to support economic evaluation in the UK. 
+#' hospital-based doctors in the UK. These are informed by the 
+#' [Unit Costs of Health and Social Care Manual](https://research.kent.ac.uk/corec/unit-costs-2022-2027/) 
+#' published by the Care and Outcomes Research Centre (COReC), which is designed 
+#' to support economic evaluation in the UK. 
 #' 
 #' The table shows hourly costs across different grades of seniority, inclusive
 #' or exclusive of qualification costs.
@@ -500,7 +521,7 @@
 #' \describe{
 #'   \item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
 #'   \item{job_title}{Hospital doctor role: e.g. "Registrar", Consultant}
-#'   \item{qualification_cost}{whether qualification costs are included or excluded}
+#'   \item{qualification_cost}{Whether qualification costs are included or excluded}
 #'   \item{cost_per_working_hour}{Cost per working hours (annual estimate expressed in £)}
 #' }
 #' 
@@ -516,9 +537,10 @@
 #' Unit costs for qualified nurses (Agenda for Change bands)
 #'
 #' This dataset provides the estimates of the cost per working hour 
-#' for qualified nurses in the UK. These are informed by the Unit Costs of 
-#' Health and Social Care Manual published by the Personal Social Services 
-#' Research Unit (PSSRU), which is designed to support economic evaluation in the UK. 
+#' for qualified nurses in the UK. These are informed by the 
+#' [Unit Costs of Health and Social Care Manual](https://research.kent.ac.uk/corec/unit-costs-2022-2027/) 
+#' published by the Care and Outcomes Research Centre (COReC), which is designed 
+#' to support economic evaluation in the UK. 
 #' 
 #' The table shows hourly costs for bands 4 through 9, inclusive or exclusive of 
 #' qualification cost. Each row corresponds to a band and year and its corresponding
@@ -528,7 +550,7 @@
 #' \describe{
 #'   \item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
 #'   \item{band}{NHS Agenda for Change band (Band 4–Band 9)}
-#'   \item{qualification_cost}{whether qualification costs are included or excluded}
+#'   \item{qualification_cost}{Whether qualification costs are included or excluded}
 #'   \item{cost_per_working_hour}{Cost per working hours (annual estimate expressed in £)}
 #' }
 #' 
@@ -544,27 +566,28 @@
 #' Qualification costs for doctors
 #'
 #' This dataset provides estimates of the training and qualification costs for
-#' doctors in the UK. These are informed by the Unit Costs of Health and Social 
-#' Care Manual published by the Personal Social Services Research Unit (PSSRU), 
+#' doctors in the UK. These are informed by the 
+#' [Unit Costs of Health and Social Care Manual](https://research.kent.ac.uk/corec/unit-costs-2022-2027/) 
+#' published by the Care and Outcomes Research Centre (COReC), 
 #' which is designed to support economic evaluation in the UK. 
 #' 
 #' The table includes the cost of qualification disaggregated into different items, 
 #' such as tuition fees, living expenses and loss production costs. It also 
-#' reports the expected annual cost discounted at 3.5%, which allows to use 
-#' these estimations for NICE economic evaluations.
+#' reports the expected annual cost discounted at 3.5%, which allows use of
+#' these estimates in NICE economic evaluations.
 #'
 #' @format A data frame with `r length(colnames(unit_costs_hsc_training_costs_doctor))` columns:
 #' \describe{
 #'   \item{year}{Unit Costs Manual year}
-#'   \item{job_title}{Doctor role (e.g.  G.P, consultants)
+#'   \item{job_title}{Doctor role (e.g.  G.P, consultants)}
 #'   \item{tuition}{Annual tuition fees}
 #'   \item{living_expenses_or_lost_production_costs}{Estimated living expenses 
 #'   or lost production during the period of training where staff are away from their posts}
-#'   \item{clinical_placements}{costs or benefits from clinical placement activities}
+#'   \item{clinical_placement}{Costs or benefits from clinical placement activities}
 #'   \item{placement_fee_plus_market_forces_factor}{Placement fees plus market forces factor, where applicable}
 #'   \item{salary_inc_overheads_and_postgraduate_centre_costs}{Salary including overheads and postgraduate centre costs}
 #'   \item{total_investment}{Total investment costs for the doctor qualification}
-#'   \item{expected_annual_cost_discounted_at_3pt5perc}{expecyed annual cost discounted at 3.5%}
+#'   \item{expected_annual_cost_discounted_at_3pt5perc}{Expected annual cost discounted at 3.5%}
 #' }
 #' 
 #' @source Care and Outcomes Research Centre (COReC) at the University of Kent 
@@ -580,26 +603,25 @@
 #'
 #' This dataset provides estimates of the training and qualification costs for
 #' a range of healthcare professionals in the UK. These are informed by the 
-#' Unit Costs of Health and Social Care Manual published by the Personal Social 
-#' Services Research Unit (PSSRU), which is designed to support economic 
-#' evaluation in the UK. 
+#' [Unit Costs of Health and Social Care Manual](https://research.kent.ac.uk/corec/unit-costs-2022-2027/) 
+#' published by the Care and Outcomes Research Centre (COReC), which is designed 
+#' to support economic evaluation in the UK. 
 #' 
 #' The table includes the cost of qualification disaggregated into different items, 
 #' such as tuition fees, living expenses and loss production costs. It also 
-#' reports the expected annual cost discounted at 3.5%, which allows to use 
-#' these estimations for NICE economic evaluations.
+#' reports the expected annual cost discounted at 3.5%, which allows use of
+#' these estimates in NICE economic evaluations.
 #'
 #' @format A data frame with `r length(colnames(unit_costs_hsc_training_costs_hcp))` columns:
 #' \describe{
-#' \describe{
 #'   \item{year}{Unit Costs Manual year}
-#'   \item{job_title}{Healthcare profesionnal roles (e.g.  Physiotherapist, nurse)
+#'   \item{job_title}{Healthcare professional roles (e.g. physiotherapist, nurse)}
 #'   \item{tuition}{Annual tuition fees}
 #'   \item{living_expenses_or_lost_production_costs}{Estimated living expenses 
 #'   or lost production during the period of training where staff are away from their posts}
-#'   \item{clinical_placements}{costs or benefits from clinical placement activities}
+#'   \item{clinical_placement}{Costs or benefits from clinical placement activities}
 #'   \item{total_investment}{Total investment costs for the healthcare professional qualification}
-#'   \item{expected_annual_cost_discounted_at_3pt5perc}{expecyed annual cost discounted at 3.5%}
+#'   \item{expected_annual_cost_discounted_at_3pt5perc}{Expected annual cost discounted at 3.5%}
 #' }
 #' 
 #' @source Care and Outcomes Research Centre (COReC) at the University of Kent 
