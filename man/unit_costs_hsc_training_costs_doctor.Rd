@@ -3,19 +3,20 @@
 \docType{data}
 \name{unit_costs_hsc_training_costs_doctor}
 \alias{unit_costs_hsc_training_costs_doctor}
-\title{Title for unit_costs_hsc_training_costs_doctor ...}
+\title{Qualification costs for doctors}
 \format{
 A data frame with 9 columns:
 \describe{
 \item{year}{Unit Costs Manual year}
-\item{job_title}{...}
-\item{tuition}{...}
-\item{living_expenses_or_lost_production_costs}{...}
-\item{clinical_placement}{...}
-\item{placement_fee_plus_market_forces_factor}{...}
-\item{salary_inc_overheads_and_postgraduate_centre_costs}{...}
-\item{total_investment}{...}
-\item{expected_annual_cost_discounted_at_3pt5perc}{...}
+\item{job_title}{Doctor role (e.g.  G.P, consultants)}
+\item{tuition}{Annual tuition fees}
+\item{living_expenses_or_lost_production_costs}{Estimated living expenses
+or lost production during the period of training where staff are away from their posts}
+\item{clinical_placement}{Costs or benefits from clinical placement activities}
+\item{placement_fee_plus_market_forces_factor}{Placement fees plus market forces factor, where applicable}
+\item{salary_inc_overheads_and_postgraduate_centre_costs}{Salary including overheads and postgraduate centre costs}
+\item{total_investment}{Total investment costs for the doctor qualification}
+\item{expected_annual_cost_discounted_at_3pt5perc}{Expected annual cost discounted at 3.5\%}
 }
 }
 \source{
@@ -28,10 +29,17 @@ of Health and Social Care Manual
 unit_costs_hsc_training_costs_doctor
 }
 \description{
-Description (1st paragraph)...
+This dataset provides estimates of the training and qualification costs for
+doctors in the UK. These are informed by the
+\href{https://research.kent.ac.uk/corec/unit-costs-2022-2027/}{Unit Costs of Health and Social Care Manual}
+published by the Care and Outcomes Research Centre (COReC),
+which is designed to support economic evaluation in the UK.
 }
 \details{
-Details (subsequent paragraphs)...
+The table includes the cost of qualification disaggregated into different items,
+such as tuition fees, living expenses and loss production costs. It also
+reports the expected annual cost discounted at 3.5\%, which allows use of
+these estimates in NICE economic evaluations.
 }
 \seealso{
 Other {unit_costs_hsc_tables}: 
