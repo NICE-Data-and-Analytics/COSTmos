@@ -4,7 +4,68 @@ drug_tariff_sections <- list("Part VIIIA" = "viii_a", "Part VIIIB" = "viii_b", "
 
 drug_tariff_ix_part_choice <- c("All" = "_ALL_", "IXA", "IXB", "IXC", "IXR")
 
+js_pennies_round <- DT::JS("
+  function(data, type, row, meta) {
+    if (type === 'display') {
+      const scaled = (parseFloat(data) / 100).toFixed(2);
+      return new Intl.NumberFormat('en-GB', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(scaled);
+    }
+    return data;
+  }
+")
+
+
+js_comma_sep <- DT::JS("function(data, type, row, meta) {
+  if (type === 'display') {
+    // Convert to number and format with commas
+    return new Intl.NumberFormat('en-GB', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    }).format(parseFloat(data));
+  }
+  return data; // Keep raw value for sorting/filtering
+}")
+
+
+
 # Define reactable column specification
+
+drug_tariff_df_spec_list <- list(
+  viii_a = list(colnames = c("Drug Tariff category", "Medicine", "Pack size", 
+                             "Unit of measure", "Basic price (\u00a3)", "VMP SNOMED code",
+                             "VMPP SNOMED code"),
+                column_defs = list(
+                  list(
+                    targets = 3,
+                    render = js_comma_sep
+                    ),
+                  list(
+                    targets = 5,
+                    render = js_pennies_round
+                  )
+                  )
+  ),
+  ix = list(colnames = c("Drug Tariff part", "VMP name", "AMP name", "Supplier name", 
+                         "Quantity", "Quantity unit of measure", "Price (\u00a3)", "Colour",
+                         "Size or weight", "Product order number", "Pack order number",
+                         "Add dispensing indicator", "Product SNOMED code",
+                         "Pack SNOMED code", "GTIN", "Supplier SNOMED code", "BNF code"),
+                column_defs = list(
+                  list(
+                    targets = 5,
+                    render = js_comma_sep
+                  ),
+                  list(
+                    targets = 7,
+                    render = js_pennies_round
+                  )
+                )
+  )
+)
+
 drug_tariff_col_spec <- list(
   viii_a = list(
     drug_tariff_category = reactable::colDef(name = "Drug Tariff category"),

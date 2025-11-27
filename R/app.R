@@ -79,10 +79,10 @@ costmos_app <- function(...) {
                   width = NULL,
                   style = htmltools::css(grid_template_columns = "3fr 1fr"),
                   shiny::uiOutput("drug_tariff_caption"),
-                  shiny::uiOutput("drug_tariff_download_button")
+                  shiny::downloadButton("drug_tariff_download_button", "Download CSV")
                 )
               ),
-              reactable::reactableOutput("drug_tariff_table")
+              DT::DTOutput("drug_tariff_table")
             )
           )
         ),
@@ -379,15 +379,14 @@ costmos_app <- function(...) {
     })
 
     # Table
-    drug_tariff_df_colspec <- shiny::reactive(drug_tariff_col_spec[[input$drug_tariff_section]])
+    drug_tariff_df_spec <- shiny::reactive(drug_tariff_df_spec_list[[input$drug_tariff_section]])
 
-    output$drug_tariff_table <- reactable::renderReactable({
-      reactable::reactable(drug_tariff_df(),
-        searchable = T,
-        defaultPageSize = 10,
-        columns = drug_tariff_df_colspec()
-      )
-    })
+    output$drug_tariff_table <- DT::renderDT(
+      DT::datatable(drug_tariff_df(), 
+                colnames = drug_tariff_df_spec()$colnames,
+                options = list(columnDefs = drug_tariff_df_spec()$column_defs)
+                )
+    )
 
     # Title
     output$drug_tariff_title <- shiny::renderText(glue::glue("Drug Tariff - {names(drug_tariff_sections)[[stringr::str_which(drug_tariff_sections, input$drug_tariff_section)]]}"))
@@ -421,9 +420,9 @@ costmos_app <- function(...) {
     })
 
     # Download button
-    output$drug_tariff_download_button <- shiny::renderUI({
-      csvDownloadButton("drug_tariff_table",
-        filename = paste0(
+    output$drug_tariff_download_button <- shiny::downloadHandler(
+      filename = function(){
+        paste0(
           "drug_tariff_extract_",
           input$drug_tariff_section,
           "_",
@@ -434,8 +433,13 @@ costmos_app <- function(...) {
           ),
           ".csv"
         )
+      },
+      content = function(file) {
+        s = input$drug_tariff_table_rows_all
+        
+        write.csv(drug_tariff_df()[s, , drop = FALSE], file, row.names = F)
+        }
       )
-    })
 
     # PCA SERVER LOGIC ---------------------------------------------
 
