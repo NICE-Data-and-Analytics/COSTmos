@@ -22,12 +22,12 @@ LazyData: true
 Imports: 
     bslib,
     dplyr,
+    DT,
     fs,
     glue,
     htmltools,
     lubridate,
     purrr,
-    reactable,
     rlang,
     shiny,
     stringr,

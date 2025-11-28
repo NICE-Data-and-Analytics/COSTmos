@@ -19,9 +19,9 @@ utils::globalVariables(c("drug_tariff_version",
                          "drug_tariff_viii_a"))
 
 # Overcome check() note about utils not being used
-ignore_unused_imports <- function() {
-  utils::download.file
-}
+# ignore_unused_imports <- function() {
+#   utils::download.file
+# }
 
 costmos_app <- function(...) {
   
@@ -29,17 +29,11 @@ costmos_app <- function(...) {
   uchsc_year_choice <- unique(unit_costs_hsc_gp$year) |>
     stringr::str_sort(decreasing = T, numeric = T)
   
-  drug_tariff_viii_a_categories <- c("All" = "_ALL_", sort(unique(drug_tariff_viii_a$drug_tariff_category)))
+  drug_tariff_viii_a_categories <- c("_ALL_", sort(unique(drug_tariff_viii_a$drug_tariff_category)))
+  names(drug_tariff_viii_a_categories) <- c("All", stringr::str_remove(sort(unique(drug_tariff_viii_a$drug_tariff_category)), "^Part VIIIA "))
   
   pca_bnf_chapter_choice <- c("All" = "_ALL_", sort(unique(pca_calendar_year$bnf_chapter_name)))
   
-  csvDownloadButton <- function(id, filename = "data.csv", label = "Download table as CSV") {
-    htmltools::tags$button(
-      htmltools::tagList(shiny::icon("download"), label),
-      onclick = sprintf("Reactable.downloadDataCSV('%s', '%s')", id, filename)
-    )
-  }
-
   # Define UI for application that draws a histogram
   ui <- bslib::page_navbar(
     title = "COSTmos",
@@ -79,10 +73,10 @@ costmos_app <- function(...) {
                   width = NULL,
                   style = htmltools::css(grid_template_columns = "3fr 1fr"),
                   shiny::uiOutput("drug_tariff_caption"),
-                  shiny::uiOutput("drug_tariff_download_button")
+                  shiny::downloadButton("drug_tariff_download_button", "Download CSV")
                 )
               ),
-              reactable::reactableOutput("drug_tariff_table")
+              DT::DTOutput("drug_tariff_table")
             )
           )
         ),
@@ -104,10 +98,10 @@ costmos_app <- function(...) {
                   width = NULL,
                   style = htmltools::css(grid_template_columns = "3fr 1fr"),
                   shiny::uiOutput("pca_caption"),
-                  shiny::uiOutput("pca_download_button")
+                  shiny::downloadButton("pca_download_button", "Download CSV")
                 )
               ),
-              reactable::reactableOutput("pca_table")
+              DT::DTOutput("pca_table")
             )
           )
         ),
@@ -138,10 +132,10 @@ costmos_app <- function(...) {
                   width = NULL,
                   style = htmltools::css(grid_template_columns = "3fr 1fr"),
                   shiny::uiOutput("ncc_caption"),
-                  shiny::uiOutput("ncc_download_button")
+                  shiny::downloadButton("ncc_download_button", "Download CSV")
                 )
               ),
-              reactable::reactableOutput("ncc_table")
+              DT::DTOutput("ncc_table")
             )
           )
         ),
@@ -243,10 +237,10 @@ costmos_app <- function(...) {
                   width = NULL,
                   style = htmltools::css(grid_template_columns = "3fr 1fr"),
                   shiny::uiOutput("uchsc_caption"),
-                  shiny::uiOutput("uchsc_download_button")
+                  shiny::downloadButton("uchsc_download_button", "Download CSV")
                 )
               ),
-              reactable::reactableOutput("uchsc_table")
+              DT::DTOutput("uchsc_table")
             ),
           )
         )
@@ -260,7 +254,7 @@ costmos_app <- function(...) {
     )
   )
 
-  # Define server logic required to draw a histogram
+  # Define server logic
   server <- function(input, output, session) {
     # UNIT COSTS OF HEALTH AND SOCIAL CARE SERVER LOGIC ---------------------------------------------
 
@@ -306,14 +300,14 @@ costmos_app <- function(...) {
 
     # Table
     uchsc_df_colspec <- shiny::reactive(uchsc_col_spec[[uchsc_hcp_full()]])
-
-    output$uchsc_table <- reactable::renderReactable({
-      reactable::reactable(uchsc_df(),
-        searchable = T,
-        defaultPageSize = 10,
-        columns = uchsc_df_colspec()
+    
+    output$uchsc_table <- DT::renderDT(
+      DT::datatable(uchsc_df(), 
+                    colnames = uchsc_df_colspec()$colnames,
+                    rownames = FALSE,
+                    options = list(columnDefs = uchsc_df_colspec()$column_defs)
       )
-    })
+    )
 
     # Caption
     output$uchsc_caption <- shiny::renderUI({
@@ -342,17 +336,24 @@ costmos_app <- function(...) {
     })
 
     # Download button
-    output$uchsc_download_button <- shiny::renderUI({
-      csvDownloadButton("uchsc_table",
-        filename = paste0(
+    output$uchsc_download_button <- shiny::downloadHandler(
+      filename = function(){
+        
+        paste0(
           "unit_costs_hsc_extract_",
           uchsc_hcp_full(),
           "_",
           ushsc_year(),
           ".csv"
         )
-      )
-    })
+        
+      },
+      content = function(file) {
+        s = input$uchsc_table_rows_all
+        
+        utils::write.csv(uchsc_df()[s, , drop = FALSE], file, row.names = F)
+      }
+    )
 
 
     # DRUG TARIFF SERVER LOGIC ---------------------------------------------
@@ -379,15 +380,15 @@ costmos_app <- function(...) {
     })
 
     # Table
-    drug_tariff_df_colspec <- shiny::reactive(drug_tariff_col_spec[[input$drug_tariff_section]])
+    drug_tariff_df_spec <- shiny::reactive(drug_tariff_col_spec[[input$drug_tariff_section]])
 
-    output$drug_tariff_table <- reactable::renderReactable({
-      reactable::reactable(drug_tariff_df(),
-        searchable = T,
-        defaultPageSize = 10,
-        columns = drug_tariff_df_colspec()
-      )
-    })
+    output$drug_tariff_table <- DT::renderDT(
+      DT::datatable(drug_tariff_df(), 
+                colnames = drug_tariff_df_spec()$colnames,
+                rownames = FALSE,
+                options = list(columnDefs = drug_tariff_df_spec()$column_defs)
+                )
+    )
 
     # Title
     output$drug_tariff_title <- shiny::renderText(glue::glue("Drug Tariff - {names(drug_tariff_sections)[[stringr::str_which(drug_tariff_sections, input$drug_tariff_section)]]}"))
@@ -421,9 +422,10 @@ costmos_app <- function(...) {
     })
 
     # Download button
-    output$drug_tariff_download_button <- shiny::renderUI({
-      csvDownloadButton("drug_tariff_table",
-        filename = paste0(
+    output$drug_tariff_download_button <- shiny::downloadHandler(
+      filename = function(){
+        
+        paste0(
           "drug_tariff_extract_",
           input$drug_tariff_section,
           "_",
@@ -434,8 +436,14 @@ costmos_app <- function(...) {
           ),
           ".csv"
         )
+
+      },
+      content = function(file) {
+        s = input$drug_tariff_table_rows_all
+        
+        utils::write.csv(drug_tariff_df()[s, , drop = FALSE], file, row.names = F)
+        }
       )
-    })
 
     # PCA SERVER LOGIC ---------------------------------------------
 
@@ -462,14 +470,26 @@ costmos_app <- function(...) {
     })
 
     # Table
-    output$pca_table <- reactable::renderReactable({
-      reactable::reactable(
-        pca_filtered(),
-        searchable = TRUE,
-        defaultPageSize = 10,
-        columns = pca_col_spec
+    output$pca_table <- DT::renderDT(
+      DT::datatable(pca_filtered(), 
+                    colnames = c("Generic BNF presentation name", "BNF chapter", 
+                                 "SNOMED code", "Unit of measure", "Total items",
+                                 "Total quantity", "Total cost (\u00a3)", "Cost per quantity (\u00a3)"),
+                    rownames = FALSE,
+                    options = list(
+                      columnDefs = list(
+                        list(
+                          targets = c(4,5), # -1 as JS indexes from 0 and rownames = F
+                          render = js_comma_sep
+                        ),
+                        list(
+                          targets = c(6,7),
+                          render = js_gbp_pad_2dp
+                        )
+                      )
+                    )
       )
-    })
+    )
 
     # Get year
     pca_year <- shiny::reactive({
@@ -497,14 +517,21 @@ costmos_app <- function(...) {
     })
 
     # Download button
-    output$pca_download_button <- shiny::renderUI({
-      bnf_c <- input$pca_bnf_chapter
-      label <- if (is.null(bnf_c) || identical(bnf_c, "_ALL_")) NA_character_ else paste0(stringr::str_to_lower(stringr::str_replace_all(bnf_c, " ", "_")), "_")
-
-      csvDownloadButton("pca_table",
-        filename = glue::glue("pca_calendar_year_extract_{label}{pca_year()}.csv", .na = "")
-      )
-    })
+    output$pca_download_button <- shiny::downloadHandler(
+      filename = function(){
+        
+        bnf_c <- input$pca_bnf_chapter
+        label <- if (is.null(bnf_c) || identical(bnf_c, "_ALL_")) NA_character_ else paste0(stringr::str_to_lower(stringr::str_replace_all(bnf_c, " ", "_")), "_")
+        
+        glue::glue("pca_calendar_year_extract_{label}{pca_year()}.csv", .na = "")
+        
+      },
+      content = function(file) {
+        s = input$pca_table_rows_all
+        
+        utils::write.csv(pca_filtered()[s, , drop = FALSE], file, row.names = F)
+      }
+    )
 
     # NATIONAL COST COLLECTION SERVER LOGIC -----------------------------------
 
@@ -587,28 +614,25 @@ costmos_app <- function(...) {
     })
 
     # Table
-    output$ncc_table <- reactable::renderReactable({
-      reactable::reactable(
-        ncc_filtered(),
-        searchable = TRUE,
-        defaultPageSize = 10,
-        columns = list(
-          department_code = reactable::colDef(name = "Department Code"), 
-          currency_code = reactable::colDef(name = "Currency Code"), 
-          currency_desc = reactable::colDef(name = "Currency Description"), 
-          activity = reactable::colDef(name = "Activity",
-                            format = reactable::colFormat(separators = T)),
-          unit_cost = reactable::colDef(name = "Unit cost (\u00a3)",
-                               cell = function(value) {
-                                 format(round(value, 2), nsmall = 2, big.mark = ",")
-                               }),
-          cost = reactable::colDef(name = "Cost (\u00a3)",
-                          cell = function(value) {
-                            format(round(value, 2), nsmall = 2, big.mark = ",")
-                          })
-        )
+    output$ncc_table <- DT::renderDT(
+      DT::datatable(ncc_filtered(), 
+                    colnames = c("Department Code", "Currency Code", "Currency Description",
+                                 "Activity", "Unit cost (\u00a3)", "Cost (\u00a3)"),
+                    rownames = FALSE,
+                    options = list(
+                      columnDefs = list(
+                        list(
+                          targets = 3, # -1 as JS indexes from 0 and rownames = F
+                          render = js_comma_sep
+                        ),
+                        list(
+                          targets = c(4,5),
+                          render = js_gbp_pad_2dp
+                        )
+                        )
+                    )
       )
-    })
+    )
 
     # Get year
     ncc_year <- shiny::reactive({
@@ -636,24 +660,31 @@ costmos_app <- function(...) {
     })
 
     # Download button - filename reflects selection
-    output$ncc_download_button <- shiny::renderUI({
-      sc <- input$ncc_service_code
-      all_sc <- ncc_service_levels()
-      
-      label <- if (is.null(sc) || length(sc) == 0 || 
-                   length(sc) == length (all_sc)) {
-        NA_character_ 
-      } else {
-        clean_sc <- stringr:: str_to_lower(
-          stringr::str_replace_all(sc, " ", "_")
-        )
-        paste0(paste(clean_sc, collapse = "_"), "_")
+    output$ncc_download_button <- shiny::downloadHandler(
+      filename = function(){
+        
+        sc <- input$ncc_service_code
+        all_sc <- ncc_service_levels()
+        
+        label <- if (is.null(sc) || length(sc) == 0 || 
+                     length(sc) == length (all_sc)) {
+          NA_character_ 
+        } else {
+          clean_sc <- stringr:: str_to_lower(
+            stringr::str_replace_all(sc, " ", "_")
+          )
+          paste0(paste(clean_sc, collapse = "_"), "_")
+        }
+        
+        glue::glue("ncc_extract_{label}{stringr::str_replace_all(ncc_year(), '_', '/')}.csv", .na = "")
+        
+      },
+      content = function(file) {
+        s = input$ncc_table_rows_all
+        
+        utils::write.csv(ncc_filtered()[s, , drop = FALSE], file, row.names = F)
       }
-
-      csvDownloadButton("ncc_table",
-        filename = glue::glue("ncc_extract_{label}{stringr::str_replace_all(ncc_year(), '_', '/')}.csv", .na = "")
-      )
-    })
+    )
     
   } # end of server
 
