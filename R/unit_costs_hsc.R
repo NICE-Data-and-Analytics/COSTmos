@@ -15,141 +15,98 @@ uchsc_training_costs_choice <- c(
 )
 
 uchsc_col_spec <- list(
-  gp = list(
-    year = reactable::colDef(show = FALSE),
-    variable = reactable::colDef(name = ""),
-    qualification_cost = reactable::colDef(show = FALSE),
-    direct_care_staff_cost = reactable::colDef(show = FALSE),
-    cost = reactable::colDef(
-      name = "Cost (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    )
+  gp = list(colnames = c("year", "", "qualification_cost", "direct_care_staff_cost", "Cost (\u00a3)"),
+            column_defs = list(
+                  list(
+                    targets = 4, # -1 as JS indexes from 0 and rownames = F
+                    render = js_gbp
+                  ),
+                  list(
+                    visible = F, 
+                    targets = c(0,2,3)
+                    )
+                )
   ),
-  gp_nurse = list(
-    year = reactable::colDef(show = FALSE),
-    variable = reactable::colDef(name = ""),
-    qualification_cost = reactable::colDef(show = FALSE),
-    ratio_direct_to_indirect_time = reactable::colDef(show = FALSE),
-    cost = reactable::colDef(
-      name = "Cost (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    )
+  gp_nurse = list(colnames = c("year", "", "qualification_cost", "ratio_direct_to_indirect_time", "Cost (\u00a3)"),
+            column_defs = list(
+              list(
+                targets = 4, # -1 as JS indexes from 0 and rownames = F
+                render = js_gbp
+              ),
+              list(
+                visible = F, 
+                targets = c(0,2,3)
+              )
+            )
   ),
-  hospital_doctor = list(
-    year = reactable::colDef(show = FALSE),
-    job_title = reactable::colDef(name = "Job title"),
-    qualification_cost = reactable::colDef(show = FALSE),
-    cost_per_working_hour = reactable::colDef(
-      name = "Cost per working hour (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    )
+  hospital_doctor = list(colnames = c("year", "Job title", "qualification_cost", "Cost per working hour (\u00a3)"),
+                  column_defs = list(
+                    list(
+                      targets = 3, # -1 as JS indexes from 0 and rownames = F
+                      render = js_gbp
+                    ),
+                    list(
+                      visible = F, 
+                      targets = c(0,2)
+                    )
+                  )
   ),
-  nurse = list(
-    year = reactable::colDef(show = FALSE),
-    band = reactable::colDef(name = "Band"),
-    qualification_cost = reactable::colDef(show = FALSE),
-    cost_per_working_hour = reactable::colDef(
-      name = "Cost per working hour (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    )
+  nurse = list(colnames = c("year", "Band", "qualification_cost", "Cost per working hour (\u00a3)"),
+                         column_defs = list(
+                           list(
+                             targets = 3, # -1 as JS indexes from 0 and rownames = F
+                             render = js_gbp
+                           ),
+                           list(
+                             visible = F, 
+                             targets = c(0,2)
+                           )
+                         )
   ),
-  community_hcp = list(
-    year = reactable::colDef(show = FALSE),
-    band = reactable::colDef(name = "Band"),
-    cost_per_working_hour = reactable::colDef(
-      name = "Cost per working hour (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    ),
-    job_title = reactable::colDef(name = "Example jobs")
+  community_hcp = list(colnames = c("year", "Band", "Cost per working hour (\u00a3)", "Example jobs"),
+               column_defs = list(
+                 list(
+                   targets = 2, # -1 as JS indexes from 0 and rownames = F
+                   render = js_gbp
+                 ),
+                 list(
+                   visible = F, 
+                   targets = c(0)
+                 )
+               )
   ),
-  training_costs_doctor = list(
-    year = reactable::colDef(show = FALSE),
-    job_title = reactable::colDef(name = "Job title"),
-    tuition = reactable::colDef(
-      name = "Tuition (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    ),
-    living_expenses_or_lost_production_costs = reactable::colDef(
-      name = "Living expenses/lost production costs (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    ),
-    clinical_placement = reactable::colDef(
-      name = "Clinical placement (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    ),
-    placement_fee_plus_market_forces_factor = reactable::colDef(
-      name = "Placement fee plus Market Forces Factor (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    ),
-    salary_inc_overheads_and_postgraduate_centre_costs = reactable::colDef(
-      name = "Salary (inc overheads) and post-graduate centre costs (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    ),
-    total_investment = reactable::colDef(
-      name = "Total investment (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    ),
-    expected_annual_cost_discounted_at_3pt5perc = reactable::colDef(
-      name = "Expected annual cost discounted at 3.5% (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    )
+  training_costs_doctor = list(colnames = c("year", "Job title", "Tuition (\u00a3)", 
+                                            "Living expenses/lost production costs (\u00a3)",
+                                            "Clinical placement (\u00a3)",
+                                            "Placement fee plus Market Forces Factor (\u00a3)",
+                                            "Salary (inc overheads) and post-graduate centre costs (\u00a3)",
+                                            "Total investment (\u00a3)",
+                                            "Expected annual cost discounted at 3.5% (\u00a3)"),
+                       column_defs = list(
+                         list(
+                           targets = c(2,3,4,5,6,7,8), # -1 as JS indexes from 0 and rownames = F
+                           render = js_gbp
+                         ),
+                         list(
+                           visible = F, 
+                           targets = c(0)
+                         )
+                       )
   ),
-  training_costs_hcp = list(
-    year = reactable::colDef(show = FALSE),
-    job_title = reactable::colDef(name = "Job title"),
-    tuition = reactable::colDef(
-      name = "Tuition (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    ),
-    living_expenses_or_lost_production_costs = reactable::colDef(
-      name = "Living expenses/lost production costs (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    ),
-    clinical_placement = reactable::colDef(
-      name = "Clinical placement (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    ),
-    total_investment = reactable::colDef(
-      name = "Total investment (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    ),
-    expected_annual_cost_discounted_at_3pt5perc = reactable::colDef(
-      name = "Expected annual cost discounted at 3.5% (\u00a3)",
-      cell = function(value) {
-        format(round(value, 2), big.mark = ",")
-      }
-    )
+  training_costs_hcp = list(colnames = c("year", "Job title", "Tuition (\u00a3)", 
+                                            "Living expenses/lost production costs (\u00a3)",
+                                            "Clinical placement (\u00a3)",
+                                            "Total investment (\u00a3)",
+                                            "Expected annual cost discounted at 3.5% (\u00a3)"),
+                               column_defs = list(
+                                 list(
+                                   targets = c(2,3,4,5,6), # -1 as JS indexes from 0 and rownames = F
+                                   render = js_gbp
+                                 ),
+                                 list(
+                                   visible = F, 
+                                   targets = c(0)
+                                 )
+                               )
   )
 )

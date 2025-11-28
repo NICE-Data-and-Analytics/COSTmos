@@ -632,3 +632,58 @@
 #' @family {unit_costs_hsc_tables}
 
 "unit_costs_hsc_training_costs_hcp"
+
+# Javascript functions for DT column rendering
+js_pennies_in_gbp <- DT::JS("
+  function(data, type, row, meta) {
+    if (type === 'display') {
+      const scaled = (parseFloat(data) / 100).toFixed(2);
+      return new Intl.NumberFormat('en-GB', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(scaled);
+    }
+    return data;
+  }
+")
+
+js_gbp_pad_2dp <- DT::JS("
+  function(data, type, row, meta) {
+    if (type === 'display') {
+      const scaled = parseFloat(data).toFixed(2);
+      return new Intl.NumberFormat('en-GB', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(scaled);
+    }
+    return data;
+  }
+")
+
+js_gbp <- DT::JS("
+  function (data, type, row, meta) {
+    if (type === 'display') {
+      const n = Number(data);
+  
+      // Round to 2 decimals without forcing trailing zeros
+      const rounded = Math.round(n * 100) / 100;
+  
+      return new Intl.NumberFormat('en-GB', {
+        minimumFractionDigits: 0, // no forced trailing zeros
+        maximumFractionDigits: 2  // cap at 2 decimals
+      }).format(rounded);
+    }
+    return data; // keep raw for sort/filter/etc.
+  }
+")
+
+js_comma_sep <- DT::JS("function(data, type, row, meta) {
+  if (type === 'display') {
+    // Convert to number and format with commas
+    return new Intl.NumberFormat('en-GB', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    }).format(parseFloat(data));
+  }
+  return data; // Keep raw value for sorting/filtering
+}")
