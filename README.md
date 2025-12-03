@@ -8,8 +8,9 @@
 <!-- badges: end -->
 
 COSTmos collates and displays reference data sets on healthcare costs in
-England. These are displayed in a Shiny dashboard and available as R
-objects within the package.
+England. These are displayed in a Shiny dashboard
+(<https://vtwkam1.shinyapps.io/costmos/>) and available as R objects
+within the package.
 
 Data sets included are:  
 - [Drug
@@ -81,7 +82,7 @@ str(drug_tariff_ix)
 
 1.  **NHS Business Services Authority**, *Drug Tariff*.  
     <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>  
-    Accessed November 2025. **Licensed under:** [Open Government Licence
+    Accessed December 2025. **Licensed under:** [Open Government Licence
     v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)
 
 2.  **NHS Business Services Authority**, *Prescription Cost Analysis –

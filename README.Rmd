@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-COSTmos collates and displays reference data sets on healthcare costs in England. These are displayed in a Shiny dashboard and available as R objects within the package.
+COSTmos collates and displays reference data sets on healthcare costs in England. These are displayed in a Shiny dashboard (<https://vtwkam1.shinyapps.io/costmos/>) and available as R objects within the package. 
 
 Data sets included are:  
 - [Drug Tariff](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff)  
