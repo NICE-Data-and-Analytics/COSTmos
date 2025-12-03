@@ -19,9 +19,10 @@ utils::globalVariables(c("drug_tariff_version",
                          "drug_tariff_viii_a"))
 
 # Overcome check() note about utils not being used
-# ignore_unused_imports <- function() {
-#   utils::download.file
-# }
+ignore_unused_imports <- function() {
+  markdown::renderMarkdown
+  pkgload::load_all
+}
 
 costmos_app <- function(...) {
   
