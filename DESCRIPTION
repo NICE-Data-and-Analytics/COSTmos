@@ -27,6 +27,8 @@ Imports:
     glue,
     htmltools,
     lubridate,
+    markdown,
+    pkgload,
     purrr,
     rlang,
     shiny,
