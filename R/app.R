@@ -1,28 +1,17 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    https://shiny.posit.co/
-#
-
+#' Run the COSTmos application
+#' 
+#' Runs the COSTmos application on the local machine.
+#' 
+#' @description
+#' Calls `shiny::shinyApp()` with the COSTmos UI and server.
+#' 
+#' @param ... Arguments passed on to `shiny::shinyApp()`
+#' 
+#' @return Shiny app object
+#' 
+#' @export
+#' 
 #' @importFrom rlang .data
-
-# Overcome check() note about undefined global variables
-utils::globalVariables(c("drug_tariff_version", 
-                         "ncc", 
-                         "ncc_version", 
-                         "pca_calendar_year", 
-                         "pca_version", 
-                         "unit_costs_hsc_gp", 
-                         "drug_tariff_viii_a"))
-
-# Overcome check() note about utils not being used
-ignore_unused_imports <- function() {
-  markdown::renderMarkdown
-  pkgload::load_all
-}
 
 costmos_app <- function(...) {
   
@@ -691,4 +680,19 @@ costmos_app <- function(...) {
 
   # Run the application
   shiny::shinyApp(ui = ui, server = server)
+}
+
+# Overcome check() note about undefined global variables
+utils::globalVariables(c("drug_tariff_version", 
+                         "ncc", 
+                         "ncc_version", 
+                         "pca_calendar_year", 
+                         "pca_version", 
+                         "unit_costs_hsc_gp", 
+                         "drug_tariff_viii_a"))
+
+# Overcome check() note about utils not being used
+ignore_unused_imports <- function() {
+  markdown::renderMarkdown
+  pkgload::load_all
 }
