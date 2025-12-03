@@ -16,22 +16,22 @@ library(utils)
 # Paste links to download CSVs from website
 # https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii
 viii_links <- list(
-  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2025-10/Part%20VIIIA%20Nov%2025.xls.csv",
+  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2025-11/Part%20VIIIA%20December%2020251.csv",
   viii_b = "https://cms.nhsbsa.nhs.uk/sites/default/files/2025-11/Part%20VIIIB%20Nov%2025.xls.csv",
   viii_d = "https://www.nhsbsa.nhs.uk/sites/default/files/2025-10/Part%20VIIID%20Nov%2025%20%281%29.csv"
 )
 
 # Paste link to download CSV of Part IX 
 # https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix
-ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2025-10/Drug%20Tariff%20November%202025%20Part%20IX.csv"
+ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2025-11/Drug%20Tariff%20Part%20IX%20December%202025.csv"
 
 # Input version for each section, in YYYYMM
 drug_tariff_version <- tibble::tribble(
   ~section, ~version_ym,
-  "viii_a", "202511",
+  "viii_a", "202512",
   "viii_b", "202511",
   "viii_d", "202511",
-  "ix", "202511"
+  "ix", "202512"
   )
 
 # Drug Tariff Part VIII ---------------------------------------------
@@ -153,6 +153,8 @@ withr::with_tempfile("ix_dl_file",
   },
   fileext = ".csv"
 )
+
+download_ix_manual()
 
 # Save version table
 usethis::use_data(drug_tariff_version, overwrite = T)

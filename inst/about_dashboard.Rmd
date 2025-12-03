@@ -22,7 +22,7 @@ The [Drug Tariff](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-applianc
 
 COSTmos sources the following sections of the Drug Tariff from the web pages below:
 
-| Section (link to source) | Title/description |
+| Section (link to source) | Description |
 |-----------------------------|-------------------------------------------|
 | [Part VIIIA](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii) | Basic Prices of Drugs |
 | [Part VIIIB](https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii) | Arrangements for payment for Specials and Imported Unlicensed Medicines with a Price Per Unit Above a Minimum Quantity |
