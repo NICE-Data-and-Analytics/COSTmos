@@ -39,7 +39,7 @@ pages below:
 <thead>
 <tr>
 <th>Section (link to source)</th>
-<th>Title/description</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
@@ -105,7 +105,7 @@ Economics (CHE) at the University of York.
 
 1.  **NHS Business Services Authority**, *Drug Tariff*.  
     <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>  
-    Accessed November 2025. **Licensed under:** [Open Government Licence
+    Accessed January 2026. **Licensed under:** [Open Government Licence
     v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)
 
 2.  **NHS Business Services Authority**, *Prescription Cost Analysis –
