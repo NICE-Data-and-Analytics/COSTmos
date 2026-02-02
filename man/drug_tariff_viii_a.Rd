@@ -3,7 +3,7 @@
 \docType{data}
 \name{drug_tariff_viii_a}
 \alias{drug_tariff_viii_a}
-\title{Drug Tariff Part VIIIA - Basic Prices of Drugs (January 2026)}
+\title{Drug Tariff Part VIIIA - Basic Prices of Drugs (February 2026)}
 \format{
 A data frame with 7 columns:
 \describe{
@@ -25,7 +25,7 @@ drug_tariff_viii_a
 }
 \description{
 Part VIIIA of the Drug Tariff, lists the basic prices of drugs. This is the
-January 2026 version.
+February 2026 version.
 }
 \details{
 The \href{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}{Drug Tariff}
