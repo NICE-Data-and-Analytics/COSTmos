@@ -10,28 +10,31 @@ library(tidyr)
 library(usethis)
 library(withr)
 library(utils)
+library(here)
+
+i_am("data-raw/drug_tariff_download_manual.R")
 
 # Manual parameters - Populate! ------------------------------------------------
 
 # Paste links to download CSVs from website
 # https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii
 viii_links <- list(
-  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2025-12/Part%20VIIIA%20Jan%202026.csv",
-  viii_b = "https://cms.nhsbsa.nhs.uk/sites/default/files/2025-11/Part%20VIIIB%20Nov%2025.xls.csv",
-  viii_d = "https://www.nhsbsa.nhs.uk/sites/default/files/2025-10/Part%20VIIID%20Nov%2025%20%281%29.csv"
+  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-01/Part%20VIIIA%20Feb%202026.csv",
+  viii_b = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-01/Part%20VIIIB%20Feb%2026.csv",
+  viii_d = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-01/Part%20VIIIB%20Feb%2026.csv"
 )
 
 # Paste link to download CSV of Part IX 
 # https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix
-ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2025-12/Drug%20Tariff%20Part%20IX%20January%202026.csv"
+ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2026-01/Drug%20Tariff%20Part%20IX%20February%202026.csv"
 
 # Input version for each section, in YYYYMM
 drug_tariff_version <- tibble::tribble(
   ~section, ~version_ym,
-  "viii_a", "202601",
-  "viii_b", "202511",
-  "viii_d", "202511",
-  "ix", "202601"
+  "viii_a", "202602",
+  "viii_b", "202602",
+  "viii_d", "202602",
+  "ix", "202602"
   )
 
 # Drug Tariff Part VIII ---------------------------------------------
@@ -165,8 +168,11 @@ devtools::document()
 # Update README
 devtools::build_readme()
 
-# Run data-raw/render_about_dashboard.R
+# Update About page
+source(here("data-raw", "render_about_dashboard.R"))
 
 # Run app locally
+# devtools::load_all()
+# costmos_app()
 
 # Run check()

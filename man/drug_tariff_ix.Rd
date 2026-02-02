@@ -3,7 +3,7 @@
 \docType{data}
 \name{drug_tariff_ix}
 \alias{drug_tariff_ix}
-\title{Drug Tariff Part IX - Appliances (January 2026)}
+\title{Drug Tariff Part IX - Appliances (February 2026)}
 \format{
 A data frame with 17 columns:
 \describe{
@@ -37,7 +37,7 @@ drug_tariff_ix
 Part IX of the Drug Tariff, lists the basic prices of appliances and chemical
 reagents which can be prescribed by prescribing practitioners at NHS expense.
 This is the
-January 2026 version.
+February 2026 version.
 }
 \details{
 The \href{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}{Drug Tariff}
