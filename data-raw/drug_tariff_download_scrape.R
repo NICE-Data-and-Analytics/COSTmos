@@ -95,7 +95,7 @@ download_viii_scrape <- function(name) {
 
       # Read data and clean - Removes header and empty rows, renames columns sensibly
       df <- readr::read_csv(dl_file,
-        skip = 5,
+        skip = 3,
         col_types = viii_read[[name]]$col_types,
         col_names = viii_read[[name]]$col_names
       ) |>
@@ -179,7 +179,7 @@ withr::with_tempfile("ix_dl_file",
 
     # Read data and clean - Removes header and empty rows, renames columns sensibly
     drug_tariff_ix <- readr::read_csv(ix_dl_file,
-      skip = 5,
+      skip = 1,
       col_types = "ccccccdcccdcccccc",
       col_names = c(
         "drug_tariff_part", "supplier_name", "vmp_name", "amp_name",
