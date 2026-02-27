@@ -19,22 +19,23 @@ i_am("data-raw/drug_tariff_download_manual.R")
 # Paste links to download CSVs from website
 # https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii
 viii_links <- list(
-  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-01/Part%20VIIIA%20Feb%202026.csv",
-  viii_b = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-01/Part%20VIIIB%20Feb%2026.csv",
-  viii_d = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-01/Part%20VIIIB%20Feb%2026.csv"
+  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-02/Part%20VIIIA%20Mar%2026.xls.csv",
+  viii_b = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-01/Part%20VIIIB%20Feb%2026.csv"
+  # ,
+  # viii_d = "" # Manual perform as incorrect URL on NHSBSA website
 )
 
 # Paste link to download CSV of Part IX 
 # https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix
-ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2026-01/Drug%20Tariff%20Part%20IX%20February%202026.csv"
+ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2026-02/Drug%20Tariff%20Part%20IX%20March%202026.csv"
 
 # Input version for each section, in YYYYMM
 drug_tariff_version <- tibble::tribble(
   ~section, ~version_ym,
-  "viii_a", "202602",
+  "viii_a", "202603",
   "viii_b", "202602",
   "viii_d", "202602",
-  "ix", "202602"
+  "ix", "202603"
   )
 
 # Drug Tariff Part VIII ---------------------------------------------
@@ -42,11 +43,6 @@ drug_tariff_version <- tibble::tribble(
 # Function to download file, using the list names
 download_viii_manual <- function(name) {
   viii_read <- list(
-    cat_m = list(
-      col_types = "ccdcd",
-      col_names = c("vmpp_snomed_code", "drug_name", "pack_size", "unit_of_measure", "basic_price_in_p"),
-      col_order = c("drug_name", "pack_size", "unit_of_measure", "basic_price_in_p", "vmpp_snomed_code")
-    ),
     viii_a = list(
       col_types = "cdccccd",
       col_names = c("medicine", "pack_size", "unit_of_measure", "vmp_snomed_code", "vmpp_snomed_code", "drug_tariff_category", "basic_price_in_p"),
@@ -76,7 +72,7 @@ download_viii_manual <- function(name) {
 
       # Read data and clean - Removes header and empty rows, renames columns sensibly
       df <- readr::read_csv(dl_file,
-        skip = 5,
+        skip = 3,
         col_types = viii_read[[name]]$col_types,
         col_names = viii_read[[name]]$col_names
       ) |>
@@ -133,7 +129,7 @@ withr::with_tempfile("ix_dl_file",
 
     # Read data and clean - Removes header and empty rows, renames columns sensibly
     drug_tariff_ix <- readr::read_csv(ix_dl_file,
-      skip = 5,
+      skip = 1,
       col_types = "ccccccdcccdcccccc",
       col_names = c(
         "drug_tariff_part", "supplier_name", "vmp_name", "amp_name",
@@ -175,4 +171,7 @@ source(here("data-raw", "render_about_dashboard.R"))
 # devtools::load_all()
 # costmos_app()
 
+# Check first rows of each Drug Tariff section against raw CSV files
+
 # Run check()
+# devtools::check()
