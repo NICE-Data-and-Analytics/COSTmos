@@ -1,5 +1,4 @@
-# Manually exported from
-# https://app.powerbi.com/links/RYCmc6t127?ctid=37c354b2-85b0-47f5-b222-07b48d774ee3&pbi_source=linkShare
+# Manually update NCC
 
 library(dplyr)
 library(tibble)
@@ -17,10 +16,11 @@ i_am("data-raw/ncc_download.R")
 ## Use within function to not change scipen globally
 withr::local_options(list(scipen = 999))
 
-# Input 
+# !!!!!!!MANUALLY INPUT!!!!!!!
 # - URL to download data tables from NCC Power BI dashboards from https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/
 # - Name of subfolder with Excel spreadsheets when folder is unzipped, e.g. latter bit of "NCC_National-Schedule_2024_25/NCC National Schedule_Supressed_2024_25"
 # - Financial year the data is for
+# - !!!!!Change date NCC accessed in "inst/references.Rmd" to update references in README and dashboard 'About' tab
 national_schedule_link <- "https://www.england.nhs.uk/wp-content/uploads/2025/11/NCC_National-Schedule_2024_25.zip"
 national_schedule_folder <- "NCC National Schedule_Supressed_2024_25"
 ncc_finyear <- "2024/25"
@@ -32,10 +32,12 @@ withr::with_tempfile("dl_file", {
   # Download file to temporary file
   download.file(national_schedule_link, dl_file, mode = "wb")
   
+  # Unzip
   unzip(dl_file, exdir = tempdir())
   
   list.files(tempdir())
   
+  # Read summary files
   raw_hrg <<- readxl::read_xlsx(file.path(tempdir(), national_schedule_folder, "Summary HRG.xlsx"), col_names = F)
   raw_other_currencies <<- readxl::read_xlsx(file.path(tempdir(), national_schedule_folder, "Summary Other Currencies.xlsx"), col_names = F)
   raw_mh <<- readxl::read_xlsx(file.path(tempdir(), national_schedule_folder, "Summary MH NHS Talking Therapies.xlsx"), col_names = F)
