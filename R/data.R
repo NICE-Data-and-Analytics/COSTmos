@@ -80,7 +80,6 @@
 #' 
 #'  - NHS providers submit these costs annually for inclusion in national benchmarking,
 #'    tariff-setting, and productivity programmes (e.g. PLICS, GIRFT). \[[1](https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/)\] 
-#'  - The 2023/24 dataset excludes detailed high-cost drug costs at present due to remapping of codes \[[1](https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/)\]
 #'
 #' @format A data frame with `r length(colnames(ncc))` columns:
 #' \describe{
@@ -96,7 +95,7 @@
 #' @family {ncc_tables}
 #' 
 #' @references
-#' 1. NHS England, National Cost Collection for the NHS (2025). <https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/>
+#' 1. NHS England, National Cost Collection for the NHS (`r as.numeric(substr(ncc_version$year[ncc_version$df == "ncc"], 1, 4)) + 1`). <https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/>
 
 "ncc"
 
@@ -163,7 +162,7 @@
 #' @family {drug_tariff_tables}
 #' 
 #' @references
-#' 1. NHSBSA, Drug Tariff (2025). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
+#' 1. NHSBSA, Drug Tariff (`r format(lubridate::ym(drug_tariff_version$version_ym[drug_tariff_version$section == "viii_a"]), "%Y")`). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
 #' 2. Community Pharmacy England, Virtual Drug Tariff (2025). <https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/>
 
 "drug_tariff_viii_a"
@@ -243,7 +242,7 @@
 #' @family {drug_tariff_tables}
 #' 
 #' @references
-#' 1. NHSBSA, Drug Tariff (2025). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
+#' 1. NHSBSA, Drug Tariff (`r format(lubridate::ym(drug_tariff_version$version_ym[drug_tariff_version$section == "viii_b"]), "%Y")`). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
 #' 2. Community Pharmacy England, Virtual Drug Tariff (2025). <https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/>
 #' 3. Community Pharmacy England, Unlicensed specials and imports (2024). <https://cpe.org.uk/dispensing-and-supply/dispensing-process/dispensing-a-prescription/unlicensed-specials-and-imports/>
 
@@ -313,7 +312,7 @@
 #' @family {drug_tariff_tables}
 #' 
 #' @references
-#' 1. NHSBSA, Drug Tariff (2025). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
+#' 1. NHSBSA, Drug Tariff (`r format(lubridate::ym(drug_tariff_version$version_ym[drug_tariff_version$section == "viii_d"]), "%Y")`). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
 #' 2. Community Pharmacy England, Virtual Drug Tariff (2025). <https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/>
 #' 3. Community Pharmacy England, Unlicensed specials and imports (2024). <https://cpe.org.uk/dispensing-and-supply/dispensing-process/dispensing-a-prescription/unlicensed-specials-and-imports/>
 
@@ -371,7 +370,7 @@
 #' @family {drug_tariff_tables}
 #' 
 #' @references
-#' 1. NHSBSA, Drug Tariff (2025). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
+#' 1. NHSBSA, Drug Tariff (`r format(lubridate::ym(drug_tariff_version$version_ym[drug_tariff_version$section == "ix"]), "%Y")`). <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>
 #' 2. NHSBSA, Drug Tariff Part IX information (2025). <https://www.nhsbsa.nhs.uk/manufacturers-and-suppliers/drug-tariff-part-ix-information>
 
 "drug_tariff_ix"

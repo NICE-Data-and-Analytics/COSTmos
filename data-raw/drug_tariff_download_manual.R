@@ -11,6 +11,7 @@ library(usethis)
 library(withr)
 library(utils)
 library(here)
+library(devtools)
 
 i_am("data-raw/drug_tariff_download_manual.R")
 
@@ -165,7 +166,7 @@ devtools::document()
 devtools::build_readme()
 
 # Update About page
-source(here("data-raw", "render_about_dashboard.R"))
+source(here::here("data-raw", "render_about_dashboard.R"))
 
 # Run app locally
 # devtools::load_all()

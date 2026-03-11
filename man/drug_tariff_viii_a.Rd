@@ -58,7 +58,7 @@ by Community Pharmacy England for a simplified explanation.
 }
 \references{
 \enumerate{
-\item NHSBSA, Drug Tariff (2025). \url{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}
+\item NHSBSA, Drug Tariff (2026). \url{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}
 \item Community Pharmacy England, Virtual Drug Tariff (2025). \url{https://cpe.org.uk/dispensing-and-supply/dispensing-process/drug-tariff-resources/virtual-drug-tariff/}
 }
 }
