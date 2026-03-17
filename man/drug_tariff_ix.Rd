@@ -62,7 +62,7 @@ for more information on Part IX.
 }
 \references{
 \enumerate{
-\item NHSBSA, Drug Tariff (2025). \url{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}
+\item NHSBSA, Drug Tariff (2026). \url{https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff}
 \item NHSBSA, Drug Tariff Part IX information (2025). \url{https://www.nhsbsa.nhs.uk/manufacturers-and-suppliers/drug-tariff-part-ix-information}
 }
 }

@@ -3,7 +3,7 @@
 \docType{data}
 \name{ncc}
 \alias{ncc}
-\title{National Cost Collection (NCC) for the NHS: National Schedule 2023/24}
+\title{National Cost Collection (NCC) for the NHS: National Schedule 2024/25}
 \format{
 A data frame with 6 columns:
 \describe{
@@ -25,13 +25,12 @@ ncc
 A dataset containing aggregated and organisation-level cost data for NHS services in England,
 based on the \href{https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/}{NCC} published by NHS England. The collection includes:
 National schedule of unit costs for defined services (e.g. inpatient, outpatient, mental health, community).
-Note this data frame contains data for 2023/24 only.
+Note this data frame contains data for 2024/25 only.
 }
 \details{
 \itemize{
 \item NHS providers submit these costs annually for inclusion in national benchmarking,
 tariff-setting, and productivity programmes (e.g. PLICS, GIRFT). [\href{https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/}{1}]
-\item The 2023/24 dataset excludes detailed high-cost drug costs at present due to remapping of codes [\href{https://www.england.nhs.uk/costing-in-the-nhs/national-cost-collection/}{1}]
 }
 }
 \references{
