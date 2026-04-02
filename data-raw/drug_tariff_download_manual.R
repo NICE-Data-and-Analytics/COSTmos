@@ -20,23 +20,24 @@ i_am("data-raw/drug_tariff_download_manual.R")
 # Paste links to download CSVs from website
 # https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii
 viii_links <- list(
-  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-02/Part%20VIIIA%20Mar%2026.xls.csv",
-  viii_b = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-01/Part%20VIIIB%20Feb%2026.csv"
+  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-02/Part%20VIIIA%20Mar%2026.xls.csv"
+  # ,
+  # viii_b = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-01/Part%20VIIIB%20Feb%2026.csv"
   # ,
   # viii_d = "" # Manual perform as incorrect URL on NHSBSA website
 )
 
 # Paste link to download CSV of Part IX 
 # https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix
-ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2026-02/Drug%20Tariff%20Part%20IX%20March%202026.csv"
+ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2026-03/Drug%20Tariff%20Part%20IX%20April%202026.csv"
 
 # Input version for each section, in YYYYMM
 drug_tariff_version <- tibble::tribble(
   ~section, ~version_ym,
-  "viii_a", "202603",
+  "viii_a", "202604",
   "viii_b", "202602",
   "viii_d", "202602",
-  "ix", "202603"
+  "ix", "202604"
   )
 
 # Drug Tariff Part VIII ---------------------------------------------
@@ -172,7 +173,8 @@ source(here::here("data-raw", "render_about_dashboard.R"))
 # devtools::load_all()
 # costmos_app()
 
-# Check first rows of each Drug Tariff section against raw CSV files
+# Check first and last rows of each Drug Tariff section against raw CSV files
+# Check number of entries
 
 # Run check()
 # devtools::check()
