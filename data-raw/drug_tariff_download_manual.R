@@ -20,24 +20,22 @@ i_am("data-raw/drug_tariff_download_manual.R")
 # Paste links to download CSVs from website
 # https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii
 viii_links <- list(
-  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-02/Part%20VIIIA%20Mar%2026.xls.csv"
-  # ,
-  # viii_b = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-01/Part%20VIIIB%20Feb%2026.csv"
-  # ,
-  # viii_d = "" # Manual perform as incorrect URL on NHSBSA website
+  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-04/Part%20VIIIA%20May%2026.csv",
+  viii_b = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-04/Part%20VIIIB%20May%2026.xls.csv",
+  viii_d = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-04/Part%20VIIID%20May%2026.xls.csv"
 )
 
 # Paste link to download CSV of Part IX 
 # https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix
-ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2026-03/Drug%20Tariff%20Part%20IX%20April%202026.csv"
+ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2026-04/Drug%20Tariff%20Part%20IX%20May%202026.csv"
 
 # Input version for each section, in YYYYMM
 drug_tariff_version <- tibble::tribble(
   ~section, ~version_ym,
-  "viii_a", "202604",
-  "viii_b", "202602",
-  "viii_d", "202602",
-  "ix", "202604"
+  "viii_a", "202605",
+  "viii_b", "202605",
+  "viii_d", "202605",
+  "ix", "202605"
   )
 
 # Drug Tariff Part VIII ---------------------------------------------
