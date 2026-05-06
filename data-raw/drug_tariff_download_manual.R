@@ -176,3 +176,7 @@ source(here::here("data-raw", "render_about_dashboard.R"))
 
 # Run check()
 # devtools::check()
+
+# If GitHub action deploy fails because of renv out of sync
+# renv::snapshot()
+# rsconnect::deployApp()
