@@ -7,7 +7,7 @@
 \format{
 A data frame with 5 columns:
 \describe{
-\item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
+\item{year}{Unit Costs Manual year (e.g. 2024, 2025)}
 \item{variable}{Type of costs measure (e.g., per minute of patient contact)}
 \item{qualification_cost}{Whether qualification costs are included or excluded}
 \item{direct_care_staff_cost}{Whether direct care staff costs are included or excluded}

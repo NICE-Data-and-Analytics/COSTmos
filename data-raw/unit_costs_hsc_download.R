@@ -1,4 +1,4 @@
-# script for analysis on PSSRU
+# Script for extracting and manipulating numbers from Unit Costs of Health and Social Care Manual
 
 library(dplyr)
 library(pdftools)
@@ -37,22 +37,28 @@ pdf_scrape <- function(pdf_chr, search_term) {
     dplyr::mutate(rn = dplyr::row_number())
 
 
-  # Rows where first column crosses two lines misformatted, split over multiple rows
+  # Rows where first column text is quite long so it crosses over multiple rows
+  # And the cost values are not from the second column onwards but shifted to the row below and one column left
   # e.g. doctors table
   # Identify row
   error_row <- df$rn[stringr::str_detect(df$x, "£") & stringr::str_detect(df$x, "[:alpha:]", negate = T)]
 
-  # Double check that the second column for the row above and below is empty
+  # If there is an error row
   if (length(error_row) > 0L) {
-    if (is.na(df$x_2[error_row - 1]) & is.na(df$x_2[error_row + 1])) {
-      # Shift the costs in the error row to the row above, where the row label is in col 1
-      df[error_row - 1, 2:10] <- df[error_row, 1:9]
-      # Correct the split row label
-      df[error_row - 1, 1] <- paste0(df[error_row - 1, 1], df[error_row + 1, 1])
-      # Drop the error row and the row below where the row label is split
-      df <- df |>
-        dplyr::slice(-error_row, -(error_row + 1))
+    # For each error row
+    for (er in error_row) {
+      # Double check that the second column for the row above and below is empty
+      if (is.na(df$x_2[er - 1]) & is.na(df$x_2[er + 1])) {
+        # Shift the costs in the error row to the row above, where the row label is in col 1
+        df[er - 1, 2:10] <- df[er, 1:9]
+        # Correct the split row label
+        df[er - 1, 1] <- paste0(df[er - 1, 1], df[er + 1, 1])
+      }
     }
+    
+    # Drop the error row and the row below where the row label is split
+    df <- df |>
+      dplyr::slice(-sort(c(error_row, error_row+1)))
   }
 
   # # Warning about coercion of characters for as.numeric is suppressed
@@ -84,8 +90,9 @@ generate_unit_costs_hsc_tables <- function(report_year) {
   pdf_df <- pdftools::pdf_text(temp_pdf) # PDF error: xref num 17102 not found but needed, try to reconstruct<0a>
 
   # GP table ---------------------
+  # Table 9.4.2: Unit costs for a GP
   # Scrape PDF
-  gp <- pdf_scrape(pdf_df, "Table 9.4.2: Unit costs for a GP")
+  gp <- pdf_scrape(pdf_df, "9.4.2: Unit costs for a GP")
 
   # Relabel
   gp$x <- c(
@@ -126,9 +133,10 @@ generate_unit_costs_hsc_tables <- function(report_year) {
       .before = 1
     )
 
-  # Training costs for doctor table -----------------------------------
+  # Training costs for doctors table -----------------------------------
+  # Table 12.4.2: Training costs of doctors (after discounting)
   # Scrape PDF
-  training_costs_doctor <- pdf_scrape(pdf_df, "Table 12.4.2: Training costs of doctors")
+  training_costs_doctor <- pdf_scrape(pdf_df, "12.4.2: Training costs of doctors")
 
   training_costs_doctor$x <- c(
     "Pre-registration training: years 1-5", "Foundation Officer 1 (included in pre-reg training)",
@@ -150,8 +158,9 @@ generate_unit_costs_hsc_tables <- function(report_year) {
     )
 
   # Training costs for HCPs other than doctors ---------------------
+  # Table 12.4.1: Training costs of health and social care professionals, excluding doctors
   # Scrape PDF
-  training_costs_hcp <- pdf_scrape(pdf_df, "Table 12.4.1: Training costs of health and social care professionals, excluding doctors")
+  training_costs_hcp <- pdf_scrape(pdf_df, "12.4.1: Training costs of health and social care professionals, excluding doctors")
 
   training_costs_hcp$x <- c(
     "Physiotherapist",
@@ -180,8 +189,9 @@ generate_unit_costs_hsc_tables <- function(report_year) {
     )
 
   # Nurse table -----------------------------------
+  # Table 9.2.1: Annual and unit costs for qualified nurses
   # Scrape PDF
-  nurse <- pdf_scrape(pdf_df, "Table 9.2.1: Annual and unit costs for qualified nurses")
+  nurse <- pdf_scrape(pdf_df, "9.2.1: Annual and unit costs for qualified nurses")
 
   colnames(nurse) <- c(
     "variable",
@@ -206,7 +216,9 @@ generate_unit_costs_hsc_tables <- function(report_year) {
       .before = 1
     )
 
-  # Practice nurse table
+  # Practice nurse table ----------------------------
+  # Generated
+  
   # GP practice nurse is band 5, so use Band 5 values in nurse
   # Practice nurse table is Table 9.3.1: Costs and unit estimations for nurses working in a GP practice nurse (Band 5)
   # But newer reports don't report on ratio of direct to indirect time and duration of contact
@@ -257,9 +269,12 @@ generate_unit_costs_hsc_tables <- function(report_year) {
       .before = 1
     )
 
-  # Doctors table -----------------------------------
+  # Hospital doctors table -----------------------------------
+  # Table 11.3.2: Annual and unit costs for hospital-based doctors 
+  # (Text extracted strangely by pdftools::pdf_text with hyphen in table name, 
+  # hence capturing using only text before hyphen)
   # Scrape PDF
-  hospital_doctor <- pdf_scrape(pdf_df, "Table 11.3.2: Annual and unit costs for hospital-based doctors")
+  hospital_doctor <- pdf_scrape(pdf_df, "11.3.2: Annual and unit costs for hospital")
 
   colnames(hospital_doctor) <- c(
     "variable",
@@ -284,9 +299,12 @@ generate_unit_costs_hsc_tables <- function(report_year) {
     )
 
   # Community HCP table -------------------------------------------------------
-
-  community_hcp <- pdf_scrape(pdf_df, "Table 8.2.1: Annual and unit costs for community-based scientific and professional staff")
-
+  # Table 8.2.1: Annual and unit costs for community-based scientific and professional staff
+  # (Text extracted strangely by pdftools::pdf_text with hyphen in table name, 
+  # hence capturing using only text before hyphen)
+  # Scrape PDF
+  community_hcp <- pdf_scrape(pdf_df, "8.2.1: Annual and unit costs for community")
+  
   colnames(community_hcp) <- c(
     "variable",
     "Band 4",
@@ -339,13 +357,19 @@ generate_unit_costs_hsc_tables <- function(report_year) {
 
 # Link to download PDF report
 unit_costs_hsc_pdf_link <- list(
-  `2024` = "https://kar.kent.ac.uk/109563/1/The%20unit%20costs%20of%20health%20and%20social%20care%202024%20%28for%20publication%29_Final.pdf",
+  `2025` = "https://kar.kent.ac.uk/115569/1/The%20unit%20costs%20of%20health%20and%20social%20care%202025_Final%20%281st%20June%202026%29.pdf",
+  `2024` = "https://kar.kent.ac.uk/109563/1/The%20unit%20costs%20of%20health%20and%20social%20care%202024%20%28for%20publication%29_Amended%2012%20October%202025.pdf",
   `2023` = "https://kar.kent.ac.uk/105685/1/The%20unit%20costs%20of%20health%20and%20social%20care_Final3.pdf"
 )
-
 # Doesn't work for 2022 report
 
 # Extract tables from each report
+# Table 8.2.1: Annual and unit costs for community-based scientific and professional staff
+# Table 9.2.1: Annual and unit costs for qualified nurses
+# Table 9.4.2: Unit costs for a GP
+# Table 11.3.2: Annual and unit costs for hospital-based doctors 
+# Table 12.4.1: Training costs of health and social care professionals, excluding doctors
+# Table 12.4.2: Training costs of doctors (after discounting)
 unit_costs_year <- purrr::map(names(unit_costs_hsc_pdf_link), generate_unit_costs_hsc_tables)
 
 # Combine tables from different years
@@ -362,3 +386,33 @@ purrr::iwalk(unit_costs, \(x, idx) {
   # Save as .rda object
   do.call("use_data", list(as.name(df_name), overwrite = TRUE))
 })
+
+# Check documentation in R/data.R
+# - Check @source link
+# - Update years in \item{year}{Unit Costs Manual year (e.g. 2024, 2025)}
+devtools::document()
+
+# Update references in inst/references.Rmd
+# - Accessed date
+# - Add reference for newest year manual
+
+# Update About page
+# - Check URL
+# - Render, so references edited above are updated
+source(here::here("data-raw", "render_about_dashboard.R"))
+
+# Update README (updates references)
+devtools::build_readme()
+
+# Run app locally
+# devtools::load_all()
+# costmos_app()
+
+# Spot check against manual PDF
+
+# Run check()
+# devtools::check()
+
+# If GitHub action deploy fails because of renv out of sync
+# renv::snapshot()
+# rsconnect::deployApp()

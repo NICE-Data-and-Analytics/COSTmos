@@ -7,7 +7,7 @@
 \format{
 A data frame with 5 columns:
 \describe{
-\item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
+\item{year}{Unit Costs Manual year (e.g. 2024, 2025)}
 \item{variable}{Type of costs measure (e.g., per working hour)}
 \item{qualification_cost}{whether qualification costs are included or excluded}
 \item{ratio_direct_to_indirect_time}{whether the ratio of direct to indirect

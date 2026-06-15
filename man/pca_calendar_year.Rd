@@ -3,7 +3,7 @@
 \docType{data}
 \name{pca_calendar_year}
 \alias{pca_calendar_year}
-\title{Prescription Cost Analysis (PCA), England: National Summary Table, 2024 Calendar Year}
+\title{Prescription Cost Analysis (PCA), England: National Summary Table, 2025 Calendar Year}
 \format{
 A data frame with 8 columns [\href{https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england/prescription-cost-analysis-england-202425}{2}]:
 \describe{
@@ -47,7 +47,7 @@ in the community in England. These statistics are designed to provide the total
 number of prescription items and spend for any individual product, at any level
 of the British National Formulary (BNF) hierarchy of all
 prescriptions dispensed in the community in England" [\href{https://nhsbsa-opendata.s3.eu-west-2.amazonaws.com/pca/pca_background_info_methodology_june2025_v001.html}{1}]. This data frame is the
-national level summary table for 2024 with the SNOMED codes of
+national level summary table for 2025 with the SNOMED codes of
 medicinal products provided.
 }
 \details{
@@ -57,10 +57,10 @@ from the NHSBSA.
 }
 \references{
 \enumerate{
-\item NHSBSA, Prescription Cost Analysis: Background Information and Methodology (2025).
-\url{https://nhsbsa-opendata.s3.eu-west-2.amazonaws.com/pca/pca_background_info_methodology_june2025_v001.html}
-\item NHSBSA, Prescription Cost Analysis – England 2024/25: National summary tables - calendar year (2025).
-\url{https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england/prescription-cost-analysis-england-202425}
+\item NHSBSA, Prescription Cost Analysis: Background Information and Methodology (2026).
+\url{https://nhsbsa-opendata.s3.eu-west-2.amazonaws.com/pca/pca_background_info_methodology_june2026_v001.html}
+\item NHSBSA, Prescription Cost Analysis – England 2025/26: National summary tables - calendar year (2025).
+\url{https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england/prescription-cost-analysis-england-202526}
 }
 }
 \seealso{
