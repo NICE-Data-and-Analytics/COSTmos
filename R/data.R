@@ -47,11 +47,11 @@
 #' @family {pca_tables}
 #' 
 #' @references 
-#' 1. NHSBSA, Prescription Cost Analysis: Background Information and Methodology (2025).
-#' <https://nhsbsa-opendata.s3.eu-west-2.amazonaws.com/pca/pca_background_info_methodology_june2025_v001.html>
+#' 1. NHSBSA, Prescription Cost Analysis: Background Information and Methodology (2026).
+#' <https://nhsbsa-opendata.s3.eu-west-2.amazonaws.com/pca/pca_background_info_methodology_june2026_v001.html>
 #' 
-#' 2. NHSBSA, Prescription Cost Analysis – England 2024/25: National summary tables - calendar year (2025).
-#' <https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england/prescription-cost-analysis-england-202425>
+#' 2. NHSBSA, Prescription Cost Analysis – England 2025/26: National summary tables - calendar year (2025).
+#' <https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england/prescription-cost-analysis-england-202526>
 
 "pca_calendar_year"
 

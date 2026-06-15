@@ -405,8 +405,8 @@ source(here::here("data-raw", "render_about_dashboard.R"))
 devtools::build_readme()
 
 # Run app locally
-devtools::load_all()
-costmos_app()
+# devtools::load_all()
+# costmos_app()
 
 # Spot check against manual PDF
 

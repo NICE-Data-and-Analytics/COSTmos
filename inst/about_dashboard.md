@@ -111,8 +111,7 @@ Economics (CHE) at the University of York.
 2.  **NHS Business Services Authority**, *Prescription Cost Analysis –
     England*.  
     <https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england>.  
-    Accessed September 2025. **Licensed under:** [Open Government
-    Licence
+    Accessed June 2026. **Licensed under:** [Open Government Licence
     v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)
 
 3.  **NHS England**, *National Cost Collection for the NHS*.  

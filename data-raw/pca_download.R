@@ -60,7 +60,7 @@ withr::with_tempfile("dl_file",
     pca_calendar_year <- readxl::read_excel(dl_file,
       sheet = "SNOMED_Codes",
       skip = 4,
-      col_types = c("numeric", rep("text", 18), rep("numeric", 9))
+      col_types = c(rep("text", 19), rep("numeric", 9))
     ) |>
       janitor::clean_names() |>
       dplyr::select(
@@ -85,3 +85,32 @@ pca_version <- tibble::tibble(df = "pca_calendar_year", year = pca_year)
 
 # Save version table
 usethis::use_data(pca_version, overwrite = T)
+
+# Check documentation in R/data.R
+# - Update @references
+devtools::document()
+
+# Update references in inst/references.Rmd
+# - Accessed date
+
+# Update About page in inst/about_dashboard.Rmd
+# - Check URL
+# - Render, so references edited above are updated
+source(here::here("data-raw", "render_about_dashboard.R"))
+
+# Update README (updates references)
+devtools::build_readme()
+
+# Run app locally
+# devtools::load_all()
+# costmos_app()
+
+# Spot check against source spreadsheet
+
+# Run check()
+# devtools::check()
+
+# If GitHub action deploy fails because of renv out of sync
+# renv::snapshot()
+# rsconnect::deployApp()
+
