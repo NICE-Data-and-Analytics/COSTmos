@@ -7,7 +7,7 @@
 \format{
 A data frame with 4 columns:
 \describe{
-\item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
+\item{year}{Unit Costs Manual year (e.g. 2024, 2025)}
 \item{band}{NHS Agenda for Change band (Band 4–Band 9)}
 \item{cost_per_working_hour}{Cost per working hours (annual estimate expressed in £)}
 \item{job_title}{Representative  professional roles included in the band (

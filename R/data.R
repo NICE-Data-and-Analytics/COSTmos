@@ -413,7 +413,7 @@
 #' 
 #' @format A data frame with `r length(colnames(unit_costs_hsc_community_hcp))` columns:
 #' \describe{
-#'   \item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
+#'   \item{year}{Unit Costs Manual year (e.g. 2024, 2025)}
 #'   \item{band}{NHS Agenda for Change band (Band 4–Band 9)}
 #'   \item{cost_per_working_hour}{Cost per working hours (annual estimate expressed in £)}
 #'   \item{job_title}{Representative  professional roles included in the band (
@@ -441,7 +441,7 @@
 #'
 #' @format A data frame with `r length(colnames(unit_costs_hsc_gp))` columns:
 #' \describe{
-#'   \item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
+#'   \item{year}{Unit Costs Manual year (e.g. 2024, 2025)}
 #'   \item{variable}{Type of costs measure (e.g., per minute of patient contact)}
 #'   \item{qualification_cost}{Whether qualification costs are included or excluded}
 #'   \item{direct_care_staff_cost}{Whether direct care staff costs are included or excluded}
@@ -482,7 +482,7 @@
 #'
 #' @format A data frame with `r length(colnames(unit_costs_hsc_gp_nurse))` columns:
 #' \describe{
-#'   \item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
+#'   \item{year}{Unit Costs Manual year (e.g. 2024, 2025)}
 #'   \item{variable}{Type of costs measure (e.g., per working hour)}
 #'   \item{qualification_cost}{whether qualification costs are included or excluded}
 #'   \item{ratio_direct_to_indirect_time}{whether the ratio of direct to indirect 
@@ -518,7 +518,7 @@
 #'
 #' @format A data frame with `r length(colnames(unit_costs_hsc_hospital_doctor))` columns:
 #' \describe{
-#'   \item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
+#'   \item{year}{Unit Costs Manual year (e.g. 2024, 2025)}
 #'   \item{job_title}{Hospital doctor role: e.g. "Registrar", Consultant}
 #'   \item{qualification_cost}{Whether qualification costs are included or excluded}
 #'   \item{cost_per_working_hour}{Cost per working hours (annual estimate expressed in £)}
@@ -547,7 +547,7 @@
 #'
 #' @format A data frame with `r length(colnames(unit_costs_hsc_nurse))` columns:
 #' \describe{
-#'   \item{year}{Unit Costs Manual year (e.g., 2023, 2024)}
+#'   \item{year}{Unit Costs Manual year (e.g. 2024, 2025)}
 #'   \item{band}{NHS Agenda for Change band (Band 4–Band 9)}
 #'   \item{qualification_cost}{Whether qualification costs are included or excluded}
 #'   \item{cost_per_working_hour}{Cost per working hours (annual estimate expressed in £)}
@@ -635,6 +635,12 @@
 # Javascript functions for DT column rendering
 js_pennies_in_gbp <- DT::JS("
   function(data, type, row, meta) {
+  
+    // If NA, return NA. Otherwise, code below would make NA into 0
+    if (data === null) {
+      return type === 'display' ? 'NA' : data;
+    }
+  
     if (type === 'display') {
       const scaled = (parseFloat(data) / 100).toFixed(2);
       return new Intl.NumberFormat('en-GB', {
@@ -648,6 +654,12 @@ js_pennies_in_gbp <- DT::JS("
 
 js_gbp_pad_2dp <- DT::JS("
   function(data, type, row, meta) {
+  
+    // If NA, return NA. Otherwise, code below would make NA into 0
+    if (data === null) {
+      return type === 'display' ? 'NA' : data;
+    }
+  
     if (type === 'display') {
       const scaled = parseFloat(data).toFixed(2);
       return new Intl.NumberFormat('en-GB', {
@@ -661,6 +673,12 @@ js_gbp_pad_2dp <- DT::JS("
 
 js_gbp <- DT::JS("
   function (data, type, row, meta) {
+  
+    // If NA, return NA. Otherwise, code below would make NA into 0
+    if (data === null) {
+      return type === 'display' ? 'NA' : data;
+    }
+
     if (type === 'display') {
       const n = Number(data);
   
@@ -677,6 +695,12 @@ js_gbp <- DT::JS("
 ")
 
 js_comma_sep <- DT::JS("function(data, type, row, meta) {
+
+  // If NA, return NA. Otherwise, code below would make NA into 0
+  if (data === null) {
+    return type === 'display' ? 'NA' : data;
+  }
+
   if (type === 'display') {
     // Convert to number and format with commas
     return new Intl.NumberFormat('en-GB', {

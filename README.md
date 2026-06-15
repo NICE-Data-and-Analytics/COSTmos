@@ -101,10 +101,15 @@ str(drug_tariff_ix)
     for Health Economics (University of York)**, *Unit Costs of Health
     and Social Care Manual.*
     <https://research.kent.ac.uk/corec/unit-costs-2022-2027/>  
-    Accessed November 2025. **Licensed under:** [Creative Commons
+    Accessed June 2026. **Licensed under:** [Creative Commons
     Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
     4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
+    - Jones K, Weatherly H, Barker A, et al. (2026) *Unit Costs of
+      Health and Social Care 2025 Manual*, Personal Social Services
+      Research Unit (University of Kent) & Centre for Health Economics
+      (University of York). doi:
+      [10.22024/UniKent/01.02.115569](https://doi.org/10.22024/UniKent/01.02.115569)  
     - Jones K, Weatherly H, Birch S, et al. (2025) *Unit Costs of Health
       and Social Care 2024 Manual*, Personal Social Services Research
       Unit (University of Kent) & Centre for Health Economics
