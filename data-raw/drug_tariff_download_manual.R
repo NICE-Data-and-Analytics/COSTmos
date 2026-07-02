@@ -20,22 +20,22 @@ i_am("data-raw/drug_tariff_download_manual.R")
 # Paste links to download CSVs from website
 # https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii
 viii_links <- list(
-  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-05/Part%20VIIIA%20Jun%202026.csv",
+  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-06/Part%20VIIIA%20Jul%2026.xls.csv",
   viii_b = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-04/Part%20VIIIB%20May%2026.xls.csv",
   viii_d = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-04/Part%20VIIID%20May%2026.xls.csv"
 )
 
 # Paste link to download CSV of Part IX 
 # https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix
-ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2026-05/Drug%20Tariff%20Part%20IX%20June%202026.csv"
+ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2026-06/Drug%20Tariff%20Part%20IX%20July%202026.csv"
 
 # Input version for each section, in YYYYMM
 drug_tariff_version <- tibble::tribble(
   ~section, ~version_ym,
-  "viii_a", "202606",
+  "viii_a", "202607",
   "viii_b", "202605",
   "viii_d", "202605",
-  "ix", "202606"
+  "ix", "202607"
   )
 
 # Drug Tariff Part VIII ---------------------------------------------

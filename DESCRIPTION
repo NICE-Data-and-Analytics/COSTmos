@@ -1,6 +1,6 @@
 Package: COSTmos
 Title: Collate and Display England Healthcare Cost Datasets
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
     person("Vanessa", "Kam", email = "vanessa.kam@nice.org.uk", role = c("aut", "cre")),
     person("Alfredo", "Mariani", email = "alfredo.mariani@nice.org.uk", role = c("aut")),
