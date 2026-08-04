@@ -20,22 +20,22 @@ i_am("data-raw/drug_tariff_download_manual.R")
 # Paste links to download CSVs from website
 # https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-viii
 viii_links <- list(
-  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-06/Part%20VIIIA%20Jul%2026.xls.csv",
-  viii_b = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-04/Part%20VIIIB%20May%2026.xls.csv",
-  viii_d = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-04/Part%20VIIID%20May%2026.xls.csv"
+  viii_a = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-07/Part%20VIIIA%20Aug%202026.csv",
+  viii_b = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-07/Part%20VIIIB%20Aug%202026.csv",
+  viii_d = "https://www.nhsbsa.nhs.uk/sites/default/files/2026-07/Part%20VIIID%20Aug%202026.csv"
 )
 
 # Paste link to download CSV of Part IX 
 # https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff/drug-tariff-part-ix
-ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2026-06/Drug%20Tariff%20Part%20IX%20July%202026.csv"
+ix_link <- "https://www.nhsbsa.nhs.uk/sites/default/files/2026-07/Drug%20Tariff%20Part%20IX%20August%202026_0.csv"
 
 # Input version for each section, in YYYYMM
 drug_tariff_version <- tibble::tribble(
   ~section, ~version_ym,
-  "viii_a", "202607",
-  "viii_b", "202605",
-  "viii_d", "202605",
-  "ix", "202607"
+  "viii_a", "202608",
+  "viii_b", "202608",
+  "viii_d", "202608",
+  "ix", "202608"
   )
 
 # Drug Tariff Part VIII ---------------------------------------------
@@ -175,8 +175,8 @@ source(here::here("data-raw", "render_about_dashboard.R"))
 # Check number of entries
 
 # Run check()
-# devtools::check()
+devtools::check()
 
 # If GitHub action deploy fails because of renv out of sync
-# renv::snapshot()
-# rsconnect::deployApp()
+renv::snapshot()
+rsconnect::deployApp()
