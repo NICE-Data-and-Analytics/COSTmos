@@ -58,7 +58,7 @@ over one million consultations in English primary care. \url{https://doi.org/10.
 }
 }
 \seealso{
-Other {unit_costs_hsc_tables}: 
+Other {unit_costs_hsc_tables}:
 \code{\link{unit_costs_hsc_community_hcp}},
 \code{\link{unit_costs_hsc_gp}},
 \code{\link{unit_costs_hsc_hospital_doctor}},

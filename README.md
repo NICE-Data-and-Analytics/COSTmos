@@ -82,7 +82,8 @@ str(drug_tariff_ix)
 
 1.  **NHS Business Services Authority**, *Drug Tariff*.  
     <https://www.nhsbsa.nhs.uk/pharmacies-gp-practices-and-appliance-contractors/drug-tariff>  
-    Accessed August 2026. **Licensed under:** [Open Government Licence
+    Accessed September 2026. **Licensed under:** [Open Government
+    Licence
     v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)
 
 2.  **NHS Business Services Authority**, *Prescription Cost Analysis –

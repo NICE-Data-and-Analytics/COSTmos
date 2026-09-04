@@ -15,7 +15,6 @@ Description: A Shiny dashboard and R package that collates and displays
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Depends: 
     R (>= 4.1.0)
 LazyData: true
@@ -45,3 +44,4 @@ Suggests:
     tidyselect,
     usethis,
     withr
+Config/roxygen2/version: 8.1.0

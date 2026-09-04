@@ -40,7 +40,7 @@ reports the expected annual cost discounted at 3.5\%, which allows use of
 these estimates in NICE economic evaluations.
 }
 \seealso{
-Other {unit_costs_hsc_tables}: 
+Other {unit_costs_hsc_tables}:
 \code{\link{unit_costs_hsc_community_hcp}},
 \code{\link{unit_costs_hsc_gp}},
 \code{\link{unit_costs_hsc_gp_nurse}},
