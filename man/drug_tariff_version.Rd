@@ -29,7 +29,7 @@ drug_tariff_version
 Contains version information for the Drug Tariff data sets.
 }
 \seealso{
-Other {drug_tariff_tables}: 
+Other {drug_tariff_tables}:
 \code{\link{drug_tariff_ix}},
 \code{\link{drug_tariff_viii_a}},
 \code{\link{drug_tariff_viii_b}},

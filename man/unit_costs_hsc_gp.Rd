@@ -34,7 +34,7 @@ The table includes GPs costs across years and different activity measures,
 inclusive or exclusive of qualification and direct care staff costs.
 }
 \seealso{
-Other {unit_costs_hsc_tables}: 
+Other {unit_costs_hsc_tables}:
 \code{\link{unit_costs_hsc_community_hcp}},
 \code{\link{unit_costs_hsc_gp_nurse}},
 \code{\link{unit_costs_hsc_hospital_doctor}},

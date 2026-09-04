@@ -39,7 +39,7 @@ tariff-setting, and productivity programmes (e.g. PLICS, GIRFT). [\href{https://
 }
 }
 \seealso{
-Other {ncc_tables}: 
+Other {ncc_tables}:
 \code{\link{ncc_version}}
 }
 \concept{{ncc_tables}}

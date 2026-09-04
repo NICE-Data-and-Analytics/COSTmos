@@ -21,7 +21,7 @@ ncc_version
 Contains the financial year the \code{ncc} data is for.
 }
 \seealso{
-Other {ncc_tables}: 
+Other {ncc_tables}:
 \code{\link{ncc}}
 }
 \concept{{ncc_tables}}

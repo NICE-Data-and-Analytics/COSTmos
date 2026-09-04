@@ -36,7 +36,7 @@ by NHS Agenda for Change bands. Each row corresponds to a specific band and
 year, with associated unit cost values and representative job titles.
 }
 \seealso{
-Other {unit_costs_hsc_tables}: 
+Other {unit_costs_hsc_tables}:
 \code{\link{unit_costs_hsc_gp}},
 \code{\link{unit_costs_hsc_gp_nurse}},
 \code{\link{unit_costs_hsc_hospital_doctor}},

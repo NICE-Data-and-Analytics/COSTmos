@@ -21,7 +21,7 @@ pca_version
 Contains the calendar year the \code{pca_calendar_year} data is for.
 }
 \seealso{
-Other {pca_tables}: 
+Other {pca_tables}:
 \code{\link{pca_calendar_year}}
 }
 \concept{{pca_tables}}

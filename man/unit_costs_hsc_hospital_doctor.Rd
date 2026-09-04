@@ -34,7 +34,7 @@ The table shows hourly costs across different grades of seniority, inclusive
 or exclusive of qualification costs.
 }
 \seealso{
-Other {unit_costs_hsc_tables}: 
+Other {unit_costs_hsc_tables}:
 \code{\link{unit_costs_hsc_community_hcp}},
 \code{\link{unit_costs_hsc_gp}},
 \code{\link{unit_costs_hsc_gp_nurse}},

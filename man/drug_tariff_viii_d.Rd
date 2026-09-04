@@ -79,7 +79,7 @@ from Community Pharmacy England for more information.
 }
 }
 \seealso{
-Other {drug_tariff_tables}: 
+Other {drug_tariff_tables}:
 \code{\link{drug_tariff_ix}},
 \code{\link{drug_tariff_version}},
 \code{\link{drug_tariff_viii_a}},

@@ -35,7 +35,7 @@ qualification cost. Each row corresponds to a band and year and its correspondin
 unit cost per working hour.
 }
 \seealso{
-Other {unit_costs_hsc_tables}: 
+Other {unit_costs_hsc_tables}:
 \code{\link{unit_costs_hsc_community_hcp}},
 \code{\link{unit_costs_hsc_gp}},
 \code{\link{unit_costs_hsc_gp_nurse}},

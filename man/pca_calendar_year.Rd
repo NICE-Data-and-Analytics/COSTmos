@@ -64,7 +64,7 @@ from the NHSBSA.
 }
 }
 \seealso{
-Other {pca_tables}: 
+Other {pca_tables}:
 \code{\link{pca_version}}
 }
 \concept{{pca_tables}}
